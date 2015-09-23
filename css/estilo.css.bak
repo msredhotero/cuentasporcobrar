@@ -1,0 +1,74 @@
+/*
+html {
+  background-color: #e8e8dc;
+}
+*/
+body {
+	margin:0;
+	padding:0;
+}
+
+body > h3 {
+	border-bottom:1px solid #000;
+	margin-left:100px;
+	margin-right:80px;
+	padding-top:10px;
+	padding-left:15px;
+	padding-bottom:16px;
+	font-weight: bold;
+	font-size:1.9em;
+	color:#000;
+}
+
+.fdizquierda {float: left; width: 29%;}
+.fdderecha {float: right; width: 68%;}
+
+
+header {
+    background-image: -webkit-gradient(
+	linear,
+	left top,
+	left bottom,
+	color-stop(0, #454A4E),
+	color-stop(1, #464F52)
+);
+background-image: -o-linear-gradient(bottom, #454A4E 0%, #464F52 100%);
+background-image: -moz-linear-gradient(bottom, #454A4E 0%, #464F52 100%);
+background-image: -webkit-linear-gradient(bottom, #454A4E 0%, #464F52 100%);
+background-image: -ms-linear-gradient(bottom, #454A4E 0%, #464F52 100%);
+background-image: linear-gradient(to bottom, #454A4E 0%, #464F52 100%);
+	height:100px;
+	margin:0;
+	padding-left:100px;
+}
+
+.logueo {
+	background-color:#2b2f32;
+	height:600px;
+	padding-left:100px;
+}
+
+
+
+body > footer{
+background: url(../imagenes/bg-bueno.jpg) repeat; text-align:center; font-family: "Prestige Elite Std"; font-size:0.9em; height:30px;
+border-top:2px solid #085878;
+width:100%;
+padding-top:10px;
+bottom: 0px;
+font-size:1.1em;
+padding-bottom: 10px;
+}
+
+.content {
+    height: 100%;
+    margin: 20px auto;
+    padding: 16px;
+    width: 1050px;
+    margin-left:-20px;
+}
+
+
+
+
+
