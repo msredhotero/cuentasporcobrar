@@ -7,30 +7,11 @@ class appconfig {
 function conexion() {
 		
 		$hostname = "localhost";
-		$database = "db_prediobck8";
+		$database = "facturacion";
 		$username = "root";
 		$password = "";
 		
-		/*
-		$hostname = "localhost";
-		$database = "wwwpredi_98nicolas";
-		$username = "wwwpredi_98nico";
-		$password = "nicolaspredio98";
-		*/
 		
-		/*
-		$hostname = "localhost";
-		$database = "estudiohamelin_com_ar_-_proyecto360";
-		$username = "estudio";
-		$password = "pro369";
-		*/
-		
-		/*
-		$hostname = "mysql.hostinger.es";
-		$database = "u849094071_predi";
-		$username = "u849094071_nico";
-		$password = "rhcp7575";
-		*/
 		$conexion = array("hostname" => $hostname,
 						  "database" => $database,
 						  "username" => $username,

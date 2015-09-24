@@ -5,147 +5,7 @@ date_default_timezone_set('America/Buenos_Aires');
 
 class ServiciosHTML {
 
-function menuHTML() {
-	$cad = utf8_encode('<div class="row" style=" background-color:#dadada; z-index:9999999px; display:block; margin-left:10px; margin-right:10px;">
-        	<div id="submenu" style="display:none; z-index:9999999px;">
-            <div style="height:auto; position:relative; ">
-            	<div class="col-md-4" style="padding-top:10px;">
-                	<div class="alert alert-predio alert-dismissible submenu" id="futbolco">
-                    	<p style="font-size:1.3em; cursor:pointer;"> Torneo de Fútbol 11 con Off-side</p> 
-                    </div>
-                    <div class="alert alert-predio alert-dismissible submenu" id="futbolso">
-                    	<p style="font-size:1.3em; cursor:pointer;"> Torneo de Fútbol 11 sin Off-side</p> 
-                    </div>
-                    <div class="alert alert-predio alert-dismissible submenu" id="futbol">
-                    	<p style="font-size:1.3em; cursor:pointer;"> Torneo de Fútbol 7</p> 
-                    </div>
-                </div>
-                <div class="col-md-4 foncecoE" style="display:none;">
-                	<div class="col-md-6" align="center">
-                    	
-                        <h4 class="textoTrazoTitulos"> Estadísticas</h4>
-                    </div>
-                    <div class="col-md-6" style="border-left:1px dashed #333;" id="submenuestadisticas">
-                    	<ul>
-                        	<li><span class="glyphicon glyphicon-plus-sign"></span> <a href="posiciones.php?idtorneo=1">Posiciones</a></li>
-                            <li><span class="glyphicon glyphicon-plus-sign"></span> <a href="resultados.php?idtorneo=1">Resultados</a></li>
-                            <li><span class="glyphicon glyphicon-plus-sign"></span> <a href="goleadores.php?idtorneo=1">Goleadores</a></li>
-                            <li><span class="glyphicon glyphicon-plus-sign"></span> <a href="fairplay.php?idtorneo=1">Fair Play</a></li>
-                            <li><span class="glyphicon glyphicon-plus-sign"></span> <a href="suspendidos.php?idtorneo=1">Suspendidos</a></li>
-                            <li><span class="glyphicon glyphicon-plus-sign"></span> <a href="amonestados.php?idtorneo=1">Amonestados</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-md-4 foncesoE" style="display:none;">
-                	<div class="col-md-6" align="center">
-                    	
-                        <h4 class="textoTrazoTitulos"> Estadísticas</h4>
-                    </div>
-                    <div class="col-md-6" style="border-left:1px dashed #333;" id="submenuestadisticas">
-                    	<ul>
-                        	<li><span class="glyphicon glyphicon-plus-sign"></span> <a href="posiciones.php?idtorneo=2">Posiciones</a></li>
-                            <li><span class="glyphicon glyphicon-plus-sign"></span> <a href="resultados.php?idtorneo=2">Resultados</a></li>
-                            <li><span class="glyphicon glyphicon-plus-sign"></span> <a href="goleadores.php?idtorneo=2">Goleadores</a></li>
-                            <li><span class="glyphicon glyphicon-plus-sign"></span> <a href="fairplay.php?idtorneo=2">Fair Play</a></li>
-                            <li><span class="glyphicon glyphicon-plus-sign"></span> <a href="suspendidos.php?idtorneo=2">Suspendidos</a></li>
-                            <li><span class="glyphicon glyphicon-plus-sign"></span> <a href="amonestados.php?idtorneo=2">Amonestados</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-md-4 fsieteE" style="display:none;">
-                	<div class="col-md-6" align="center">
-                    	
-                        <h4 class="textoTrazoTitulos"> Estadísticas</h4>
-                    </div>
-                    <div class="col-md-6" style="border-left:1px dashed #333;" id="submenuestadisticas">
-                    	<ul>
-                        	<li><span class="glyphicon glyphicon-plus-sign"></span> <a href="posiciones.php?idtorneo=1">Posiciones</a></li>
-                            <li><span class="glyphicon glyphicon-plus-sign"></span> <a href="resultados.php?idtorneo=1">Resultados</a></li>
-                            <li><span class="glyphicon glyphicon-plus-sign"></span> <a href="goleadores.php?idtorneo=1">Goleadores</a></li>
-                            <li><span class="glyphicon glyphicon-plus-sign"></span> <a href="fairplay.php?idtorneo=1">Fair Play</a></li>
-                            <li><span class="glyphicon glyphicon-plus-sign"></span> <a href="suspendidos.php?idtorneo=1">Suspendidos</a></li>
-                            <li><span class="glyphicon glyphicon-plus-sign"></span> <a href="amonestados.php?idtorneo=1">Amonestados</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-md-4 foncecoI" style="display:none;">
-                	<div class="col-md-6" align="center">
-                    	
-                        <h4 class="textoTrazoTitulos"> Información</h4>
-                    </div>
-                    <div class="col-md-6" style="border-left:1px dashed #333;" id="submenuestadisticas">
-                    	<ul>
-                        	<li><span class="glyphicon glyphicon-calendar"></span> <a href="fixture.php">Fixture</a></li>
-                        </ul>
-                    </div>
-                    <br>
-                    <div class="col-md-6" align="center" style="margin-top:15px;">
-                    	
-                        <h4 class="textoTrazoTitulos"> Zonas</h4>
-                    </div>
-                    <div class="col-md-6" style="border-left:1px dashed #333;margin-top:15px;" id="submenuestadisticas">
-                    	<ul>
-                        	<li><span class="glyphicon glyphicon-th"></span> <a href="zonas.php?zona=19&idtorneo=1">Zona A</a></li>
-                            <li><span class="glyphicon glyphicon-th"></span> <a href="zonas.php?zona=20&idtorneo=1">Zona B</a></li>
-                            <li><span class="glyphicon glyphicon-th"></span> <a href="zonas.php?zona=21&idtorneo=1">Zona C</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-md-4 foncesoI" style="display:none;">
-                	<div class="col-md-6" align="center">
-                    	
-                        <h4 class="textoTrazoTitulos"> Información</h4>
-                    </div>
-                    <div class="col-md-6" style="border-left:1px dashed #333;" id="submenuestadisticas">
-                    	<ul>
-                        	<li><span class="glyphicon glyphicon-calendar"></span> <a href="fixture.php">Fixture</a></li>
-                        </ul>
-                    </div>
-                    <br>
-                    <div class="col-md-6" align="center" style="margin-top:15px;">
-                    	
-                        <h4 class="textoTrazoTitulos"> Zonas</h4>
-                    </div>
-                    <div class="col-md-6" style="border-left:1px dashed #333;margin-top:15px;" id="submenuestadisticas">
-                    	<ul>
-                        	<li><span class="glyphicon glyphicon-th"></span> <a href="zonas.php?zona=19&idtorneo=2">Zona A</a></li>
-                            <li><span class="glyphicon glyphicon-th"></span> <a href="zonas.php?zona=20&idtorneo=2">Zona B</a></li>
-                            <li><span class="glyphicon glyphicon-th"></span> <a href="zonas.php?zona=21&idtorneo=2">Zona C</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-md-4 fsieteI" style="display:none;">
-                	<div class="col-md-6" align="center">
-                    	
-                        <h4 class="textoTrazoTitulos"> Información</h4>
-                    </div>
-                    <div class="col-md-6" style="border-left:1px dashed #333;" id="submenuestadisticas">
-                    	<ul>
-                        	<li><span class="glyphicon glyphicon-calendar"></span> <a href="fixture.php">Fixture</a></li>
-                        </ul>
-                    </div>
-                    
-                    <div class="col-md-6" align="center" style="margin-top:15px;">
-                    	
-                        <h4 class="textoTrazoTitulos"> Zonas</h4>
-                    </div>
-                    <div class="col-md-6" style="border-left:1px dashed #333;margin-top:15px;" id="submenuestadisticas">
-                    	<ul>
-                        	<li><span class="glyphicon glyphicon-th"></span> <a href="zonas.php?zona=19&idtorneo=3">Zona A</a></li>
-                            <li><span class="glyphicon glyphicon-th"></span> <a href="zonas.php?zona=20&idtorneo=3">Zona B</a></li>
-                            <li><span class="glyphicon glyphicon-th"></span> <a href="zonas.php?zona=21&idtorneo=3">Zona C</a></li>
-                        </ul>
-                    </div>
-                </div>
-                
-            </div>
-            </div>
-        </div>');
-	return $cad;	
-}
-
-
-function menu($usuario,$titulo,$rol,$torneo) {
+function menu($usuario,$titulo,$rol,$empresa) {
 	
 	$sql = "select idmenu,url,icono, nombre, permiso from predio_menu where permiso like '%".$rol."%' order by orden";
 	$res = $this->query($sql,0);
@@ -184,7 +44,7 @@ function menu($usuario,$titulo,$rol,$torneo) {
 			
 			<ul class="list-inline">
 				<li><span class="glyphicon glyphicon-user"></span> '.$usuario.'</li>
-				<li style="color:#FC0;">'.$torneo.' <a href="../torneos/cambiartorneo.php"> Cambiar</a></li>    
+				<li style="color:#FC0;">'.$empresa.' <a href="../empresa/cambiarempresa.php"> Cambiar</a></li>    
 			</ul>
 		</div>
 		 
@@ -417,7 +277,7 @@ function footer() {
 </div><!--fin del footer-->";
 }
 
-Function query($sql,$accion) {
+function query($sql,$accion) {
 		
 		require_once 'appconfig.php';
 

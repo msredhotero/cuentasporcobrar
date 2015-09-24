@@ -1,5 +1,4 @@
 <?php
-set_include_path("class");
 
 require 'includes/funcionesUsuarios.php';
 include ('includes/funciones.php');
@@ -7,7 +6,6 @@ include ('includes/funciones.php');
 $serviciosUsuarios = new ServiciosUsuarios();
 $servicios = new Servicios();
 
-$resTipoTorneos = $servicios->traerTipoTorneo();
 
 ?>
 <!DOCTYPE HTML>
@@ -22,7 +20,7 @@ $resTipoTorneos = $servicios->traerTipoTorneo();
 
 
 
-<title>Acceso Restringido: Predio98</title>
+<title>Acceso Restringido: Facturación - Cuentas Por Cobrar</title>
 
 
 
@@ -156,10 +154,10 @@ $resTipoTorneos = $servicios->traerTipoTorneo();
 
 <div class="content">
 
-<div class="row" style="margin-top:10px; font-family:Verdana, Geneva, sans-serif;" align="center">
+<!--<div class="row" style="margin-top:10px; font-family:Verdana, Geneva, sans-serif;" align="center">
 		<img src="imagenes/logo.png" width="300" height="273">
    
-</div>
+</div>-->
 
 
 <div class="logueo" align="center">
@@ -214,16 +212,6 @@ $resTipoTorneos = $servicios->traerTipoTorneo();
                 </div>
               </div>
               
-              <div class="form-group">
-                <label for="ejemplo_password_2" class="col-md-2 control-label" style="color:#FFF;text-align:left;">Torneo</label>
-                <div class="col-lg-7">
-                  <select class="form-control" id="reftorneo" name="reftorneo" >
-                  	<?php while ($rowT = mysql_fetch_array($resTipoTorneos)) { ?>
-						<option value="<?php echo $rowT[0]; ?>"><?php echo $rowT[1]; ?></option>	
-					<?php } ?>
-                  </select>
-                </div>
-              </div>
               
               <div class="form-group">
               	<label for="olvido" class="control-label" style="color:#FFF">¿Has olvidado tu contraseña?. <a href="recuperarpassword.php">Recuperar.</a></label>
@@ -251,7 +239,7 @@ $resTipoTorneos = $servicios->traerTipoTorneo();
 
 <div class="row">
 	<div class="col-md-12" align="center">
-    	<p style="text-shadow: 1px 1px #fff;"><strong>Copyright © 2015 Predio98. Diseño Web: Saupurein Marcos.</strong></p>
+    	<p style="text-shadow: 1px 1px #0000FF;"><strong>Copyright © 2015. Diseño Web: Saupurein Marcos.</strong></p>
 
     </div>
 </div>

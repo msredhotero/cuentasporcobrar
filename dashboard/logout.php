@@ -19,7 +19,7 @@ session_destroy();
 
 
 
-<title>Predio 98</title>
+<title>Facturación - Cuentas Por Cobrar</title>
 
 
 
@@ -105,11 +105,11 @@ session_destroy();
         
                 
 
-	<div class="row" style="height:360px;" align="center">
+	<div class="row" style="height:160px;" align="center">
 <br>
 <h2>Acaba de salir del sistema. </h2>
 
-<h4>Si quiere volver al Inicio presione <a href="../login.php" style="color:#009; font-weight:bold;">AQUI</a></h4>
+<h4>Si quiere volver al Inicio presione <a href="../index.php" style="color:#009; font-weight:bold;">AQUI</a></h4>
 
 
 </div>

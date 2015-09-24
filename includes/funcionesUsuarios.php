@@ -20,9 +20,9 @@ function GUID()
 }
 
 
-function login($usuario,$pass,$torneo) {
+function login($usuario,$pass) {
 	
-	$sqlusu = "select * from se_usuarios where email = '".$usuario."'";
+	$sqlusu = "select * from dbusuarios where email = '".$usuario."'";
 
 
 
@@ -34,7 +34,10 @@ if (mysql_num_rows($respusu) > 0) {
 	$error = '';
 	
 	$idUsua = mysql_result($respusu,0,0);
-	$sqlpass = "select nombrecompleto,email,usuario,refroll from se_usuarios where password = '".$pass."' and IdUsuario = ".$idUsua;
+	$sqlpass = "select u.nombrecompleto,u.email,u.usuario,r.descripcion 
+					from dbusuarios u
+					inner join tbroles r on r.idrol = u.refroll
+					 where u.password = '".$pass."' and u.IdUsuario = ".$idUsua;
 
 	$resppass = $this->query($sqlpass,0);
 	
@@ -58,9 +61,11 @@ if (mysql_num_rows($respusu) > 0) {
 		$_SESSION['email_predio'] = mysql_result($resppass,0,1);
 		$_SESSION['refroll_predio'] = mysql_result($resppass,0,3);
 		
-		$sqlTorneo = "select descripciontorneo,idtipotorneo from tbtipotorneo where idtipotorneo =".$torneo;
+		//////////////// EN CASO DE NECESITAR ENTRAR POR EMPRESA ///////////////////////////////////////
+		
+		/*$sqlTorneo = "select descripciontorneo,idtipotorneo from tbtipotorneo where idtipotorneo =".$torneo;
 		$_SESSION['torneo_predio'] = mysql_result($this->query($sqlTorneo,0),0,0);
-		$_SESSION['idtorneo_predio'] = mysql_result($this->query($sqlTorneo,0),0,1);
+		$_SESSION['idtorneo_predio'] = mysql_result($this->query($sqlTorneo,0),0,1);*/
 	}
 	
 }	else {
