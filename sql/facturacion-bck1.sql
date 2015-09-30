@@ -3,8 +3,8 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 30-09-2015 a las 18:58:39
--- Versión del servidor: 5.1.36-community-log
+-- Tiempo de generación: 24-09-2015 a las 06:25:50
+-- Versión del servidor: 5.5.24-log
 -- Versión de PHP: 5.4.3
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
@@ -63,14 +63,7 @@ CREATE TABLE IF NOT EXISTS `dbempresas` (
   `celular` varchar(10) COLLATE utf8_spanish_ci DEFAULT NULL,
   `objetoempresa` varchar(1000) COLLATE utf8_spanish_ci DEFAULT NULL,
   PRIMARY KEY (`idempresa`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci AUTO_INCREMENT=2 ;
-
---
--- Volcado de datos para la tabla `dbempresas`
---
-
-INSERT INTO `dbempresas` (`idempresa`, `razonsocial`, `rfc`, `direccion`, `email`, `telefono`, `celular`, `objetoempresa`) VALUES
-(1, 'Marcos', '16516894', 'asdamsdomo', '', '', '', '');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -83,24 +76,22 @@ CREATE TABLE IF NOT EXISTS `dbfacturas` (
   `nrofactura` varchar(5) NOT NULL,
   `fecha` date NOT NULL,
   `refcliente` int(11) NOT NULL,
+  `concepto` varchar(1000) NOT NULL,
   `importebruto` decimal(18,2) NOT NULL,
   `iva` decimal(8,2) NOT NULL,
   `total` decimal(18,2) NOT NULL,
-  `refempresa` int(11) NOT NULL,
-  `concepto` varchar(1000) NOT NULL,
+  `refestatus` smallint(6) NOT NULL,
   PRIMARY KEY (`idfactura`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
 
 --
 -- Volcado de datos para la tabla `dbfacturas`
 --
 
-INSERT INTO `dbfacturas` (`idfactura`, `nrofactura`, `fecha`, `refcliente`, `importebruto`, `iva`, `total`, `refempresa`, `concepto`) VALUES
-(7, '', '0000-00-00', 0, '0.00', '0.00', '0.00', 0, ''),
-(8, '', '0000-00-00', 0, '0.00', '0.00', '0.00', 0, ''),
-(9, '', '0000-00-00', 0, '0.00', '0.00', '0.00', 0, ''),
-(10, 'MR035', '2015-09-24', 7, '9500.00', '1520.00', '11020.00', 1, '12 cajones de Heineken'),
-(11, 'MR045', '2015-09-30', 9, '65000.00', '10400.00', '75400.00', 1, 'asdqwqwd');
+INSERT INTO `dbfacturas` (`idfactura`, `nrofactura`, `fecha`, `refcliente`, `concepto`, `importebruto`, `iva`, `total`, `refestatus`) VALUES
+(7, '', '0000-00-00', 0, '', '0.00', '0.00', '0.00', 0),
+(8, '', '0000-00-00', 0, '', '0.00', '0.00', '0.00', 0),
+(9, '', '0000-00-00', 0, '', '0.00', '0.00', '0.00', 0);
 
 -- --------------------------------------------------------
 
@@ -127,7 +118,6 @@ CREATE TABLE IF NOT EXISTS `dbpagosfacturas` (
   `idpagofactura` int(11) NOT NULL AUTO_INCREMENT,
   `refpago` int(11) NOT NULL,
   `reffactura` int(11) NOT NULL,
-  `refestatu` smallint(6) NOT NULL,
   PRIMARY KEY (`idpagofactura`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci AUTO_INCREMENT=1 ;
 
@@ -182,7 +172,7 @@ CREATE TABLE IF NOT EXISTS `predio_menu` (
   `hover` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
   `permiso` varchar(50) COLLATE utf8_spanish_ci DEFAULT NULL,
   PRIMARY KEY (`idmenu`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci AUTO_INCREMENT=20 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci AUTO_INCREMENT=18 ;
 
 --
 -- Volcado de datos para la tabla `predio_menu`
@@ -191,10 +181,8 @@ CREATE TABLE IF NOT EXISTS `predio_menu` (
 INSERT INTO `predio_menu` (`idmenu`, `url`, `icono`, `nombre`, `Orden`, `hover`, `permiso`) VALUES
 (12, '../logout.php', 'icosalir', 'Salir', 30, NULL, 'Administrador, Capturista, Supervisor'),
 (13, '../index.php', 'icodashboard', 'Dashboard', 1, NULL, 'Administrador, Capturista, Supervisor'),
-(16, '../clientes/', 'icoclientes', 'Clientes', 2, NULL, 'Administrador, Capturista, Supervisor'),
-(17, '../empresas/', 'icoinmubles', 'Empresas', 3, NULL, 'Administrador, Capturista, Supervisor'),
-(18, '../facturas/', 'icoalquileres', 'Facturas', 4, NULL, 'Administrador, Capturista, Supervisor'),
-(19, '../pagos/', 'icopagos', 'Pagos', 5, NULL, 'Administrador, Capturista, Supervisor');
+(16, '../clientes/', 'icoclientes', 'Clientes', 2, NULL, 'Administrador'),
+(17, '../empresas/', 'icoinmubles', 'Empresas', 3, NULL, 'Administrador');
 
 -- --------------------------------------------------------
 
@@ -229,6 +217,15 @@ INSERT INTO `tbroles` (`idrol`, `descripcion`, `activo`) VALUES
 (1, 'Administrador', b'1'),
 (2, 'Capturista', b'1'),
 (3, 'Supervisor', b'1');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `viewfacturas`
+--
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `facturacion`.`viewfacturas` AS select `facturacion`.`dbfacturas`.`idfactura` AS `idfactura`,`facturacion`.`dbfacturas`.`nrofactura` AS `nrofactura`,`facturacion`.`dbfacturas`.`fechacreacion` AS `fechacreacion`,`facturacion`.`dbfacturas`.`mes` AS `mes`,`facturacion`.`dbfacturas`.`refcliente` AS `refcliente`,`facturacion`.`tbactividad`.`actividad` AS `actividad`,`facturacion`.`dbfacturas`.`retencion` AS `retencion`,`facturacion`.`dbfacturas`.`percepcion` AS `percepcion`,`facturacion`.`dbfacturas`.`exento` AS `exento`,`facturacion`.`dbdetallefactura`.`importe` AS `importeBase`,`facturacion`.`tbtipoiva`.`descripcion` AS `descripcion`,`facturacion`.`tbtipoiva`.`monto` AS `monto`,`facturacion`.`dbfacturas`.`gravado` AS `gravado`,`facturacion`.`dbfacturas`.`importe` AS `importe`,`facturacion`.`dbfacturas`.`baseimponible` AS `baseimponible`,`facturacion`.`dbclientes`.`nombre` AS `nombre`,`facturacion`.`tbtipocliente`.`TipoCliente` AS `TipoCliente`,`facturacion`.`tbtipocliente`.`proveedor` AS `proveedor` from (((((`facturacion`.`dbfacturas` join `facturacion`.`dbclientes` on((`facturacion`.`dbclientes`.`idcliente` = `facturacion`.`dbfacturas`.`refcliente`))) join `facturacion`.`tbactividad` on((`facturacion`.`tbactividad`.`idactividad` = `facturacion`.`dbfacturas`.`refactividad`))) join `facturacion`.`dbdetallefactura` on((`facturacion`.`dbdetallefactura`.`reffactura` = `facturacion`.`dbfacturas`.`idfactura`))) join `facturacion`.`tbtipoiva` on((`facturacion`.`tbtipoiva`.`idtipoiva` = `facturacion`.`dbdetallefactura`.`refiva`))) join `facturacion`.`tbtipocliente` on((`facturacion`.`tbtipocliente`.`idtipocliente` = `facturacion`.`dbclientes`.`reftipocliente`)));
+-- Error leyendo datos: (#1356 - View 'facturacion.viewfacturas' references invalid table(s) or column(s) or function(s) or definer/invoker of view lack rights to use them)
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
