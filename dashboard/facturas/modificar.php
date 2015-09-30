@@ -12,55 +12,65 @@ if (!isset($_SESSION['usua_predio']))
 include ('../../includes/funciones.php');
 include ('../../includes/funcionesUsuarios.php');
 include ('../../includes/funcionesHTML.php');
-include ('../../includes/funcionesEquipos.php');
+include ('../../includes/funcionesFacturas.php');
+include ('../../includes/funcionesClientes.php');
+include ('../../includes/funcionesEmpresas.php');
 
 $serviciosFunciones = new Servicios();
 $serviciosUsuario 	= new ServiciosUsuarios();
 $serviciosHTML 		= new ServiciosHTML();
-$serviciosEquipos 	= new ServiciosE();
+$serviciosFactuas 	= new ServiciosFacturas();
+$serviciosClientes	= new ServiciosClientes();
+$serviciosEmpresas	= new ServiciosEmpresas();
 
 $fecha = date('Y-m-d');
 
 //$resProductos = $serviciosProductos->traerProductosLimite(6);
-$resMenu = $serviciosHTML->menu(utf8_encode($_SESSION['nombre_predio']),"Equipos",$_SESSION['refroll_predio'],utf8_encode($_SESSION['torneo_predio']));
+$resMenu = $serviciosHTML->menu(utf8_encode($_SESSION['nombre_predio']),"Facturas",$_SESSION['refroll_predio'],utf8_encode($_SESSION['torneo_predio']));
 
 
 $id = $_GET['id'];
 
-$resResultado = $serviciosEquipos->TraerIdEquipo($id);
+$resResultado = $serviciosFactuas->traerFacturasPorId($id);
 
 /////////////////////// Opciones para la creacion del formulario  /////////////////////
-$tabla 			= "dbequipos";
+$tabla 			= "dbfacturas";
 
-$lblCambio	 	= array("nombrecapitan","emailcapitan","telefonocapitan","facebookcapitan","nombresubcapitan","emailsubcapitan","telefonosubcapitan","facebooksubcapitan");
-$lblreemplazo	= array("Nombre Capitán","Email Capitán","Telefono Capitán","Facebook Capitán","Nombre SubCapitán","Email SubCapitán","Telefono SubCapitán","Facebook SubCapitán");
+$lblCambio	 	= array("nrofactura","importebruto","iva","refcliente","refempresa");
+$lblreemplazo	= array("Nro Factura","Importe Bruto","IVA","Cliente","Empresa");
+
+$resCliente 	= $serviciosClientes->traerClientes();
 
 $cadRef = '';
+while ($rowTT = mysql_fetch_array($resCliente)) {
+	if (mysql_result($resResultado,0,'refcliente')== $rowTT[0]) {
+		$cadRef = $cadRef.'<option value="'.$rowTT[0].'" selected>'.utf8_encode($rowTT[1]).'</option>';
+	} else {
+		$cadRef = $cadRef.'<option value="'.$rowTT[0].'">'.utf8_encode($rowTT[1]).'</option>';
+	}
+	
+}
 
-$refdescripcion = array(0 => "");
-$refCampo[] 	= ""; 
+
+$resEmpresa 	= $serviciosEmpresas->traerEmpresas();
+
+$cadEmpresa = '';
+while ($rowFF = mysql_fetch_array($resEmpresa)) {
+	if (mysql_result($resResultado,0,'refempresa')== $rowFF[0]) {
+		$cadEmpresa = $cadEmpresa.'<option value="'.$rowFF[0].'" selected>'.utf8_encode($rowFF[1]).'</option>';
+	} else {
+		$cadEmpresa = $cadEmpresa.'<option value="'.$rowFF[0].'">'.utf8_encode($rowFF[1]).'</option>';	
+	}
+	
+}
+
+$refdescripcion = array(0 => $cadRef,1=>$cadEmpresa);
+$refCampo 	=  array("refcliente","refempresa"); 
 //////////////////////////////////////////////  FIN de los opciones //////////////////////////
 
 
 
-
-/////////////////////// Opciones para la creacion del view  /////////////////////
-$cabeceras 		= "	<th>Nombre</th>
-				<th>Nombre Capitán</th>
-				<th>Email Capitán</th>
-				<th>Telefono Capitán</th>
-				<th>Facebook Capitán</th>
-				<th>Nombre SubCapitán</th>
-				<th>Email SubCapitán</th>
-				<th>Telefono SubCapitán</th>
-				<th>Facebook SubCapitán</th>";
-
-//////////////////////////////////////////////  FIN de los opciones //////////////////////////
-
-
-
-
-$formulario 	= $serviciosFunciones->camposTablaModificar($id, "idequipo", "modificarEquipos",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
+$formulario 	= $serviciosFunciones->camposTablaModificar($id, "idfactura", "modificarFacturas",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
 
 
 if ($_SESSION['refroll_predio'] != 1) {
@@ -84,7 +94,7 @@ if ($_SESSION['refroll_predio'] != 1) {
 
 
 
-<title>Gestión: Predio 98</title>
+<title>Gestión: Facturación - Cuentas Por Cobrar</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
@@ -99,6 +109,7 @@ if ($_SESSION['refroll_predio'] != 1) {
     
 	<!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="../../bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../../css/bootstrap-datetimepicker.min.css">
 	<link href='http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
     <!-- Latest compiled and minified JavaScript -->
     <script src="../../bootstrap/js/bootstrap.min.js"></script>
@@ -128,11 +139,11 @@ if ($_SESSION['refroll_predio'] != 1) {
 
 <div id="content">
 
-<h3>Equipos</h3>
+<h3>Facturas</h3>
 
     <div class="boxInfoLargo">
         <div id="headBoxInfo">
-        	<p style="color: #fff; font-size:18px; height:16px;">Modificar de Equipos</p>
+        	<p style="color: #fff; font-size:18px; height:16px;">Modificar Factura</p>
         	
         </div>
     	<div class="cuerpoBox">
@@ -181,13 +192,15 @@ if ($_SESSION['refroll_predio'] != 1) {
 <div id="dialog2" title="Eliminar Equipos">
     	<p>
         	<span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
-            ¿Esta seguro que desea eliminar el equipo?.<span id="proveedorEli"></span>
+            ¿Esta seguro que desea eliminar la Factura?.<span id="proveedorEli"></span>
         </p>
-        <p><strong>Importante: </strong>Si elimina el equipo se perderan todos los datos de este</p>
+        <p><strong>Importante: </strong>Si elimina el equipo se perderan todos los datos de esta</p>
         <input type="hidden" value="" id="idEliminar" name="idEliminar">
 </div>
 <script type="text/javascript" src="../../js/jquery.dataTables.min.js"></script>
 <script src="../../bootstrap/js/dataTables.bootstrap.js"></script>
+<script src="../../js/bootstrap-datetimepicker.min.js"></script>
+<script src="../../js/bootstrap-datetimepicker.es.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -212,6 +225,15 @@ $(document).ready(function(){
 		  }
 	});//fin del boton eliminar
 
+	$("#importebruto").change( function(){
+		var iva 	= parseFloat($("#importebruto").val()) * 0.16;
+		var total	= parseFloat($("#importebruto").val()) * 1.16;
+		
+		$("#iva").val(iva);
+		$("#total").val(total);
+		
+	});//calcula el iva
+	
 	 $( "#dialog2" ).dialog({
 		 	
 			    autoOpen: false,
@@ -223,7 +245,7 @@ $(document).ready(function(){
 				    "Eliminar": function() {
 	
 						$.ajax({
-									data:  {id: $('#idEliminar').val(), accion: 'eliminarEquipos'},
+									data:  {id: $('#idEliminar').val(), accion: 'eliminarFacturas'},
 									url:   '../../ajax/ajax.php',
 									type:  'post',
 									beforeSend: function () {
@@ -289,7 +311,7 @@ $(document).ready(function(){
                                             $(".alert").removeClass("alert-danger");
 											$(".alert").removeClass("alert-info");
                                             $(".alert").addClass("alert-success");
-                                            $(".alert").html('<strong>Ok!</strong> Se modifico exitosamente el <strong>Equipo</strong>. ');
+                                            $(".alert").html('<strong>Ok!</strong> Se modifico exitosamente la <strong>Factura</strong>. ');
 											$(".alert").delay(3000).queue(function(){
 												/*aca lo que quiero hacer 
 												  después de los 2 segundos de retraso*/
@@ -317,6 +339,19 @@ $(document).ready(function(){
 		}
     });
 
+});
+</script>
+<script type="text/javascript">
+$('.form_date').datetimepicker({
+	language:  'es',
+	weekStart: 1,
+	todayBtn:  1,
+	autoclose: 1,
+	todayHighlight: 1,
+	startView: 2,
+	minView: 2,
+	forceParse: 0,
+	format: 'dd/mm/yyyy'
 });
 </script>
 <?php } ?>

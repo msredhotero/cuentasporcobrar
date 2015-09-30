@@ -8,8 +8,11 @@ body {
 
 	font-family:RobotoThin;
 	width: 100%;
+	min-height: 100%;
+	height: auto !important;
 	height: 100%;
-	background: url(../imagenes/DeclaraExpress_factura.jpg) 50% 50% no-repeat;
+	margin: 0 auto -60px;
+	background: url(../imagenes/DeclaraExpress_factura.jpg) 100% 0% no-repeat;
 	background-size: cover;
 /*background:#FFF;*/
 }
@@ -552,7 +555,8 @@ footer {
 	border-top:1px solid #6B9FDE;
 	width:100%;
 	text-align:center;
-	/*height:40px;*/
+	position: absolute;
+	bottom: 0;
 	padding-top:1%;
 }
 

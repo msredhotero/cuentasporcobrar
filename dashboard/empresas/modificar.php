@@ -12,28 +12,28 @@ if (!isset($_SESSION['usua_predio']))
 include ('../../includes/funciones.php');
 include ('../../includes/funcionesUsuarios.php');
 include ('../../includes/funcionesHTML.php');
-include ('../../includes/funcionesEquipos.php');
+include ('../../includes/funcionesEmpresas.php');
 
 $serviciosFunciones = new Servicios();
 $serviciosUsuario 	= new ServiciosUsuarios();
 $serviciosHTML 		= new ServiciosHTML();
-$serviciosEquipos 	= new ServiciosE();
+$serviciosEmpresas 	= new ServiciosEmpresas();
 
 $fecha = date('Y-m-d');
 
 //$resProductos = $serviciosProductos->traerProductosLimite(6);
-$resMenu = $serviciosHTML->menu(utf8_encode($_SESSION['nombre_predio']),"Equipos",$_SESSION['refroll_predio'],utf8_encode($_SESSION['torneo_predio']));
+$resMenu = $serviciosHTML->menu(utf8_encode($_SESSION['nombre_predio']),"Empresas",$_SESSION['refroll_predio'],"Empresas");
 
 
 $id = $_GET['id'];
 
-$resResultado = $serviciosEquipos->TraerIdEquipo($id);
+$resResultado = $serviciosEmpresas->traerEmpresasPorId($id);
 
 /////////////////////// Opciones para la creacion del formulario  /////////////////////
-$tabla 			= "dbequipos";
+$tabla 			= "dbempresas";
 
-$lblCambio	 	= array("nombrecapitan","emailcapitan","telefonocapitan","facebookcapitan","nombresubcapitan","emailsubcapitan","telefonosubcapitan","facebooksubcapitan");
-$lblreemplazo	= array("Nombre Capitán","Email Capitán","Telefono Capitán","Facebook Capitán","Nombre SubCapitán","Email SubCapitán","Telefono SubCapitán","Facebook SubCapitán");
+$lblCambio	 	= array("razonsocial","rfc","direccion","telefono", "objetoempresa");
+$lblreemplazo	= array("Razon Social","RFC","Dirección","Teléfono","Objeto Empresa");
 
 $cadRef = '';
 
@@ -44,23 +44,7 @@ $refCampo[] 	= "";
 
 
 
-/////////////////////// Opciones para la creacion del view  /////////////////////
-$cabeceras 		= "	<th>Nombre</th>
-				<th>Nombre Capitán</th>
-				<th>Email Capitán</th>
-				<th>Telefono Capitán</th>
-				<th>Facebook Capitán</th>
-				<th>Nombre SubCapitán</th>
-				<th>Email SubCapitán</th>
-				<th>Telefono SubCapitán</th>
-				<th>Facebook SubCapitán</th>";
-
-//////////////////////////////////////////////  FIN de los opciones //////////////////////////
-
-
-
-
-$formulario 	= $serviciosFunciones->camposTablaModificar($id, "idequipo", "modificarEquipos",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
+$formulario 	= $serviciosFunciones->camposTablaModificar($id, "idempresa", "modificarEmpresas",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
 
 
 if ($_SESSION['refroll_predio'] != 1) {
@@ -84,7 +68,7 @@ if ($_SESSION['refroll_predio'] != 1) {
 
 
 
-<title>Gestión: Predio 98</title>
+<title>Gestión: Facturación - Cuentas Por Cobrar</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
@@ -128,11 +112,11 @@ if ($_SESSION['refroll_predio'] != 1) {
 
 <div id="content">
 
-<h3>Equipos</h3>
+<h3>Empresas</h3>
 
     <div class="boxInfoLargo">
         <div id="headBoxInfo">
-        	<p style="color: #fff; font-size:18px; height:16px;">Modificar de Equipos</p>
+        	<p style="color: #fff; font-size:18px; height:16px;">Modificar Empresa</p>
         	
         </div>
     	<div class="cuerpoBox">
@@ -181,7 +165,7 @@ if ($_SESSION['refroll_predio'] != 1) {
 <div id="dialog2" title="Eliminar Equipos">
     	<p>
         	<span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
-            ¿Esta seguro que desea eliminar el equipo?.<span id="proveedorEli"></span>
+            ¿Esta seguro que desea eliminar la Empresa?.<span id="proveedorEli"></span>
         </p>
         <p><strong>Importante: </strong>Si elimina el equipo se perderan todos los datos de este</p>
         <input type="hidden" value="" id="idEliminar" name="idEliminar">
@@ -223,7 +207,7 @@ $(document).ready(function(){
 				    "Eliminar": function() {
 	
 						$.ajax({
-									data:  {id: $('#idEliminar').val(), accion: 'eliminarEquipos'},
+									data:  {id: $('#idEliminar').val(), accion: 'eliminarEmpresas'},
 									url:   '../../ajax/ajax.php',
 									type:  'post',
 									beforeSend: function () {
@@ -289,7 +273,7 @@ $(document).ready(function(){
                                             $(".alert").removeClass("alert-danger");
 											$(".alert").removeClass("alert-info");
                                             $(".alert").addClass("alert-success");
-                                            $(".alert").html('<strong>Ok!</strong> Se modifico exitosamente el <strong>Equipo</strong>. ');
+                                            $(".alert").html('<strong>Ok!</strong> Se modifico exitosamente la <strong>Empresa</strong>. ');
 											$(".alert").delay(3000).queue(function(){
 												/*aca lo que quiero hacer 
 												  después de los 2 segundos de retraso*/

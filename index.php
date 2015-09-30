@@ -233,6 +233,7 @@ $servicios = new Servicios();
      <br>
      <br>
      <br>
+     </div>
 </div><!-- fin del content -->
 
 <footer>

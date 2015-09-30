@@ -5,12 +5,14 @@ include ('../includes/funciones.php');
 include ('../includes/funcionesHTML.php');
 include ('../includes/funcionesClientes.php');
 include ('../includes/funcionesEmpresas.php');
+include ('../includes/funcionesFacturas.php');
 
 $serviciosUsuarios  = new ServiciosUsuarios();
 $serviciosFunciones = new Servicios();
 $serviciosHTML		= new ServiciosHTML();
 $serviciosClientes 	= new ServiciosClientes();
 $serviciosEmpresas	= new ServiciosEmpresas();
+$serviciosFacturas	= new ServiciosFacturas();
 
 $accion = $_POST['accion'];
 
@@ -55,6 +57,19 @@ break;
 case 'eliminarEmpresas': 
 eliminarEmpresas($serviciosEmpresas); 
 break; 
+
+/* Fin */
+
+/* PARA Facturas */
+case 'insertarFacturas':
+insertarFacturas($serviciosFacturas);
+break;
+case 'modificarFacturas':
+modificarFacturas($serviciosFacturas);
+break;
+case 'eliminarFacturas':
+eliminarFacturas($serviciosFacturas);
+break;
 
 /* Fin */
 
@@ -140,6 +155,49 @@ echo $res;
 } 
 
 /* Fin */
+
+
+/* PARA Facturas */
+function insertarFacturas($serviciosFacturas) {
+$nrofactura = $_POST['nrofactura'];
+$fecha = $_POST['fecha'];
+$refcliente = $_POST['refcliente'];
+$concepto = $_POST['concepto'];
+$importebruto = $_POST['importebruto'];
+$iva = $_POST['iva'];
+$total = $_POST['total'];
+$refempresa = $_POST['refempresa'];
+$res = $serviciosFacturas->insertarFacturas($nrofactura,$fecha,$refcliente,$concepto,$importebruto,$iva,$total,$refempresa);
+if ((integer)$res > 0) {
+echo '';
+} else {
+echo 'Huvo un error al insertar datos ';
+}
+}
+function modificarFacturas($serviciosFacturas) {
+$id = $_POST['id'];
+$nrofactura = $_POST['nrofactura'];
+$fecha = $_POST['fecha'];
+$refcliente = $_POST['refcliente'];
+$concepto = $_POST['concepto'];
+$importebruto = $_POST['importebruto'];
+$iva = $_POST['iva'];
+$total = $_POST['total'];
+$refempresa = $_POST['refempresa'];
+$res = $serviciosFacturas->modificarFacturas($id,$nrofactura,$fecha,$refcliente,$concepto,$importebruto,$iva,$total,$refempresa);
+if ($res == true) {
+echo '';
+} else {
+echo 'Huvo un error al modificar datos';
+}
+}
+function eliminarFacturas($serviciosFacturas) {
+$id = $_POST['id'];
+$res = $serviciosFacturas->eliminarFacturas($id);
+echo $res;
+}
+
+/* Fin */ 
 
 ////////////////////////// FIN DE TRAER DATOS ////////////////////////////////////////////////////////////
 

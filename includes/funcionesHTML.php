@@ -53,7 +53,7 @@ function menu($usuario,$titulo,$rol,$empresa) {
 		</div> 
 	
 		<div id="navigation" >
-			
+			<img src="../imagenes/factura.png"/ style="padding-bottom:15%;" width="220">
 			
 				<nav class="nav">
 					<ul>
