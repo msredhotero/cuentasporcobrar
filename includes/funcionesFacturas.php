@@ -59,6 +59,46 @@ $res = $this->query($sql,0);
 return $res;
 }
 
+function traerFacturasPorCliente($idCliente) {
+$sql = "select  f.idfactura, f.nrofactura, f.fecha, c.razonsocial, 
+				f.concepto, f.importebruto, f.iva, f.total, e.razonsocial,
+				f.refcliente, f.refempresa
+		from dbfacturas f 
+		inner join dbclientes c on f.refcliente = c.idcliente
+		inner join dbempresas e on f.refempresa = e.idempresa
+		where c.idcliente = ".$idCliente." 
+		order by f.fecha";
+$res = $this->query($sql,0);
+return $res;
+}
+
+function traerFacturasPorEmpresa($idEmpresa) {
+$sql = "select  f.idfactura, f.nrofactura, f.fecha, c.razonsocial, 
+				f.concepto, f.importebruto, f.iva, f.total, e.razonsocial,
+				f.refcliente, f.refempresa
+		from dbfacturas f 
+		inner join dbclientes c on f.refcliente = c.idcliente
+		inner join dbempresas e on f.refempresa = e.idempresa
+		where e.idempresa = ".$idEmpresa." 
+		order by f.fecha";
+$res = $this->query($sql,0);
+return $res;
+}
+
+
+function traerFacturasPorClienteEmpresa($idCliente, $idEmpresa) {
+$sql = "select  f.idfactura, f.nrofactura, f.fecha, c.razonsocial, 
+				f.concepto, f.importebruto, f.iva, f.total, e.razonsocial,
+				f.refcliente, f.refempresa
+		from dbfacturas f 
+		inner join dbclientes c on f.refcliente = c.idcliente
+		inner join dbempresas e on f.refempresa = e.idempresa
+		where e.idempresa = ".$idEmpresa." and c.idcliente = ".$idCliente." 
+		order by f.fecha";
+$res = $this->query($sql,0);
+return $res;
+}
+
 
 function traerFacturasPorId($id) {
 $sql = "select f.idfactura, f.nrofactura, f.fecha, c.razonsocial as cliente, 

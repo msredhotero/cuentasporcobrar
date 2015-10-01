@@ -6,6 +6,7 @@ include ('../includes/funcionesHTML.php');
 include ('../includes/funcionesClientes.php');
 include ('../includes/funcionesEmpresas.php');
 include ('../includes/funcionesFacturas.php');
+include ('../includes/funcionesPagos.php');
 
 $serviciosUsuarios  = new ServiciosUsuarios();
 $serviciosFunciones = new Servicios();
@@ -13,6 +14,7 @@ $serviciosHTML		= new ServiciosHTML();
 $serviciosClientes 	= new ServiciosClientes();
 $serviciosEmpresas	= new ServiciosEmpresas();
 $serviciosFacturas	= new ServiciosFacturas();
+$serviciosPagos		= new ServiciosPagos();
 
 $accion = $_POST['accion'];
 
@@ -71,6 +73,41 @@ case 'eliminarFacturas':
 eliminarFacturas($serviciosFacturas);
 break;
 
+case 'traerFacturasPorCliente':
+traerFacturasPorCliente($serviciosFacturas);
+break;
+case 'traerFacturasPorClienteEmpresa':
+traerFacturasPorClienteEmpresa($serviciosFacturas);
+break;
+case 'traerFacturasPorEmpresa':
+traerFacturasPorEmpresa($serviciosFacturas);
+break;
+case 'traerMontoFacturasPorId':
+traerMontoFacturasPorId($serviciosFacturas);
+break;
+
+/* Fin */
+
+/* PARA Pagos */
+case 'insertarPagos': 
+insertarPagos($serviciosPagos); 
+break; 
+case 'modificarPagos': 
+modificarPagos($serviciosPagos); 
+break; 
+case 'eliminarPagos': 
+eliminarPagos($serviciosPagos); 
+break; 
+
+case 'insertarPagosFacturas': 
+insertarPagosFacturas($serviciosPagos); 
+break; 
+case 'modificarPagosFacturas': 
+modificarPagosFacturas($serviciosPagos); 
+break; 
+case 'eliminarPagosFacturas': 
+eliminarPagosFacturas($serviciosPagos); 
+break; 
 /* Fin */
 
 }
@@ -197,7 +234,119 @@ $res = $serviciosFacturas->eliminarFacturas($id);
 echo $res;
 }
 
+
+function traerFacturasPorCliente($serviciosFacturas) {
+	$refCliente		= $_POST['refcliente'];
+	$forma			= $_POST['forma'];
+	
+	$resFacturas = $serviciosFacturas->traerFacturasPorCliente($refCliente);
+
+	switch ($forma) {
+		case 'check':
+			$cadFacturasS = '<ul class="list-inline">';
+			while ($rowFS = mysql_fetch_array($resFacturas)) {
+				$cadFacturasS = $cadFacturasS."<li>".'<input id="fecha'.$rowFS[0].'" class="form-control lstcheck" type="checkbox" required="" style="width:310px;" name="factura'.$rowFS[0].'"><p>'.$rowFS[1]." - Fecha: ".$rowFS['fecha']." - Importe: $".number_format($rowFS['total'],2,'.',',').'</p>'."</li>";
+			}
+			$cadFacturasS = $cadFacturasS."</ul>";
+			break;
+		
+	}
+	
+	echo $cadFacturasS;
+}
+
+
+function traerFacturasPorClienteEmpresa($serviciosFacturas) {
+	$refCliente		= $_POST['refcliente'];
+	$refEmpresa		= $_POST['refempresa'];
+}
+
+function traerMontoFacturasPorId($serviciosFacturas) {
+	$idFactura		= $_POST['idfactura'];
+//	$refEmpresa		= $_POST['refempresa'];
+
+	$resFacturas = $serviciosFacturas->traerFacturasPorId($idFactura);
+	
+	if (mysql_num_rows($resFacturas)>0) {
+		echo mysql_result($resFacturas,0,'total');
+	} else {
+		echo 0;	
+	}
+	
+}
+
+
+function traerFacturasPorEmpresa($serviciosFacturas) {
+	$refEmpresa		= $_POST['refempresa'];
+}
+
 /* Fin */ 
+
+
+
+/* PARA Pagos */
+function insertarPagos($serviciosPagos) { 
+$fechapago = $_POST['fechapago']; 
+$montoapagar = $_POST['montoapagar']; 
+$referencia = $_POST['referencia']; 
+$comentarios = $_POST['comentarios']; 
+$res = $serviciosPagos->insertarPagos($fechapago,$montoapagar,$referencia,$comentarios); 
+if ((integer)$res > 0) { 
+echo ''; 
+} else { 
+echo 'Huvo un error al insertar datos';	
+} 
+} 
+function modificarPagos($serviciosPagos) { 
+$id = $_POST['id']; 
+$fechapago = $_POST['fechapago']; 
+$montoapagar = $_POST['montoapagar']; 
+$referencia = $_POST['referencia']; 
+$comentarios = $_POST['comentarios']; 
+$res = $serviciosPagos->modificarPagos($id,$fechapago,$montoapagar,$referencia,$comentarios); 
+if ($res == true) { 
+echo ''; 
+} else { 
+echo 'Huvo un error al modificar datos'; 
+} 
+} 
+function eliminarPagos($serviciosPagos) { 
+$id = $_POST['id']; 
+$res = $serviciosPagos->eliminarPagos($id); 
+echo $res; 
+} 
+
+function insertarPagosFacturas($serviciosPagosFacturas) { 
+$refpago = $_POST['refpago']; 
+$reffactura = $_POST['reffactura']; 
+$refestatu = $_POST['refestatu']; 
+$res = $serviciosPagosFacturas->insertarPagosFacturas($refpago,$reffactura,$refestatu); 
+if ((integer)$res > 0) { 
+echo ''; 
+} else { 
+echo 'Huvo un error al insertar datos';	
+} 
+} 
+function modificarPagosFacturas($serviciosPagosFacturas) { 
+$id = $_POST['id']; 
+$refpago = $_POST['refpago']; 
+$reffactura = $_POST['reffactura']; 
+$refestatu = $_POST['refestatu']; 
+$res = $serviciosPagosFacturas->modificarPagosFacturas($id,$refpago,$reffactura,$refestatu); 
+if ($res == true) { 
+echo ''; 
+} else { 
+echo 'Huvo un error al modificar datos'; 
+} 
+} 
+function eliminarPagosFacturas($serviciosPagosFacturas) { 
+$id = $_POST['id']; 
+$res = $serviciosPagosFacturas->eliminarPagosFacturas($id); 
+echo $res; 
+} 
+
+/* Fin */
+
 
 ////////////////////////// FIN DE TRAER DATOS ////////////////////////////////////////////////////////////
 
