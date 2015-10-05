@@ -44,7 +44,7 @@ function menu($usuario,$titulo,$rol,$empresa) {
 			
 			<ul class="list-inline">
 				<li><span class="glyphicon glyphicon-user"></span> '.$usuario.'</li>
-				<li style="color:#FC0;">'.$empresa.' <a href="../empresa/cambiarempresa.php"> Cambiar</a></li>    
+				<li style="color:#FC0;">'.$empresa.' <a href="../empresas/cambiarempresa.php"> Cambiar</a></li>    
 			</ul>
 		</div>
 		 

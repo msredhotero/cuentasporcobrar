@@ -26,7 +26,7 @@ $serviciosEmpresas	= new ServiciosEmpresas();
 $fecha = date('Y-m-d');
 
 //$resProductos = $serviciosProductos->traerProductosLimite(6);
-$resMenu = $serviciosHTML->menu(utf8_encode($_SESSION['nombre_predio']),"Facturas",$_SESSION['refroll_predio'],"Empresa");
+$resMenu = $serviciosHTML->menu(utf8_encode($_SESSION['nombre_predio']),"Facturas",$_SESSION['refroll_predio'],utf8_encode($_SESSION['usua_empresa']));
 
 
 
@@ -49,7 +49,11 @@ $resEmpresa 	= $serviciosEmpresas->traerEmpresas();
 
 $cadEmpresa = '';
 while ($rowFF = mysql_fetch_array($resEmpresa)) {
-	$cadEmpresa = $cadEmpresa.'<option value="'.$rowFF[0].'">'.utf8_encode($rowFF[1]).'</option>';
+	if ($rowFF[0] == $_SESSION['usua_idempresa']) {
+		$cadEmpresa = $cadEmpresa.'<option value="'.$rowFF[0].'" selected>'.utf8_encode($rowFF[1]).'</option>';
+	} else {
+		$cadEmpresa = $cadEmpresa.'<option value="'.$rowFF[0].'">'.utf8_encode($rowFF[1]).'</option>';	
+	}
 	
 }
 

@@ -2,10 +2,13 @@
 
 require 'includes/funcionesUsuarios.php';
 include ('includes/funciones.php');
+include ('includes/funcionesEmpresas.php');
 
 $serviciosUsuarios = new ServiciosUsuarios();
 $servicios = new Servicios();
+$serviciosEmpresas  = new ServiciosEmpresas();
 
+$resEmpresa = $serviciosEmpresas->traerEmpresas();
 
 ?>
 <!DOCTYPE HTML>
@@ -111,7 +114,7 @@ $servicios = new Servicios();
         						$.ajax({
                                 data:  {email:		$("#email").val(),
 										pass:		$("#pass").val(),
-										reftorneo:	$('#reftorneo').val(),
+										idempresa:	$('#idempresa').val(),
 										accion:		'login'},
                                 url:   'ajax/ajax.php',
                                 type:  'post',
@@ -212,6 +215,21 @@ $servicios = new Servicios();
                 </div>
               </div>
               
+              <div class="form-group">
+                <label for="ejemplo_password_2" class="col-md-2 control-label" style="color:#FFF;text-align:left;">Empresa</label>
+                <div class="col-lg-7">
+                  <select id="idempresa" class="form-control" name="idempresa">
+                        <?php
+                            while ($row = mysql_fetch_array($resEmpresa)) {
+                        ?>
+                                <option value="<?php echo $row[0]; ?>"><?php echo utf8_encode($row[1]); ?></option>
+                        <?php	
+                            }
+                        ?>
+                    </select>
+                </div>
+              </div>
+              
               
               <div class="form-group">
               	<label for="olvido" class="control-label" style="color:#FFF">¿Has olvidado tu contraseña?. <a href="recuperarpassword.php">Recuperar.</a></label>
@@ -247,19 +265,6 @@ $servicios = new Servicios();
 
 </footer>
 
-<script type="text/javascript">
-$( document ).ready(function() {
-	$('#novillo').click(function(event){
-			url = "novillo.php";
-			$(location).attr('href',url);
-	});//fin del boton novillo
-	
-	$('#ternera').click(function(event){
-			url = "ternera.php";
-			$(location).attr('href',url);
-	});//fin del boton ternera
-});
-</script>
 
 
 </body>

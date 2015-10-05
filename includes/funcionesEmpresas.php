@@ -49,6 +49,18 @@ $res = $this->query($sql,0);
 return $res; 
 } 
 
+	function cambiarEmpresa($idempresa) {
+	
+		session_start();
+		
+		$sqlEmpresa = "select razonsocial from dbempresas where idempresa =".$idempresa;
+		$resEmpresa = $this->query($sqlEmpresa,0);
+		
+		$_SESSION['usua_idempresa'] = $idempresa;
+		$_SESSION['usua_empresa'] = mysql_result($resEmpresa,0,0);
+		
+		return true;
+	}
 /* Fin */
 
 

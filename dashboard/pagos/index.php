@@ -28,7 +28,7 @@ $serviciosPagos		= new ServiciosPagos();
 $fecha = date('Y-m-d');
 
 //$resProductos = $serviciosProductos->traerProductosLimite(6);
-$resMenu = $serviciosHTML->menu(utf8_encode($_SESSION['nombre_predio']),"Pagos",$_SESSION['refroll_predio'],"Empresa");
+$resMenu = $serviciosHTML->menu(utf8_encode($_SESSION['nombre_predio']),"Pagos",$_SESSION['refroll_predio'],utf8_encode($_SESSION['usua_empresa']));
 
 
 /////////////////////// Opciones para la creacion del formulario  /////////////////////
@@ -115,6 +115,7 @@ if ($_SESSION['refroll_predio'] != 1) {
     
 	<!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="../../bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../../css/bootstrap-datetimepicker.min.css">
 	<link href='http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
     <!-- Latest compiled and minified JavaScript -->
     <script src="../../bootstrap/js/bootstrap.min.js"></script>
@@ -170,17 +171,30 @@ if ($_SESSION['refroll_predio'] != 1) {
                     	
                     </div>
                 </div>
-                <div class="form-group col-md-12">
+                <div class="form-group col-md-6">
                 	<label class="control-label" style="text-align:left" for="facturas">Total a Pagar</label>
-                    <div class="input-group col-md-4">
+                    <div class="input-group col-md-7">
                     	<span class="input-group-addon">$</span>
                         <input class="form-control" type="text" value="0" name="total" id="total" readonly>
                         <span class="input-group-addon">.00</span>
                     </div>
                 </div>
+                
+                <div class="form-group col-md-6">
+                	<label class="control-label" style="text-align:left" for="facturas">Saldo</label>
+                    <div class="input-group col-md-7">
+                    	<span class="input-group-addon">$</span>
+                        <input class="form-control" type="text" value="0" name="saldo" id="saldo" readonly>
+                        <span class="input-group-addon">.00</span>
+                    </div>
+                </div>
             </div>
+            
+            <hr>
+            
             <div class="row">
 			<?php echo $formulario; ?>
+            <input type="hidden" id="refempresa" name="refempresa" value="<?php echo $_SESSION['usua_idempresa']; ?>" />
             </div>
             
             <div class='row' style="margin-left:25px; margin-right:25px;">
@@ -234,6 +248,8 @@ if ($_SESSION['refroll_predio'] != 1) {
 </div>
 <script type="text/javascript" src="../../js/jquery.dataTables.min.js"></script>
 <script src="../../bootstrap/js/dataTables.bootstrap.js"></script>
+<script src="../../js/bootstrap-datetimepicker.min.js"></script>
+<script src="../../js/bootstrap-datetimepicker.es.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -295,9 +311,10 @@ $(document).ready(function(){
 	function traerFacturas() {
 		
 		$.ajax({
-				data:  {refcliente: $('#refcliente').val(), 
+				data:  {refcliente: $('#refcliente').val(),
+						refempresa: <?php echo $_SESSION['usua_idempresa']; ?>,
 						forma: 'check',
-						accion: 'traerFacturasPorCliente'},
+						accion: 'traerFacturasPorClienteEmpresa'},
 				url:   '../../ajax/ajax.php',
 				type:  'post',
 				beforeSend: function () {
@@ -313,7 +330,7 @@ $(document).ready(function(){
 	function traerFacturasPorId(id, operacion) {
 		
 		$.ajax({
-				data:  {idfactura: id.replace('fecha',''), 
+				data:  {idfactura: id.replace('factura',''), 
 						accion: 'traerMontoFacturasPorId'},
 				url:   '../../ajax/ajax.php',
 				type:  'post',
@@ -321,11 +338,18 @@ $(document).ready(function(){
 						
 				},
 				success:  function (response) {
+					
+					datos = response.split("|");
+					
 					if (operacion == 0) {
-						$('#total').val(parseFloat($('#total').val()) + parseFloat(response));
+						$('#total').val(parseFloat($('#total').val()) + parseFloat(datos[0]));
+						$('#saldo').val(parseFloat($('#saldo').val()) +  parseFloat(datos[1]));
 					} else {
-						$('#total').val(parseFloat(response) - parseFloat($('#total').val()));
+						$('#total').val(parseFloat($('#total').val() - parseFloat(datos[0])));
+						$('#saldo').val(parseFloat($('#saldo').val() - parseFloat(datos[1])));
 					}
+					
+					
 						
 				}
 		});
@@ -385,7 +409,7 @@ $(document).ready(function(){
 	 		}); //fin del dialogo para eliminar
 			
 	<?php 
-		//echo $serviciosHTML->validacion($tabla);
+		echo $serviciosHTML->validacion($tabla);
 	
 	?>
 	
@@ -450,6 +474,19 @@ $(document).ready(function(){
 		}
     });
 
+});
+</script>
+<script type="text/javascript">
+$('.form_date').datetimepicker({
+	language:  'es',
+	weekStart: 1,
+	todayBtn:  1,
+	autoclose: 1,
+	todayHighlight: 1,
+	startView: 2,
+	minView: 2,
+	forceParse: 0,
+	format: 'dd/mm/yyyy'
 });
 </script>
 <?php } ?>

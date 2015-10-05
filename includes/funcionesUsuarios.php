@@ -20,7 +20,7 @@ function GUID()
 }
 
 
-function login($usuario,$pass) {
+function login($usuario,$pass,$idempresa) {
 	
 	$sqlusu = "select * from dbusuarios where email = '".$usuario."'";
 
@@ -61,11 +61,18 @@ if (mysql_num_rows($respusu) > 0) {
 		$_SESSION['email_predio'] = mysql_result($resppass,0,1);
 		$_SESSION['refroll_predio'] = mysql_result($resppass,0,3);
 		
-		//////////////// EN CASO DE NECESITAR ENTRAR POR EMPRESA ///////////////////////////////////////
 		
-		/*$sqlTorneo = "select descripciontorneo,idtipotorneo from tbtipotorneo where idtipotorneo =".$torneo;
-		$_SESSION['torneo_predio'] = mysql_result($this->query($sqlTorneo,0),0,0);
-		$_SESSION['idtorneo_predio'] = mysql_result($this->query($sqlTorneo,0),0,1);*/
+		//////////////// EN CASO DE NECESITAR ENTRAR POR EMPRESA ///////////////////////////////////////
+		if ($idempresa != '') {
+		$sqlEmpresa = "select razonsocial from dbempresas where idempresa =".$idempresa;
+		$resEmpresa = $this->query($sqlEmpresa,0);
+		
+		$_SESSION['usua_idempresa'] = $idempresa;
+		$_SESSION['usua_empresa'] = mysql_result($resEmpresa,0,0);
+		} else {
+			$_SESSION['usua_idempresa'] = 0;
+			$_SESSION['usua_empresa'] = 'Debe Cargar una Empresa!';
+		}
 	}
 	
 }	else {

@@ -89,7 +89,7 @@ return $res;
 function traerFacturasPorClienteEmpresa($idCliente, $idEmpresa) {
 $sql = "select  f.idfactura, f.nrofactura, f.fecha, c.razonsocial, 
 				f.concepto, f.importebruto, f.iva, f.total, e.razonsocial,
-				f.refcliente, f.refempresa
+				f.refcliente, f.refempresa, coalesce(saldoFactura( f.idfactura ),0) as saldo
 		from dbfacturas f 
 		inner join dbclientes c on f.refcliente = c.idcliente
 		inner join dbempresas e on f.refempresa = e.idempresa
@@ -103,7 +103,7 @@ return $res;
 function traerFacturasPorId($id) {
 $sql = "select f.idfactura, f.nrofactura, f.fecha, c.razonsocial as cliente, 
 				f.concepto, f.importebruto, f.iva, f.total, e.razonsocial as empresa,
-				f.refcliente, f.refempresa 
+				f.refcliente, f.refempresa , coalesce(saldoFactura( f.idfactura ),0) as saldo
 			from dbfacturas f 
 			inner join dbclientes c on f.refcliente = c.idcliente
 			inner join dbempresas e on f.refempresa = e.idempresa
