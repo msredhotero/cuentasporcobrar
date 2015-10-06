@@ -186,8 +186,9 @@ function traerUsuario($email) {
 
 function traerUsuarios() {
 	$sql = "select idusuario,usuario,refroll,nombrecompleto,email,password 
-			from se_usuarios 
-			order by concat(apellido,', ',nombre)";
+			from dbusuarios u
+			inner join tbroles r on u.refroll = r.idrol 
+			order by nombrecompleto";
 	$res = $this->query($sql,0);
 	if ($res == false) {
 		return 'Error al traer datos';
@@ -209,7 +210,7 @@ function traerTodosUsuarios() {
 }
 
 function traerUsuarioId($id) {
-	$sql = "select idusuario,usuario,refroll,nombrecompleto,email,password from se_usuarios where idusuario = ".$id;
+	$sql = "select idusuario,usuario,refroll,nombrecompleto,email,password from dbusuarios where idusuario = ".$id;
 	$res = $this->query($sql,0);
 	if ($res == false) {
 		return 'Error al traer datos';
@@ -219,7 +220,7 @@ function traerUsuarioId($id) {
 }
 
 function existeUsuario($usuario) {
-	$sql = "select * from se_usuarios where email = '".$usuario."'";
+	$sql = "select * from dbusuarios where email = '".$usuario."'";
 	$res = $this->query($sql,0);
 	if (mysql_num_rows($res)>0) {
 		return true;	
@@ -256,7 +257,7 @@ function enviarEmail($destinatario,$asunto,$cuerpo) {
 
 
 function insertarUsuario($usuario,$password,$refroll,$email,$nombrecompleto) {
-	$sql = "INSERT INTO se_usuarios
+	$sql = "INSERT INTO dbusuarios
 				(idusuario,
 				usuario,
 				password,
@@ -284,11 +285,12 @@ function insertarUsuario($usuario,$password,$refroll,$email,$nombrecompleto) {
 
 
 function modificarUsuario($id,$usuario,$password,$refroll,$email,$nombrecompleto) {
-	$sql = "UPDATE se_usuarios
+	$sql = "UPDATE dbusuarios
 			SET
 				usuario = '".utf8_decode($usuario)."',
 				password = '".utf8_decode($password)."',
 				email = '".utf8_decode($email)."',
+				refroll = '".utf8_decode($refroll)."',
 				nombrecompleto = '".utf8_decode($nombrecompleto)."'
 			WHERE idusuario = ".$id;
 	$res = $this->query($sql,0);
