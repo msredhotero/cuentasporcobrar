@@ -283,7 +283,11 @@ function traerFacturasPorClienteEmpresa($serviciosFacturas) {
 		case 'check':
 			$cadFacturasS = '<ul class="list-inline">';
 			while ($rowFS = mysql_fetch_array($resFacturas)) {
-				$cadFacturasS = $cadFacturasS."<li>".'<input id="factura'.$rowFS[0].'" class="form-control lstcheck" type="checkbox" required="" style="width:330px;" name="factura'.$rowFS[0].'"><p>'.$rowFS[1]." - Fecha: ".$rowFS['fecha']." - Importe: $".number_format($rowFS['total'],2,'.',',').'</p>'."</li>";
+				if ($rowFS['saldo'] == 0) {
+					$cadFacturasS = $cadFacturasS."<li>".'<input id="factura'.$rowFS[0].'" class="form-control lstcheck" type="checkbox" required="" style="width:430px;" name="factura'.$rowFS[0].'">'."<p><span style='color:#2DE404;' class='glyphicon glyphicon-ok'></span> Nro: <strong>".$rowFS[1]."</strong> - Fecha: ".$rowFS['fecha']." - Importe: <strong>$".number_format($rowFS['total'],2,'.',',')."</strong></p></li>";
+				} else {
+					$cadFacturasS = $cadFacturasS."<li>".'<input id="factura'.$rowFS[0].'" class="form-control lstcheck" type="checkbox" required="" style="width:430px;" name="factura'.$rowFS[0].'">'."<p><span style='color:#E40404;' class='glyphicon glyphicon-remove'></span> Nro: <strong>".$rowFS[1]."</strong> - Fecha: ".$rowFS['fecha']." - Importe: <strong>$".number_format($rowFS['total'],2,'.',',')."</strong></p></li>";
+				}
 			}
 			$cadFacturasS = $cadFacturasS."</ul>";
 			break;
@@ -322,8 +326,6 @@ function insertarPagos($serviciosPagos, $serviciosFacturas) {
 	$fechapago 		= $_POST['fechapago']; 
 	$montoapagar 	= $_POST['montoapagar'];
 	
-	$saldo			= $montoapagar;
-	
 	$referencia 	= $_POST['referencia']; 
 	$comentarios 	= $_POST['comentarios']; 
 	
@@ -339,15 +341,15 @@ function insertarPagos($serviciosPagos, $serviciosFacturas) {
 		$cadPost   .=	$rowFS[0];
 		
 		if (isset($_POST[$cadPost])) {
-			$saldo 			= $saldo - $rowFS['total'];
-			if ($saldo > 0) {
-				$lstFacturas[] 	= array("idFact" => $rowFS[0], "monto" => $rowFS['total'], "estatus" => 3);
+			$montoapagar 		= $montoapagar - $rowFS['saldo'];
+			if ($montoapagar > 0) {
+				$lstFacturas[] 	= array("idFact" => $rowFS[0], "monto" => $rowFS['saldo'], "estatus" => 3);
 			} else {
-				if ($saldo == 0) {
-					$lstFacturas[] 	= array("idFact" => $rowFS[0], "monto" => $rowFS['total'], "estatus" => 3);
+				if ($montoapagar == 0) {
+					$lstFacturas[] 	= array("idFact" => $rowFS[0], "monto" => $rowFS['saldo'], "estatus" => 3);
 					break 1;
 				} else {
-					$lstFacturas[] 	= array("idFact" => $rowFS[0], "monto" => $rowFS['total'], "estatus" => 2);
+					$lstFacturas[] 	= array("idFact" => $rowFS[0], "monto" => ($rowFS['saldo'] + $montoapagar), "estatus" => 2);
 					break 1;
 				}
 			}
@@ -355,16 +357,15 @@ function insertarPagos($serviciosPagos, $serviciosFacturas) {
 		$cadPost = 'factura';
 	}
 	
-	$res = $serviciosPagos->insertarPagos($fechapago,$montoapagar,$referencia,$comentarios); 
 	
-	if ((integer)$res > 0) {
-		foreach ($lstFacturas as $valor) {
-			$serviciosPagos->insertarPagosFacturas($res, $valor['idFact'], $valor['estatus']);
-		}
-		echo ''; 
-	} else { 
-		echo 'Huvo un error al insertar datos';	
-	} 
+	
+
+	foreach ($lstFacturas as $valor) {
+		$res = $serviciosPagos->insertarPagos($fechapago, $valor['monto'], $referencia, $comentarios); 
+		$serviciosPagos->insertarPagosFacturas($res, $valor['idFact'], $valor['estatus']);
+	}
+	echo ''; 
+
 	
 } 
 function modificarPagos($serviciosPagos) { 
