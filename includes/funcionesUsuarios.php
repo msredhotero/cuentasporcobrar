@@ -174,6 +174,18 @@ if (trim($usuario) != '' and trim($pass) != '') {
 	
 }
 
+
+function traerRoles() {
+	$sql = "select * from tbroles";
+	$res = $this->query($sql,0);
+	if ($res == false) {
+		return 'Error al traer datos';
+	} else {
+		return $res;
+	}
+}
+
+
 function traerUsuario($email) {
 	$sql = "select idusuario,usuario,refroll,nombrecompleto,email,password from se_usuarios where email = '".$email."'";
 	$res = $this->query($sql,0);
@@ -185,7 +197,7 @@ function traerUsuario($email) {
 }
 
 function traerUsuarios() {
-	$sql = "select idusuario,usuario,refroll,nombrecompleto,email,password 
+	$sql = "select u.idusuario,u.usuario, u.password, r.descripcion, u.email , u.nombrecompleto, u.refroll
 			from dbusuarios u
 			inner join tbroles r on u.refroll = r.idrol 
 			order by nombrecompleto";
@@ -290,7 +302,7 @@ function modificarUsuario($id,$usuario,$password,$refroll,$email,$nombrecompleto
 				usuario = '".utf8_decode($usuario)."',
 				password = '".utf8_decode($password)."',
 				email = '".utf8_decode($email)."',
-				refroll = '".utf8_decode($refroll)."',
+				refroll = ".$refroll.",
 				nombrecompleto = '".utf8_decode($nombrecompleto)."'
 			WHERE idusuario = ".$id;
 	$res = $this->query($sql,0);

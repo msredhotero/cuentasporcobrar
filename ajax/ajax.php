@@ -441,18 +441,13 @@ function entrar($serviciosUsuarios) {
 
 
 function registrar($serviciosUsuarios) {
-	$apellido			=	$_POST['apellido'];
+	$usuario			=	$_POST['usuario'];
 	$password			=	$_POST['password'];
-	$refroll			=	2;
+	$refroll			=	$_POST['refroll'];
 	$email				=	$_POST['email'];
-	$nombre				=	$_POST['nombre'];
-	$telefono			=	'';
-	$direccion			=	$_POST['direccion'];
-	$imagen				=	'';
-	$mime				=	'';
-	$carpeta			=	'';
-	$intentoserroneos	=	0;
-	$res = $serviciosUsuarios->insertarUsuario($apellido,$password,$refroll,$email,$nombre,$telefono,$direccion,$imagen,$mime,$carpeta,$intentoserroneos);
+	$nombre				=	$_POST['nombrecompleto'];
+	
+	$res = $serviciosUsuarios->insertarUsuario($usuario,$password,$refroll,$email,$nombre);
 	if ((integer)$res > 0) {
 		echo '';	
 	} else {
@@ -462,35 +457,30 @@ function registrar($serviciosUsuarios) {
 
 
 function insertarUsuario($serviciosUsuarios) {
-	$apellido			=	$_POST['apellido'];
+	$usuario			=	$_POST['usuario'];
 	$password			=	$_POST['password'];
-	$refroll			=	2;
+	$refroll			=	$_POST['refroll'];
 	$email				=	$_POST['email'];
-	$nombre				=	$_POST['nombre'];
-	$telefono			=	'';
-	$direccion			=	$_POST['direccion'];
-	$imagen				=	'';
-	$mime				=	'';
-	$carpeta			=	'';
-	$intentoserroneos	=	0;
-	echo $serviciosUsuarios->insertarUsuario($apellido,$password,$refroll,$email,$nombre,$telefono,$direccion,$imagen,$mime,$carpeta,$intentoserroneos);
+	$nombre				=	$_POST['nombrecompleto'];
+	
+	$res = $serviciosUsuarios->insertarUsuario($usuario,$password,$refroll,$email,$nombre);
+	if ((integer)$res > 0) {
+		echo '';	
+	} else {
+		echo $res;	
+	}
 }
 
 
 function modificarUsuario($serviciosUsuarios) {
 	$id					=	$_POST['id'];
-	$apellido			=	$_POST['apellido'];
+	$usuario			=	$_POST['usuario'];
 	$password			=	$_POST['password'];
-	$refroll			=	2;
+	$refroll			=	$_POST['refroll'];
 	$email				=	$_POST['email'];
-	$nombre				=	$_POST['nombre'];
-	$telefono			=	'';
-	$direccion			=	$_POST['direccion'];
-	$imagen				=	'';
-	$mime				=	'';
-	$carpeta			=	'';
-	$intentoserroneos	=	0;
-	echo $serviciosUsuarios->modificarUsuario($id,$apellido,$password,$refroll,$email,$nombre,$telefono,$direccion,$imagen,$mime,$carpeta,$intentoserroneos);
+	$nombre				=	$_POST['nombrecompleto'];
+	
+	echo $serviciosUsuarios->modificarUsuario($id,$apellido,$password,$refroll,$email,$nombre);
 }
 
 

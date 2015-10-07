@@ -33,55 +33,40 @@ $resMenu = $serviciosHTML->menu(utf8_encode($_SESSION['nombre_predio']),"Factura
 /////////////////////// Opciones para la creacion del formulario  /////////////////////
 $tabla 			= "dbusuarios";
 
-$lblCambio	 	= array("nrofactura","importebruto","iva","refcliente","refempresa");
-$lblreemplazo	= array("Nro Factura","Importe Bruto","IVA","Cliente","Empresa");
+$lblCambio	 	= array("refroll","nombrecompleto");
+$lblreemplazo	= array("Perfil","Nombre Completo");
 
-$resCliente 	= $serviciosClientes->traerClientes();
+$resRoles 	= $serviciosUsuario->traerRoles();
 
 $cadRef = '';
-while ($rowTT = mysql_fetch_array($resCliente)) {
+while ($rowTT = mysql_fetch_array($resRoles)) {
 	$cadRef = $cadRef.'<option value="'.$rowTT[0].'">'.utf8_encode($rowTT[1]).'</option>';
 	
 }
 
 
-$resEmpresa 	= $serviciosEmpresas->traerEmpresas();
-
-$cadEmpresa = '';
-while ($rowFF = mysql_fetch_array($resEmpresa)) {
-	if ($rowFF[0] == $_SESSION['usua_idempresa']) {
-		$cadEmpresa = $cadEmpresa.'<option value="'.$rowFF[0].'" selected>'.utf8_encode($rowFF[1]).'</option>';
-	} else {
-		$cadEmpresa = $cadEmpresa.'<option value="'.$rowFF[0].'">'.utf8_encode($rowFF[1]).'</option>';	
-	}
-	
-}
-
-$refdescripcion = array(0 => $cadRef,1=>$cadEmpresa);
-$refCampo 	=  array("refcliente","refempresa"); 
+$refdescripcion = array(0 => $cadRef);
+$refCampo 	=  array("refroll"); 
 //////////////////////////////////////////////  FIN de los opciones //////////////////////////
 
 
 
 
 /////////////////////// Opciones para la creacion del view  /////////////////////
-$cabeceras 		= "	<th>Nro Factura</th>
-				<th>Fecha</th>
-				<th>Cliente</th>
-				<th>Concepto</th>
-				<th>Importe Bruto</th>
-				<th>IVA</th>
-				<th>Total</th>
-				<th>Empresa</th>";
+$cabeceras 		= "	<th>Usuario</th>
+				<th>Password</th>
+				<th>Perfil</th>
+				<th>Email</th>
+				<th>Nombre Completo</th>";
 
 //////////////////////////////////////////////  FIN de los opciones //////////////////////////
 
 
 
 
-$formulario 	= $serviciosFunciones->camposTabla("insertarFacturas",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
+$formulario 	= $serviciosFunciones->camposTabla("insertarUsuario",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
 
-$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosFactuas->traerFacturas(),8);
+$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosUsuario->traerUsuarios(),5);
 
 
 
@@ -151,11 +136,11 @@ if ($_SESSION['refroll_predio'] != 1) {
 
 <div id="content">
 
-<h3>Facturas</h3>
+<h3>Usuarios</h3>
 
     <div class="boxInfoLargo">
         <div id="headBoxInfo">
-        	<p style="color: #fff; font-size:18px; height:16px;">Carga de Facturas</p>
+        	<p style="color: #fff; font-size:18px; height:16px;">Carga de Usuarios</p>
         	
         </div>
     	<div class="cuerpoBox">
@@ -188,7 +173,7 @@ if ($_SESSION['refroll_predio'] != 1) {
     
     <div class="boxInfoLargo">
         <div id="headBoxInfo">
-        	<p style="color: #fff; font-size:18px; height:16px;">Facturas Cargadas</p>
+        	<p style="color: #fff; font-size:18px; height:16px;">Usuarios Cargados</p>
         	
         </div>
     	<div class="cuerpoBox">
@@ -208,7 +193,7 @@ if ($_SESSION['refroll_predio'] != 1) {
 <div id="dialog2" title="Eliminar Equipos">
     	<p>
         	<span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
-            ¿Esta seguro que desea eliminar la Factura?.<span id="proveedorEli"></span>
+            ¿Esta seguro que desea eliminar el Usuario?.<span id="proveedorEli"></span>
         </p>
         <p><strong>Importante: </strong>Si elimina el equipo se perderan todos los datos de este</p>
         <input type="hidden" value="" id="idEliminar" name="idEliminar">
@@ -246,17 +231,7 @@ $(document).ready(function(){
 			}
 		  }
 	} );
-	
-	$("#importebruto").change( function(){
-		var iva 	= parseFloat($("#importebruto").val()) * 0.16;
-		var total	= parseFloat($("#importebruto").val()) * 1.16;
-		
-		$("#iva").val(iva);
-		$("#total").val(total);
-		
-	});//calcula el iva
-	
-	
+
 	$("#example").on("click",'.varborrar', function(){
 		  usersid =  $(this).attr("id");
 		  if (!isNaN(usersid)) {
@@ -294,7 +269,7 @@ $(document).ready(function(){
 				    "Eliminar": function() {
 	
 						$.ajax({
-									data:  {id: $('#idEliminar').val(), accion: 'eliminarFacturas'},
+									data:  {id: $('#idEliminar').val(), accion: 'eliminarUsuario'},
 									url:   '../../ajax/ajax.php',
 									type:  'post',
 									beforeSend: function () {
@@ -359,7 +334,7 @@ $(document).ready(function(){
                                             $(".alert").removeClass("alert-danger");
 											$(".alert").removeClass("alert-info");
                                             $(".alert").addClass("alert-success");
-                                            $(".alert").html('<strong>Ok!</strong> Se cargo exitosamente la <strong>Factura</strong>. ');
+                                            $(".alert").html('<strong>Ok!</strong> Se cargo exitosamente el <strong>Usuario</strong>. ');
 											$(".alert").delay(3000).queue(function(){
 												/*aca lo que quiero hacer 
 												  después de los 2 segundos de retraso*/
