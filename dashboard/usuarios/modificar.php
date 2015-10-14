@@ -26,7 +26,7 @@ $serviciosEmpresas	= new ServiciosEmpresas();
 $fecha = date('Y-m-d');
 
 //$resProductos = $serviciosProductos->traerProductosLimite(6);
-$resMenu = $serviciosHTML->menu(utf8_encode($_SESSION['nombre_predio']),"Facturas",$_SESSION['refroll_predio'],utf8_encode($_SESSION['usua_empresa']));
+$resMenu = $serviciosHTML->menu(utf8_encode($_SESSION['nombre_predio']),"Usuarios",$_SESSION['refroll_predio'],utf8_encode($_SESSION['usua_empresa']));
 
 
 $id = $_GET['id'];

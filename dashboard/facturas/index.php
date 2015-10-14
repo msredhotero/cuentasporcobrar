@@ -116,8 +116,10 @@ if ($_SESSION['refroll_predio'] != 1) {
     
     <script type="text/javascript" src="../../js/jquery-1.8.3.min.js"></script>
     <link rel="stylesheet" href="../../css/jquery-ui.css">
-
+	
     <script src="../../js/jquery-ui.js"></script>
+    
+    <script src="../../js/jquery.number.min.js"></script>
     
 	<!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="../../bootstrap/css/bootstrap.min.css"/>
@@ -256,6 +258,9 @@ $(document).ready(function(){
 		
 	});//calcula el iva
 	
+	$("#importebruto").number( true, 2 , '.', '');
+	$("#iva").number( true, 2 , '.', '');
+	$("#total").number( true, 2 , '.', '');
 	
 	$("#example").on("click",'.varborrar', function(){
 		  usersid =  $(this).attr("id");

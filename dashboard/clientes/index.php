@@ -56,7 +56,7 @@ $cabeceras 		= "	<th>Razon Social</th>
 
 $formulario 	= $serviciosFunciones->camposTabla("insertarClientes",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
 
-$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosClientes->traerClientes(),6);
+$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosClientes->traerClientesPorEmpresa($_SESSION['usua_idempresa']),6);
 
 
 

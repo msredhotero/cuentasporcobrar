@@ -3,8 +3,8 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 14-10-2015 a las 04:47:42
--- Versión del servidor: 5.5.24-log
+-- Tiempo de generación: 05-10-2015 a las 20:45:39
+-- Versión del servidor: 5.1.36-community-log
 -- Versión de PHP: 5.4.3
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
@@ -30,24 +30,24 @@ BEGIN
 declare saldo decimal(18,2);
 
 set saldo = (select 
-    f.total - sum(p.montoapagar)
+    f.total - p.montoapagar
 from
     dbfacturas f
         inner join
     dbclientes c ON f.refcliente = c.idcliente
         inner join
     dbempresas e ON f.refempresa = e.idempresa
-        left join
-    dbpagosfacturas pg ON pg.reffactura = f.idfactura
-        inner join
-    dbpagos p ON p.idpago = pg.refpago
-        inner join
-    tbestatus et on et.idestatu = pg.refestatu
-where f.idfactura = idFact
-group by f.total);
-    IF saldo <= 0 THEN
+		left join
+	dbpagosfacturas pg ON pg.reffactura = f.idfactura
+		inner join
+	dbpagos p ON p.idpago = pg.refpago
+		inner join
+	tbestatus et on et.idestatu = pg.refestatu
+where f.idfactura = idFact);
+
+	IF saldo <= 0 THEN
         RETURN 0;
-    END IF;
+	END IF;
 
 RETURN saldo;
 END$$
@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS `dbclientes` (
   `telefono` varchar(10) COLLATE utf8_spanish_ci DEFAULT NULL,
   `celular` varchar(10) COLLATE utf8_spanish_ci DEFAULT NULL,
   PRIMARY KEY (`idcliente`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci AUTO_INCREMENT=12 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci AUTO_INCREMENT=10 ;
 
 --
 -- Volcado de datos para la tabla `dbclientes`
@@ -79,29 +79,7 @@ INSERT INTO `dbclientes` (`idcliente`, `razonsocial`, `rfc`, `direccion`, `email
 (6, 'Saupurein Marcos', '20315524661', NULL, '', '', NULL),
 (7, 'El pueblito S.A', '468198654', NULL, '', '', NULL),
 (8, 'Capability S.A', '2342355', NULL, '', '', NULL),
-(9, 'Ventura & Cía', '54555', NULL, '', '', NULL),
-(10, 'daniela', '8398398', 'iqweuoqd', 'iajoiwjd', 'aoidjowi', '098098'),
-(11, 'daniela', '8398398', 'iqweuoqd', 'iajoiwjd', 'aoidjowi', '098098');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `dbempresaclientes`
---
-
-CREATE TABLE IF NOT EXISTS `dbempresaclientes` (
-  `idempresacliente` int(11) NOT NULL AUTO_INCREMENT,
-  `refempresa` int(11) NOT NULL,
-  `refcliente` int(11) NOT NULL,
-  PRIMARY KEY (`idempresacliente`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci AUTO_INCREMENT=2 ;
-
---
--- Volcado de datos para la tabla `dbempresaclientes`
---
-
-INSERT INTO `dbempresaclientes` (`idempresacliente`, `refempresa`, `refcliente`) VALUES
-(1, 2, 11);
+(9, 'Ventura & Cía', '54555', NULL, '', '', NULL);
 
 -- --------------------------------------------------------
 
@@ -127,7 +105,7 @@ CREATE TABLE IF NOT EXISTS `dbempresas` (
 
 INSERT INTO `dbempresas` (`idempresa`, `razonsocial`, `rfc`, `direccion`, `email`, `telefono`, `celular`, `objetoempresa`) VALUES
 (1, 'Marcos', '16516894', 'asdamsdomo', '', '', '', ''),
-(2, 'uuuuuuuuuu', 'iiiii', 'uiui', 'etjej', '565y56', 'y56y56', '5656yg56h');
+(2, 'Coca-cola', '165198491', 'asdkansldk', 'laksdmalskdm', '519862', '1658979', 'Nada que corresponda');
 
 -- --------------------------------------------------------
 
@@ -146,7 +124,7 @@ CREATE TABLE IF NOT EXISTS `dbfacturas` (
   `refempresa` int(11) NOT NULL,
   `concepto` varchar(1000) NOT NULL,
   PRIMARY KEY (`idfactura`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=15 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=14 ;
 
 --
 -- Volcado de datos para la tabla `dbfacturas`
@@ -158,7 +136,8 @@ INSERT INTO `dbfacturas` (`idfactura`, `nrofactura`, `fecha`, `refcliente`, `imp
 (9, '', '0000-00-00', 0, '0.00', '0.00', '0.00', 0, ''),
 (10, 'MR035', '2015-09-24', 7, '9500.00', '1520.00', '11020.00', 1, '12 cajones de Heineken'),
 (11, 'MR045', '2015-09-30', 9, '65000.00', '10400.00', '75400.00', 1, 'asdqwqwd'),
-(14, 'h5hyt', '2015-10-13', 6, '1587521.00', '254003.36', '1841524.36', 2, 'rthyth56h');
+(12, 'fgd45', '2015-10-17', 7, '8900.00', '1424.00', '10324.00', 2, 'efbbwrbtrb'),
+(13, 'uuu89', '2015-10-29', 7, '6120.00', '979.20', '7099.20', 2, 'defbe');
 
 -- --------------------------------------------------------
 
@@ -173,15 +152,14 @@ CREATE TABLE IF NOT EXISTS `dbpagos` (
   `referencia` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
   `comentarios` varchar(500) COLLATE utf8_spanish_ci DEFAULT NULL,
   PRIMARY KEY (`idpago`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci AUTO_INCREMENT=4 ;
 
 --
 -- Volcado de datos para la tabla `dbpagos`
 --
 
 INSERT INTO `dbpagos` (`idpago`, `fechapago`, `montoapagar`, `referencia`, `comentarios`) VALUES
-(1, '2015-10-07', '75400.00', 'dfgdfg', 'dfgdfg'),
-(2, '2015-10-13', '1000000.00', '74477', 'fffff');
+(3, '2015-10-05', '9500.00', 'greqgrqg', 'qergqergqer');
 
 -- --------------------------------------------------------
 
@@ -195,15 +173,14 @@ CREATE TABLE IF NOT EXISTS `dbpagosfacturas` (
   `reffactura` int(11) NOT NULL,
   `refestatu` smallint(6) NOT NULL,
   PRIMARY KEY (`idpagofactura`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci AUTO_INCREMENT=4 ;
 
 --
 -- Volcado de datos para la tabla `dbpagosfacturas`
 --
 
 INSERT INTO `dbpagosfacturas` (`idpagofactura`, `refpago`, `reffactura`, `refestatu`) VALUES
-(1, 1, 11, 3),
-(2, 2, 14, 2);
+(3, 3, 12, 2);
 
 -- --------------------------------------------------------
 
@@ -219,15 +196,14 @@ CREATE TABLE IF NOT EXISTS `dbusuarios` (
   `email` varchar(100) NOT NULL,
   `nombrecompleto` varchar(70) NOT NULL,
   PRIMARY KEY (`idusuario`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 --
 -- Volcado de datos para la tabla `dbusuarios`
 --
 
 INSERT INTO `dbusuarios` (`idusuario`, `usuario`, `password`, `refroll`, `email`, `nombrecompleto`) VALUES
-(1, 'marcos', 'm', 1, 'msredhotero@msn.com', 'Saupurein Marcos'),
-(2, '', 'luis', 2, 'luis@msn.com', '');
+(1, 'marcos', 'm', 1, 'msredhotero@msn.com', 'Saupurein Marcos');
 
 -- --------------------------------------------------------
 
@@ -257,7 +233,7 @@ CREATE TABLE IF NOT EXISTS `predio_menu` (
   `hover` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
   `permiso` varchar(50) COLLATE utf8_spanish_ci DEFAULT NULL,
   PRIMARY KEY (`idmenu`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci AUTO_INCREMENT=21 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci AUTO_INCREMENT=20 ;
 
 --
 -- Volcado de datos para la tabla `predio_menu`
@@ -269,8 +245,7 @@ INSERT INTO `predio_menu` (`idmenu`, `url`, `icono`, `nombre`, `Orden`, `hover`,
 (16, '../clientes/', 'icoclientes', 'Clientes', 2, NULL, 'Administrador, Capturista, Supervisor'),
 (17, '../empresas/', 'icoinmubles', 'Empresas', 3, NULL, 'Administrador, Capturista, Supervisor'),
 (18, '../facturas/', 'icoalquileres', 'Facturas', 4, NULL, 'Administrador, Capturista, Supervisor'),
-(19, '../pagos/', 'icopagos', 'Pagos', 5, NULL, 'Administrador, Capturista, Supervisor'),
-(20, '../usuarios/', 'icousuarios', 'Usuarios', 6, NULL, 'Administrador, Capturista');
+(19, '../pagos/', 'icopagos', 'Pagos', 5, NULL, 'Administrador, Capturista, Supervisor');
 
 -- --------------------------------------------------------
 
@@ -289,9 +264,9 @@ CREATE TABLE IF NOT EXISTS `tbestatus` (
 --
 
 INSERT INTO `tbestatus` (`idestatu`, `estatus`) VALUES
-(1, 'No Pagado'),
+(1, 'No Pagada'),
 (2, 'Parcial'),
-(3, 'Pagado');
+(3, 'Pagada');
 
 -- --------------------------------------------------------
 

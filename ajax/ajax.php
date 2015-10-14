@@ -5,16 +5,18 @@ include ('../includes/funciones.php');
 include ('../includes/funcionesHTML.php');
 include ('../includes/funcionesClientes.php');
 include ('../includes/funcionesEmpresas.php');
+include ('../includes/funcionesEmpresaClientes.php');
 include ('../includes/funcionesFacturas.php');
 include ('../includes/funcionesPagos.php');
 
-$serviciosUsuarios  = new ServiciosUsuarios();
-$serviciosFunciones = new Servicios();
-$serviciosHTML		= new ServiciosHTML();
-$serviciosClientes 	= new ServiciosClientes();
-$serviciosEmpresas	= new ServiciosEmpresas();
-$serviciosFacturas	= new ServiciosFacturas();
-$serviciosPagos		= new ServiciosPagos();
+$serviciosUsuarios  		= new ServiciosUsuarios();
+$serviciosFunciones 		= new Servicios();
+$serviciosHTML				= new ServiciosHTML();
+$serviciosClientes 			= new ServiciosClientes();
+$serviciosEmpresas			= new ServiciosEmpresas();
+$serviciosEmpresaClientes 	= new ServiciosEmpresaClientes();
+$serviciosFacturas			= new ServiciosFacturas();
+$serviciosPagos				= new ServiciosPagos();
 
 $accion = $_POST['accion'];
 
@@ -38,7 +40,7 @@ switch ($accion) {
 
 /* PARA Clientes */
 case 'insertarClientes': 
-insertarClientes($serviciosClientes); 
+insertarClientes($serviciosClientes, $serviciosEmpresaClientes); 
 break; 
 case 'modificarClientes': 
 modificarClientes($serviciosClientes); 
@@ -118,19 +120,24 @@ break;
 //////////////////////////Traer datos */////////////////////////////////////////////////////////////
 
 /* PARA Clientes */
-function insertarClientes($serviciosClientes) { 
-$razonsocial = $_POST['razonsocial']; 
-$rfc = $_POST['rfc']; 
-$direccion = $_POST['direccion']; 
-$email = $_POST['email']; 
-$telefono = $_POST['telefono']; 
-$celular = $_POST['celular']; 
-$res = $serviciosClientes->insertarClientes($razonsocial,$rfc,$direccion,$email,$telefono,$celular); 
-if ((integer)$res > 0) { 
-echo ''; 
-} else { 
-echo 'Huvo un error al insertar datos';	
-} 
+function insertarClientes($serviciosClientes, $serviciosEmpresas) { 
+	$razonsocial = $_POST['razonsocial']; 
+	$rfc = $_POST['rfc']; 
+	$direccion = $_POST['direccion']; 
+	$email = $_POST['email']; 
+	$telefono = $_POST['telefono']; 
+	$celular = $_POST['celular']; 
+	
+	$res = $serviciosClientes->insertarClientes($razonsocial,$rfc,$direccion,$email,$telefono,$celular); 
+	
+	if ((integer)$res > 0) {
+		session_start();
+		
+		$serviciosEmpresas->insertarEmpresaClientes($_SESSION['usua_idempresa'],$res);
+		echo ''; 
+	} else { 
+		echo 'Huvo un error al insertar datos';	
+	} 
 } 
 function modificarClientes($serviciosClientes) { 
 $id = $_POST['id']; 

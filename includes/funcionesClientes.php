@@ -37,7 +37,19 @@ return $res;
 
 
 function traerClientes() { 
-$sql = "select idcliente,razonsocial,rfc,direccion,email,telefono,celular from dbclientes order by 1"; 
+$sql = "select c.idcliente, c.razonsocial, c.rfc, c.direccion, c.email, c.telefono, c.celular 
+		from dbclientes c order by 1"; 
+$res = $this->query($sql,0); 
+return $res; 
+} 
+
+function traerClientesPorEmpresa($idEmpresa) {
+$sql = "select c.idcliente, c.razonsocial, c.rfc, c.direccion, c.email, c.telefono, c.celular 
+		from dbclientes c 
+		inner join dbempresaclientes ec on ec.refcliente = c.idcliente
+		inner join dbempresas e on ec.refempresa = e.idempresa
+		where e.idempresa = ".$idEmpresa." 
+		order by 1"; 
 $res = $this->query($sql,0); 
 return $res; 
 } 
