@@ -81,7 +81,7 @@ $cabeceras 		= "	<th>Nro Factura</th>
 
 $formulario 	= $serviciosFunciones->camposTabla("insertarFacturas",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
 
-$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosFactuas->traerFacturas(),8);
+$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosFactuas->traerFacturasPorEmpresa($_SESSION['usua_idempresa']),8);
 
 
 
@@ -331,7 +331,7 @@ $(document).ready(function(){
 	
 	?>
 	
-
+	$('#refempresa').attr('disabled', 'disabled');
 	
 	
 	//al enviar el formulario

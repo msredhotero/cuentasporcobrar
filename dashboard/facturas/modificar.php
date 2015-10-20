@@ -234,6 +234,8 @@ $(document).ready(function(){
 		
 	});//calcula el iva
 	
+	$('#refempresa').attr('disabled', 'disabled');
+	
 	 $( "#dialog2" ).dialog({
 		 	
 			    autoOpen: false,
