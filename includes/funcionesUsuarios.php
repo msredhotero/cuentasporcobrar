@@ -34,7 +34,7 @@ if (mysql_num_rows($respusu) > 0) {
 	$error = '';
 	
 	$idUsua = mysql_result($respusu,0,0);
-	$sqlpass = "select u.nombrecompleto,u.email,u.usuario,r.descripcion 
+	$sqlpass = "select u.nombrecompleto,u.email,u.usuario,r.descripcion, r.idrol 
 					from dbusuarios u
 					inner join tbroles r on r.idrol = u.refroll
 					 where u.password = '".$pass."' and u.IdUsuario = ".$idUsua;
@@ -60,6 +60,7 @@ if (mysql_num_rows($respusu) > 0) {
 		$_SESSION['nombre_predio'] = mysql_result($resppass,0,0);
 		$_SESSION['email_predio'] = mysql_result($resppass,0,1);
 		$_SESSION['refroll_predio'] = mysql_result($resppass,0,3);
+		$_SESSION['idroll_predio'] = mysql_result($resppass,0,4);
 		
 		
 		//////////////// EN CASO DE NECESITAR ENTRAR POR EMPRESA ///////////////////////////////////////
@@ -185,6 +186,16 @@ function traerRoles() {
 	}
 }
 
+function traerRolesSimple() {
+	$sql = "select * from tbroles where idrol <> 1";
+	$res = $this->query($sql,0);
+	if ($res == false) {
+		return 'Error al traer datos';
+	} else {
+		return $res;
+	}
+}
+
 
 function traerUsuario($email) {
 	$sql = "select idusuario,usuario,refroll,nombrecompleto,email,password from se_usuarios where email = '".$email."'";
@@ -200,6 +211,21 @@ function traerUsuarios() {
 	$sql = "select u.idusuario,u.usuario, u.password, r.descripcion, u.email , u.nombrecompleto, u.refroll
 			from dbusuarios u
 			inner join tbroles r on u.refroll = r.idrol 
+			order by nombrecompleto";
+	$res = $this->query($sql,0);
+	if ($res == false) {
+		return 'Error al traer datos';
+	} else {
+		return $res;
+	}
+}
+
+
+function traerUsuariosSimple() {
+	$sql = "select u.idusuario,u.usuario, u.password, r.descripcion, u.email , u.nombrecompleto, u.refroll
+			from dbusuarios u
+			inner join tbroles r on u.refroll = r.idrol 
+			where r.idrol <> 1
 			order by nombrecompleto";
 	$res = $this->query($sql,0);
 	if ($res == false) {

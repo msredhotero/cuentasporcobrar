@@ -15,10 +15,10 @@ class Servicios {
 		$cadRows = '';
 		switch ($cantidad) {
 			case 99:
-				$cantidad = 5;
-				$classMod = 'varmodificargoleadores';
-				$classEli = 'varborrargoleadores';
-				$idresultados = "resultadosgoleadores";
+				$cantidad = 8;
+				$classMod = '';
+				$classEli = 'varborrar';
+				$idresultados = "resultados";
 				break;
 			case 98:
 				$cantidad = 3;
@@ -61,33 +61,59 @@ class Servicios {
 			}
 			
 			
-			
-			$cadRows = $cadRows.'
-                            '.$cadsubRows.'
-							<td>
-								
-                                <div class="btn-group">
-                                    <button class="btn btn-success" type="button">Acciones</button>
-                                    
-                                    <button class="btn btn-success dropdown-toggle" data-toggle="dropdown" type="button">
-                                    <span class="caret"></span>
-                                    <span class="sr-only">Toggle Dropdown</span>
-                                    </button>
-                                    
-                                    <ul class="dropdown-menu" role="menu">
-                                        <li>
-                                        <a href="javascript:void(0)" class="'.$classMod.'" id="'.$row[0].'">Modificar</a>
-                                        </li>
-
-                                        <li>
-                                        <a href="javascript:void(0)" class="'.$classEli.'" id="'.$row[0].'">Borrar</a>
-                                        </li>
+			if ($classMod != '') { 
+				$cadRows = $cadRows.'
+								'.$cadsubRows.'
+								<td>
+									
+									<div class="btn-group">
+										<button class="btn btn-success" type="button">Acciones</button>
 										
-                                    </ul>
-                                </div>
-                            </td>
-                        </tr>
-			';
+										<button class="btn btn-success dropdown-toggle" data-toggle="dropdown" type="button">
+										<span class="caret"></span>
+										<span class="sr-only">Toggle Dropdown</span>
+										</button>
+										
+										<ul class="dropdown-menu" role="menu">
+										   
+											<li>
+											<a href="javascript:void(0)" class="'.$classMod.'" id="'.$row[0].'">Modificar</a>
+											</li>
+										
+											<li>
+											<a href="javascript:void(0)" class="'.$classEli.'" id="'.$row[0].'">Borrar</a>
+											</li>
+											
+										</ul>
+									</div>
+								</td>
+							</tr>
+				';
+			} else {
+				$cadRows = $cadRows.'
+								'.$cadsubRows.'
+								<td>
+									
+									<div class="btn-group">
+										<button class="btn btn-success" type="button">Acciones</button>
+										
+										<button class="btn btn-success dropdown-toggle" data-toggle="dropdown" type="button">
+										<span class="caret"></span>
+										<span class="sr-only">Toggle Dropdown</span>
+										</button>
+										
+										<ul class="dropdown-menu" role="menu">
+										
+											<li>
+											<a href="javascript:void(0)" class="'.$classEli.'" id="'.$row[0].'">Borrar</a>
+											</li>
+											
+										</ul>
+									</div>
+								</td>
+							</tr>
+				';
+			}
 		}
 		
 		$cadView = $cadView.'

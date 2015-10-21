@@ -37,7 +37,7 @@ $tabla 			= "dbpagos";
 $lblCambio	 	= array("fechapago","montoapagar");
 $lblreemplazo	= array("Fecha Pago","Abono");
 
-$resCliente 	= $serviciosClientes->traerClientes();
+$resCliente 	= $serviciosClientes->traerClientesPorEmpresa($_SESSION['usua_idempresa']);
 
 $cadRef = '';
 
@@ -47,7 +47,7 @@ $refCampo 	=  array();
 
 
 ///////////////// CLIENTES /////////////////////////////////////////////////////////////
-$resCliente 	= $serviciosClientes->traerClientes();
+$resCliente 	= $serviciosClientes->traerClientesPorEmpresa($_SESSION['usua_idempresa']);
 
 $cadRefC = '';
 while ($rowTT = mysql_fetch_array($resCliente)) {
@@ -75,7 +75,7 @@ $cabeceras 		= "<th>Empresa</th>
 $formulario 	= $serviciosFunciones->camposTabla("insertarPagos",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
 
 
-$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosPagos->traerPagosFacturas(),8);
+$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosPagos->traerPagosFacturas(),99);
 
 
 
@@ -158,6 +158,7 @@ if ($_SESSION['refroll_predio'] != 1) {
                     <label class="control-label" style="text-align:left" for="refcliente">Seleccione el Cliente</label>
                     <div class="input-group col-md-12">
                     	<select id="refcliente" class="form-control" name="refcliente">
+							<option value="0">-----Seleccionar-----</option>
 							<?php echo $cadRefC; ?>
                     	</select>
                     </div>

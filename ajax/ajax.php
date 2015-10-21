@@ -218,6 +218,9 @@ function cambiarEmpresa($serviciosEmpresas) {
 
 /* PARA Facturas */
 function insertarFacturas($serviciosFacturas) {
+
+session_start();
+
 $nrofactura = $_POST['nrofactura'];
 $fecha = $_POST['fecha'];
 $refcliente = $_POST['refcliente'];
@@ -225,7 +228,8 @@ $concepto = $_POST['concepto'];
 $importebruto = $_POST['importebruto'];
 $iva = $_POST['iva'];
 $total = $_POST['total'];
-$refempresa = $_POST['refempresa'];
+$refempresa = $_SESSION['usua_idempresa'];
+
 $res = $serviciosFacturas->insertarFacturas($nrofactura,$fecha,$refcliente,$concepto,$importebruto,$iva,$total,$refempresa);
 if ((integer)$res > 0) {
 echo '';
@@ -234,6 +238,9 @@ echo 'Huvo un error al insertar datos ';
 }
 }
 function modificarFacturas($serviciosFacturas) {
+
+session_start();
+	
 $id = $_POST['id'];
 $nrofactura = $_POST['nrofactura'];
 $fecha = $_POST['fecha'];
@@ -242,7 +249,8 @@ $concepto = $_POST['concepto'];
 $importebruto = $_POST['importebruto'];
 $iva = $_POST['iva'];
 $total = $_POST['total'];
-$refempresa = $_POST['refempresa'];
+$refempresa = $_SESSION['usua_idempresa'];
+
 $res = $serviciosFacturas->modificarFacturas($id,$nrofactura,$fecha,$refcliente,$concepto,$importebruto,$iva,$total,$refempresa);
 if ($res == true) {
 echo '';
@@ -329,7 +337,8 @@ function traerFacturasPorEmpresa($serviciosFacturas) {
 
 /* PARA Pagos */
 function insertarPagos($serviciosPagos, $serviciosFacturas) {
-	 
+	session_start();
+	
 	$fechapago 		= $_POST['fechapago']; 
 	$montoapagar 	= $_POST['montoapagar'];
 	
@@ -337,7 +346,7 @@ function insertarPagos($serviciosPagos, $serviciosFacturas) {
 	$comentarios 	= $_POST['comentarios']; 
 	
 	$idcliente		= $_POST['refcliente']; 
-	$idempresa		= $_POST['refempresa']; 
+	$idempresa		= $_SESSION['usua_idempresa']; 
 	
 	$resFacturas = $serviciosFacturas->traerFacturasPorClienteEmpresa($idcliente, $idempresa);
 	

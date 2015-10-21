@@ -36,7 +36,13 @@ $tabla 			= "dbusuarios";
 $lblCambio	 	= array("refroll","nombrecompleto");
 $lblreemplazo	= array("Perfil","Nombre Completo");
 
-$resRoles 	= $serviciosUsuario->traerRoles();
+if ($_SESSION['idroll_predio'] != 1) {
+	$resRoles 	= $serviciosUsuario->traerRolesSimple();
+} else {
+	$resRoles 	= $serviciosUsuario->traerRoles();
+	
+}
+
 
 $cadRef = '';
 while ($rowTT = mysql_fetch_array($resRoles)) {
@@ -66,16 +72,15 @@ $cabeceras 		= "	<th>Usuario</th>
 
 $formulario 	= $serviciosFunciones->camposTabla("insertarUsuario",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
 
-$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosUsuario->traerUsuarios(),5);
-
-
-
-if ($_SESSION['refroll_predio'] != 1) {
-
+if ($_SESSION['idroll_predio'] != 1) {
+	$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosUsuario->traerUsuariosSimple(),5);
 } else {
-
-	
+	$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosUsuario->traerUsuarios(),5);
 }
+
+
+
+
 
 
 ?>

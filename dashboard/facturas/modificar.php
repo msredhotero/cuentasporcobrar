@@ -39,7 +39,7 @@ $tabla 			= "dbfacturas";
 $lblCambio	 	= array("nrofactura","importebruto","iva","refcliente","refempresa");
 $lblreemplazo	= array("Nro Factura","Importe Bruto","IVA","Cliente","Empresa");
 
-$resCliente 	= $serviciosClientes->traerClientes();
+$resCliente 	= $serviciosClientes->traerClientesPorEmpresa($_SESSION['usua_idempresa']);
 
 $cadRef = '';
 while ($rowTT = mysql_fetch_array($resCliente)) {
@@ -52,7 +52,7 @@ while ($rowTT = mysql_fetch_array($resCliente)) {
 }
 
 
-$resEmpresa 	= $serviciosEmpresas->traerEmpresas();
+$resEmpresa 	= $serviciosEmpresas->traerEmpresasPorId($_SESSION['usua_idempresa']);
 
 $cadEmpresa = '';
 while ($rowFF = mysql_fetch_array($resEmpresa)) {

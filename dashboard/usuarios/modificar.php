@@ -34,16 +34,22 @@ $id = $_GET['id'];
 $resResultado = $serviciosFactuas->traerFacturasPorId($id);
 
 /////////////////////// Opciones para la creacion del formulario  /////////////////////
-$tabla 			= "dbfacturas";
+$tabla 			= "dbusuarios";
 
-$lblCambio	 	= array("nrofactura","importebruto","iva","refcliente","refempresa");
-$lblreemplazo	= array("Nro Factura","Importe Bruto","IVA","Cliente","Empresa");
+$lblCambio	 	= array("refroll","nombrecompleto");
+$lblreemplazo	= array("Perfil","Nombre Completo");
 
-$resCliente 	= $serviciosClientes->traerClientes();
+if ($_SESSION['refroll_predio'] != 1) {
+	$resRoles 	= $serviciosUsuario->traerRolesSimple();
+} else {
+	$resRoles 	= $serviciosUsuario->traerRoles();
+	
+}
+
 
 $cadRef = '';
-while ($rowTT = mysql_fetch_array($resCliente)) {
-	if (mysql_result($resResultado,0,'refcliente')== $rowTT[0]) {
+while ($rowTT = mysql_fetch_array($resRoles)) {
+	if (mysql_result($resResultado,0,'refroll') == $rowTT[0]) {
 		$cadRef = $cadRef.'<option value="'.$rowTT[0].'" selected>'.utf8_encode($rowTT[1]).'</option>';
 	} else {
 		$cadRef = $cadRef.'<option value="'.$rowTT[0].'">'.utf8_encode($rowTT[1]).'</option>';
@@ -52,20 +58,8 @@ while ($rowTT = mysql_fetch_array($resCliente)) {
 }
 
 
-$resEmpresa 	= $serviciosEmpresas->traerEmpresas();
-
-$cadEmpresa = '';
-while ($rowFF = mysql_fetch_array($resEmpresa)) {
-	if (mysql_result($resResultado,0,'refempresa')== $rowFF[0]) {
-		$cadEmpresa = $cadEmpresa.'<option value="'.$rowFF[0].'" selected>'.utf8_encode($rowFF[1]).'</option>';
-	} else {
-		$cadEmpresa = $cadEmpresa.'<option value="'.$rowFF[0].'">'.utf8_encode($rowFF[1]).'</option>';	
-	}
-	
-}
-
-$refdescripcion = array(0 => $cadRef,1=>$cadEmpresa);
-$refCampo 	=  array("refcliente","refempresa"); 
+$refdescripcion = array(0 => $cadRef);
+$refCampo 	=  array("refroll"); 
 //////////////////////////////////////////////  FIN de los opciones //////////////////////////
 
 
