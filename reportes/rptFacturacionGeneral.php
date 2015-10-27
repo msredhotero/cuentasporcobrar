@@ -10,6 +10,8 @@ include ('../includes/funcionesEmpresas.php');
 include ('../includes/funcionesEmpresaClientes.php');
 include ('../includes/funcionesFacturas.php');
 include ('../includes/funcionesPagos.php');
+include ('../includes/funcionesReportes.php');
+
 
 $serviciosUsuarios  		= new ServiciosUsuarios();
 $serviciosFunciones 		= new Servicios();
@@ -19,6 +21,7 @@ $serviciosEmpresas			= new ServiciosEmpresas();
 $serviciosEmpresaClientes 	= new ServiciosEmpresaClientes();
 $serviciosFacturas			= new ServiciosFacturas();
 $serviciosPagos				= new ServiciosPagos();
+$serviciosReportes			= new ServiciosReportes();
 
 $fecha = date('Y-m-d');
 
@@ -26,9 +29,13 @@ require('fpdf.php');
 
 //$header = array("Hora", "Cancha 1", "Cancha 2", "Cancha 3");
 
+$id				=	$_GET['id'];
+
 $resEmpresa		=	$serviciosEmpresas->traerEmpresasPorId($id);
 
-$empresa		=	mysql_result($resEmpresa,0,0);
+$empresa		=	mysql_result($resEmpresa,0,1);
+
+$datos			=	$serviciosReportes->rptFacturacionGeneralPorEmpresa($id);
 
 $TotalIngresos = 0;
 $TotalEgresos = 0;
@@ -50,7 +57,7 @@ function ingresosFacturacion($header, $data, &$TotalIngresos)
 	$this->SetFont('Arial','',12);
 	$this->Ln();
 	$this->Ln();
-	$this->Cell(60,7,'Ingresos de Fiestas',0,0,'L',false);
+	$this->Cell(60,7,'Facturación General',0,0,'L',false);
 	$this->SetFont('Arial','',10);
     // Colores, ancho de línea y fuente en negrita
     $this->SetFillColor(255,0,0);
@@ -61,9 +68,9 @@ function ingresosFacturacion($header, $data, &$TotalIngresos)
 	
 	
     // Cabecera
-    $w = array(90, 20,25,25,25);
+    $w = array(20,45,25,25,27,27,27);
     for($i=0;$i<count($header);$i++)
-        $this->Cell($w[$i],7,$header[$i],1,0,'C',true);
+        $this->Cell($w[$i],6,$header[$i],1,0,'C',true);
     $this->Ln();
     // Restauración de colores y fuentes
     $this->SetFillColor(224,235,255);
@@ -76,16 +83,16 @@ function ingresosFacturacion($header, $data, &$TotalIngresos)
 	$totalcant = 0;
     while ($row = mysql_fetch_array($data))
     {
-		$total = $total + $row[0];
-		$totalcant = $totalcant + $row[2];
+		$total = $total + $row[4];
+		$totalcant = $totalcant + 1;
 		
-        $this->Cell($w[0],6,$row[1],'LR',0,'L',$fill);
-		$this->Cell($w[1],6,$row[0],'LR',0,'R',$fill);
+        $this->Cell($w[0],6,$row[0],'LR',0,'L',$fill);
+		$this->Cell($w[1],6,$row[1],'LR',0,'R',$fill);
         $this->Cell($w[2],6,$row[2],'LR',0,'C',$fill);
 		$this->Cell($w[3],6,$row[3],'LR',0,'C',$fill);
 		$this->Cell($w[4],6,$row[4],'LR',0,'C',$fill);
-		$this->Cell($w[3],6,$row[3],'LR',0,'C',$fill);
-		$this->Cell($w[4],6,$row[4],'LR',0,'C',$fill);
+		$this->Cell($w[5],6,$row[5],'LR',0,'C',$fill);
+		$this->Cell($w[6],6,$row[6],'LR',0,'C',$fill);
         $this->Ln();
         $fill = !$fill;
     }
@@ -95,9 +102,9 @@ function ingresosFacturacion($header, $data, &$TotalIngresos)
 	$this->SetFont('Arial','',12);
 	$this->Ln();
 	$this->Ln();
-	$this->Cell(60,7,'Cantidad de Fiestas:'.number_format($totalcant, 2, '.', ','),0,0,'L',false);
+	$this->Cell(60,7,'Cantidad de Facturas: '.$totalcant,0,0,'L',false);
 	$this->Ln();
-	$this->Cell(60,7,'Total de Fiestas: $'.number_format($total, 2, '.', ','),0,0,'L',false);
+	$this->Cell(60,7,'Total: $'.number_format($total, 2, '.', ','),0,0,'L',false);
 	
 	$TotalIngresos = $TotalIngresos + $total;
 }
@@ -130,18 +137,13 @@ $pdf->Ln();
 
 $pdf->SetFont('Arial','',10);
 
-$pdf->ingresosFiestas($headerFacturacion,$resIngresosFacturacion,$TotalFacturacion);
+$pdf->ingresosFacturacion($headerFacturacion,$datos,$TotalFacturacion);
 
 $pdf->Ln();
 
 $pdf->SetFont('Arial','',13);
 
-
-$pdf->Ln();
-$pdf->Cell(60,7,'Importe Total:'.number_format(($TotalIngresos), 2, '.', ','),0,0,'L',false);
-
-
-$nombreTurno = "Mensual-".$fecha.".pdf";
+$nombreTurno = "rptFacturacionGeneral-".$fecha.".pdf";
 
 $pdf->Output($nombreTurno,'D');
 

@@ -28,59 +28,28 @@ $serviciosPagos		= new ServiciosPagos();
 $fecha = date('Y-m-d');
 
 //$resProductos = $serviciosProductos->traerProductosLimite(6);
-$resMenu = $serviciosHTML->menu(utf8_encode($_SESSION['nombre_predio']),"Pagos",$_SESSION['refroll_predio'],utf8_encode($_SESSION['usua_empresa']));
+$resMenu = $serviciosHTML->menu(utf8_encode($_SESSION['nombre_predio']),"Reportes",$_SESSION['refroll_predio'],utf8_encode($_SESSION['usua_empresa']));
 
 
-/////////////////////// Opciones para la creacion del formulario  /////////////////////
-$tabla 			= "dbpagos";
+$resEmpresas		=	$serviciosEmpresas->traerEmpresas();
 
-$lblCambio	 	= array("fechapago","montoapagar");
-$lblreemplazo	= array("Fecha Pago","Abono");
-
-$resCliente 	= $serviciosClientes->traerClientes();
+$resClientes		=	$serviciosClientes->traerClientes();
 
 $cadRef = '';
+while ($rowTT = mysql_fetch_array($resClientes)) {
+	$cadRef = $cadRef.'<option value="'.$rowTT[0].'">'.utf8_encode($rowTT[1]).'</option>';
+	
+}
 
-$refdescripcion = array();
-$refCampo 	=  array(); 
-//////////////////////////////////////////////  FIN de los opciones //////////////////////////
-
-
-///////////////// CLIENTES /////////////////////////////////////////////////////////////
-$resCliente 	= $serviciosClientes->traerClientes();
-
-$cadRefC = '';
-while ($rowTT = mysql_fetch_array($resCliente)) {
-	$cadRefC = $cadRefC.'<option value="'.$rowTT[0].'">'.utf8_encode($rowTT[1]).'</option>';
+$cadRefE = '';
+while ($rowTTE = mysql_fetch_array($resEmpresas)) {
+	$cadRefE = $cadRefE.'<option value="'.$rowTTE[0].'">'.utf8_encode($rowTTE[1]).'</option>';
 	
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////
-
-
-/////////////////////// Opciones para la creacion del view  /////////////////////
-$cabeceras 		= "<th>Empresa</th>
-				<th>Cliente</th>
-				<th>Nro Factura</th>
-				<th>Fecha Pago</th>
-				<th>Abono</th>
-				<th>Referencia</th>
-				<th>Comentario</th>
-				<th>Estatus</th>
-				";
-
-//////////////////////////////////////////////  FIN de los opciones //////////////////////////
-
-$formulario 	= $serviciosFunciones->camposTabla("insertarPagos",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
-
-
-$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosPagos->traerPagosFacturas(),8);
-
-
-
-if ($_SESSION['refroll_predio'] != 1) {
-
+if ($_SESSION['idroll_predio'] != 1) {
+	header('Location: ../index.php');
 } else {
 
 	
@@ -144,57 +113,33 @@ if ($_SESSION['refroll_predio'] != 1) {
 
 <div id="content">
 
-<h3>Pagos</h3>
+<h3>Reportes</h3>
 
     <div class="boxInfoLargo">
         <div id="headBoxInfo">
-        	<p style="color: #fff; font-size:18px; height:16px;">Carga de Pagos</p>
+        	<p style="color: #fff; font-size:18px; height:16px;">Reporte General de Facturación</p>
         	
         </div>
     	<div class="cuerpoBox">
         	<form class="form-inline formulario" role="form">
         	<div class="row">
             	<div class="form-group col-md-6">
-                    <label class="control-label" style="text-align:left" for="refcliente">Seleccione el Cliente</label>
+                    <label class="control-label" style="text-align:left" for="refcliente">Seleccione la Empresa</label>
                     <div class="input-group col-md-12">
-                    	<select id="refcliente" class="form-control" name="refcliente">
-							<?php echo $cadRefC; ?>
+                    	<select id="refempresa1" class="form-control" name="refempresa1">
+							<?php echo $cadRefE; ?>
                     	</select>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-            	<div class="form-group col-md-12">
-                	<label class="control-label" style="text-align:left" for="facturas">Facturas</label>
-                    <div class="input-group col-md-12 lstFacturas">
-                    	
-                    </div>
-                </div>
-                <div class="form-group col-md-6">
-                	<label class="control-label" style="text-align:left" for="facturas">Total a Pagar</label>
-                    <div class="input-group col-md-7">
-                    	<span class="input-group-addon">$</span>
-                        <input class="form-control" type="text" value="0" name="total" id="total" readonly>
-                        <span class="input-group-addon">.00</span>
                     </div>
                 </div>
                 
                 <div class="form-group col-md-6">
-                	<label class="control-label" style="text-align:left" for="facturas">Saldo</label>
-                    <div class="input-group col-md-7">
-                    	<span class="input-group-addon">$</span>
-                        <input class="form-control" type="text" value="0" name="saldo" id="saldo" readonly>
-                        <span class="input-group-addon">.00</span>
+                    <label class="control-label" style="text-align:left" for="refcliente">Acción</label>
+                    <div class="input-group col-md-12">
+                    	<button type="button" class="btn btn-success" id="rptgf" style="margin-left:0px;">Generar</button>
                     </div>
                 </div>
             </div>
             
-            <hr>
-            
-            <div class="row">
-			<?php echo $formulario; ?>
-            <input type="hidden" id="refempresa" name="refempresa" value="<?php echo $_SESSION['usua_idempresa']; ?>" />
-            </div>
             
             <div class='row' style="margin-left:25px; margin-right:25px;">
                 <div class='alert'>
@@ -204,27 +149,127 @@ if ($_SESSION['refroll_predio'] != 1) {
                 
                 </div>
             </div>
-            
-            <div class="row">
-                <div class="col-md-12">
-                <ul class="list-inline" style="margin-top:15px;">
-                    <li>
-                        <button type="button" class="btn btn-primary" id="cargar" style="margin-left:0px;">Guardar</button>
-                    </li>
-                </ul>
-                </div>
-            </div>
+
             </form>
     	</div>
     </div>
     
     <div class="boxInfoLargo">
         <div id="headBoxInfo">
-        	<p style="color: #fff; font-size:18px; height:16px;">Pagos Cargados</p>
+        	<p style="color: #fff; font-size:18px; height:16px;">Reporte de Saldos de Clientes</p>
         	
         </div>
     	<div class="cuerpoBox">
-        	<?php echo $lstCargados; ?>
+        	<form class="form-inline formulario" role="form">
+        	<div class="row">
+            	<div class="form-group col-md-6">
+                    <label class="control-label" style="text-align:left" for="refcliente">Seleccione el Cliente</label>
+                    <div class="input-group col-md-12">
+                    	<select id="refcliente" class="form-control" name="refcliente">
+							
+                    	</select>
+                    </div>
+                </div>
+                
+                <div class="form-group col-md-6">
+                    <label class="control-label" style="text-align:left" for="refcliente">Acción</label>
+                    <div class="input-group col-md-12">
+                    	<button type="button" class="btn btn-success" id="rptsc" style="margin-left:0px;">Generar</button>
+                    </div>
+                </div>
+            </div>
+            
+            
+            <div class='row' style="margin-left:25px; margin-right:25px;">
+                <div class='alert'>
+                
+                </div>
+                <div id='load'>
+                
+                </div>
+            </div>
+
+            </form>
+    	</div>
+    </div>
+    
+    
+    <div class="boxInfoLargo">
+        <div id="headBoxInfo">
+        	<p style="color: #fff; font-size:18px; height:16px;">Reporte de Estado de Cuenta de Clientes</p>
+        	
+        </div>
+    	<div class="cuerpoBox">
+        	<form class="form-inline formulario" role="form">
+        	<div class="row">
+            	<div class="form-group col-md-6">
+                    <label class="control-label" style="text-align:left" for="refcliente">Seleccione el Cliente</label>
+                    <div class="input-group col-md-12">
+                    	<select id="refcliente" class="form-control" name="refcliente">
+							
+                    	</select>
+                    </div>
+                </div>
+                
+                <div class="form-group col-md-6">
+                    <label class="control-label" style="text-align:left" for="refcliente">Acción</label>
+                    <div class="input-group col-md-12">
+                    	<button type="button" class="btn btn-success" id="rptcc" style="margin-left:0px;">Generar</button>
+                    </div>
+                </div>
+            </div>
+            
+            
+            <div class='row' style="margin-left:25px; margin-right:25px;">
+                <div class='alert'>
+                
+                </div>
+                <div id='load'>
+                
+                </div>
+            </div>
+
+            </form>
+    	</div>
+    </div>
+    
+    
+    <div class="boxInfoLargo">
+        <div id="headBoxInfo">
+        	<p style="color: #fff; font-size:18px; height:16px;">Reporte por Empresas</p>
+        	
+        </div>
+    	<div class="cuerpoBox">
+        	<form class="form-inline formulario" role="form">
+        	<div class="row">
+            	<div class="form-group col-md-6">
+                    <label class="control-label" style="text-align:left" for="refcliente">Seleccione el Cliente</label>
+                    <div class="input-group col-md-12">
+                    	<select id="refcliente" class="form-control" name="refcliente">
+							
+                    	</select>
+                    </div>
+                </div>
+                
+                <div class="form-group col-md-6">
+                    <label class="control-label" style="text-align:left" for="refcliente">Acción</label>
+                    <div class="input-group col-md-12">
+                    	<button type="button" class="btn btn-success" id="rpte" style="margin-left:0px;">Generar</button>
+                    </div>
+                </div>
+            </div>
+            
+            
+            <div class='row' style="margin-left:25px; margin-right:25px;">
+                <div class='alert'>
+                
+                </div>
+                <div id='load'>
+                
+                </div>
+            </div>
+
+            </form>
     	</div>
     </div>
     
@@ -237,14 +282,7 @@ if ($_SESSION['refroll_predio'] != 1) {
 
 
 </div>
-<div id="dialog2" title="Eliminar Equipos">
-    	<p>
-        	<span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
-            ¿Esta seguro que desea eliminar el Pago?.<span id="proveedorEli"></span>
-        </p>
-        <p><strong>Importante: </strong>Si elimina el equipo se perderan todos los datos de este</p>
-        <input type="hidden" value="" id="idEliminar" name="idEliminar">
-</div>
+
 <script type="text/javascript" src="../../js/jquery.dataTables.min.js"></script>
 <script src="../../bootstrap/js/dataTables.bootstrap.js"></script>
 <script src="../../js/bootstrap-datetimepicker.min.js"></script>
@@ -252,61 +290,10 @@ if ($_SESSION['refroll_predio'] != 1) {
 
 <script type="text/javascript">
 $(document).ready(function(){
-	$('#example').dataTable({
-		"order": [[ 0, "asc" ]],
-		"language": {
-			"emptyTable":     "No hay datos cargados",
-			"info":           "Mostrar _START_ hasta _END_ del total de _TOTAL_ filas",
-			"infoEmpty":      "Mostrar 0 hasta 0 del total de 0 filas",
-			"infoFiltered":   "(filtrados del total de _MAX_ filas)",
-			"infoPostFix":    "",
-			"thousands":      ",",
-			"lengthMenu":     "Mostrar _MENU_ filas",
-			"loadingRecords": "Cargando...",
-			"processing":     "Procesando...",
-			"search":         "Buscar:",
-			"zeroRecords":    "No se encontraron resultados",
-			"paginate": {
-				"first":      "Primero",
-				"last":       "Ultimo",
-				"next":       "Siguiente",
-				"previous":   "Anterior"
-			},
-			"aria": {
-				"sortAscending":  ": activate to sort column ascending",
-				"sortDescending": ": activate to sort column descending"
-			}
-		  }
-	} );
-	
-	$('.varborrar').click(function(event){
-		  usersid =  $(this).attr("id");
-		  if (!isNaN(usersid)) {
-			$("#idEliminar").val(usersid);
-			$("#dialog2").dialog("open");
-
-			
-			//url = "../clienteseleccionado/index.php?idcliente=" + usersid;
-			//$(location).attr('href',url);
-		  } else {
-			alert("Error, vuelva a realizar la acción.");	
-		  }
-	});//fin del boton eliminar
 	
 	
 	
-	
-	$("#example").on("click",'.varmodificar', function(){
-		  usersid =  $(this).attr("id");
-		  if (!isNaN(usersid)) {
-			
-			url = "modificar.php?id=" + usersid;
-			$(location).attr('href',url);
-		  } else {
-			alert("Error, vuelva a realizar la acción.");	
-		  }
-	});//fin del boton modificar
-
+/*
 	function traerFacturas() {
 		
 		$.ajax({
@@ -361,117 +348,21 @@ $(document).ready(function(){
 		} else {
 			traerFacturasPorId(usersid,1);
 		}
-	});//fin de los check
-
+	});  */
+	//fin de los check
+/*
 	$('#refcliente').change( function() {
 		$('#total').val(0);
 		traerFacturas();
 		
-	});
-
-	 $( "#dialog2" ).dialog({
-		 	
-			    autoOpen: false,
-			 	resizable: false,
-				width:600,
-				height:240,
-				modal: true,
-				buttons: {
-				    "Eliminar": function() {
+	});*/
 	
-						$.ajax({
-									data:  {id: $('#idEliminar').val(), accion: 'eliminarPagos'},
-									url:   '../../ajax/ajax.php',
-									type:  'post',
-									beforeSend: function () {
-											
-									},
-									success:  function (response) {
-											url = "index.php";
-											$(location).attr('href',url);
-											
-									}
-							});
-						$( this ).dialog( "close" );
-						$( this ).dialog( "close" );
-							$('html, body').animate({
-	           					scrollTop: '1000px'
-	       					},
-	       					1500);
-				    },
-				    Cancelar: function() {
-						$( this ).dialog( "close" );
-				    }
-				}
-		 
-		 
-	 		}); //fin del dialogo para eliminar
-			
-	<?php 
-		echo $serviciosHTML->validacion($tabla);
-	
-	?>
-	
-
-	
-	
-	//al enviar el formulario
-    $('#cargar').click(function(){
-		
-		if (validador() == "")
-        {
-			//información del formulario
-			var formData = new FormData($(".formulario")[0]);
-			var message = "";
-			//hacemos la petición ajax  
-			$.ajax({
-				url: '../../ajax/ajax.php',  
-				type: 'POST',
-				// Form data
-				//datos del formulario
-				data: formData,
-				//necesario para subir archivos via ajax
-				cache: false,
-				contentType: false,
-				processData: false,
-				//mientras enviamos el archivo
-				beforeSend: function(){
-					$("#load").html('<img src="../../imagenes/load13.gif" width="50" height="50" />');       
-				},
-				//una vez finalizado correctamente
-				success: function(data){
-
-					if (data == '') {
-                                            $(".alert").removeClass("alert-danger");
-											$(".alert").removeClass("alert-info");
-                                            $(".alert").addClass("alert-success");
-                                            $(".alert").html('<strong>Ok!</strong> Se cargo exitosamente el <strong>Pago</strong>. ');
-											$(".alert").delay(3000).queue(function(){
-												/*aca lo que quiero hacer 
-												  después de los 2 segundos de retraso*/
-												$(this).dequeue(); //continúo con el siguiente ítem en la cola
-												
-											});
-											$("#load").html('');
-											url = "index.php";
-											$(location).attr('href',url);
-                                            
-											
-                                        } else {
-                                        	$(".alert").removeClass("alert-danger");
-                                            $(".alert").addClass("alert-danger");
-                                            $(".alert").html('<strong>Error!</strong> '+data);
-                                            $("#load").html('');
-                                        }
-				},
-				//si ha ocurrido un error
-				error: function(){
-					$(".alert").html('<strong>Error!</strong> Actualice la pagina');
-                    $("#load").html('');
-				}
-			});
-		}
+	$("#rptgf").click(function(event) {
+        window.open("../../reportes/rptFacturacionGeneral.php?id=" + $("#refempresa1").val(),'_blank');	
+						
     });
+
+	 
 
 });
 </script>
