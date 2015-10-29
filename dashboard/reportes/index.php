@@ -163,9 +163,19 @@ if ($_SESSION['idroll_predio'] != 1) {
         	<form class="form-inline formulario" role="form">
         	<div class="row">
             	<div class="form-group col-md-6">
+                    <label class="control-label" style="text-align:left" for="refcliente">Seleccione la Empresa</label>
+                    <div class="input-group col-md-12">
+                    	<select id="refempresa2" class="form-control" name="refempresa2">
+							<option value="0">-------Seleccione-------</option>
+							<?php echo $cadRefE; ?>
+                    	</select>
+                    </div>
+                </div>
+                
+            	<div class="form-group col-md-6">
                     <label class="control-label" style="text-align:left" for="refcliente">Seleccione el Cliente</label>
                     <div class="input-group col-md-12">
-                    	<select id="refcliente" class="form-control" name="refcliente">
+                    	<select id="refcliente1" class="form-control" name="refcliente1">
 							
                     	</select>
                     </div>
@@ -291,7 +301,25 @@ if ($_SESSION['idroll_predio'] != 1) {
 <script type="text/javascript">
 $(document).ready(function(){
 	
+	function traerClientesPorEmpresa(idEmpresa) {
+		$.ajax({
+				data:  {idEmpresa: idEmpresa,
+						accion: 'traerClientesPorEmpresa'},
+				url:   '../../ajax/ajax.php',
+				type:  'post',
+				beforeSend: function () {
+						
+				},
+				success:  function (response) {
+						$('#refcliente1').html(response);
+						
+				}
+		});
+	}
 	
+	$('#refempresa2').change(function(e) {
+		traerClientesPorEmpresa($(this).val());	
+	});
 	
 /*
 	function traerFacturas() {
@@ -359,6 +387,11 @@ $(document).ready(function(){
 	
 	$("#rptgf").click(function(event) {
         window.open("../../reportes/rptFacturacionGeneral.php?id=" + $("#refempresa1").val(),'_blank');	
+						
+    });
+	
+	$("#rptsc").click(function(event) {
+        window.open("../../reportes/rptSaldosClientes.php?idEmp=" + $("#refempresa2").val() + "&idClie=" + $("#refcliente1").val(),'_blank');	
 						
     });
 

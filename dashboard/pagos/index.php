@@ -75,7 +75,7 @@ $cabeceras 		= "<th>Empresa</th>
 $formulario 	= $serviciosFunciones->camposTabla("insertarPagos",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
 
 
-$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosPagos->traerPagosFacturas(),99);
+$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosPagos->traerPagosFacturasPorEmpresa($_SESSION['usua_idempresa']),99);
 
 
 

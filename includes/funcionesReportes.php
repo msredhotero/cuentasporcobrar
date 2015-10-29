@@ -61,6 +61,41 @@ $sql = "select
 		order by 2"; 
 $res = $this->query($sql,0); 
 return $res; 
+}
+
+
+function rptSaldoCliente($empresa,$idcliente) { 
+$sql = "select
+			r.cliente,
+			r.total,
+			r.abono,
+			r.total - r.abono as saldo
+		from
+		(
+		select 
+			c.razonsocial as cliente,
+			sum(f.total) as total,
+			sum(p.montoapagar) as abono
+			
+			
+		from
+			dbpagosfacturas pf
+				inner join
+			dbpagos p ON pf.refpago = p.idpago
+				inner join
+			dbfacturas f ON f.idfactura = pf.reffactura
+				inner join
+			dbclientes c ON c.idcliente = f.refcliente
+				inner join
+			tbestatus et ON et.idestatu = pf.refestatu
+				inner join
+			dbempresas e ON e.idempresa = f.refempresa
+		where	e.idempresa = ".$empresa." and c.idcliente = ".$idcliente."
+		group by c.razonsocial
+		) as r
+		order by 2"; 
+$res = $this->query($sql,0); 
+return $res; 
 } 
 
 

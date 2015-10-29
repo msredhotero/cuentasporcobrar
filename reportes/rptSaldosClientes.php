@@ -29,13 +29,14 @@ require('fpdf.php');
 
 //$header = array("Hora", "Cancha 1", "Cancha 2", "Cancha 3");
 
-$id				=	$_GET['id'];
+$idEmpresa		=	$_GET['idEmp'];
+$idCliente		=	$_GET['idClie'];
 
-$resEmpresa		=	$serviciosEmpresas->traerEmpresasPorId($id);
+$resEmpresa		=	$serviciosEmpresas->traerEmpresasPorId($idEmpresa);
 
 $empresa		=	mysql_result($resEmpresa,0,1);
 
-$datos			=	$serviciosReportes->rptFacturacionGeneralPorEmpresa($id);
+$datos			=	$serviciosReportes->rptSaldoCliente($idEmpresa, $idCliente);
 
 $TotalIngresos = 0;
 $TotalEgresos = 0;
@@ -54,11 +55,7 @@ class PDF extends FPDF
 // Tabla coloreada
 function ingresosFacturacion($header, $data, &$TotalIngresos)
 {
-	$this->SetFont('Arial','',12);
-	$this->Ln();
-	$this->Ln();
-	$this->Cell(60,7,'Facturación General',0,0,'L',false);
-	$this->SetFont('Arial','',10);
+
     // Colores, ancho de línea y fuente en negrita
     $this->SetFillColor(255,0,0);
     $this->SetTextColor(255);
@@ -68,7 +65,7 @@ function ingresosFacturacion($header, $data, &$TotalIngresos)
 	
 	
     // Cabecera
-    $w = array(20,65,20,18,25,25,25);
+    $w = array(65,25,25,25);
     for($i=0;$i<count($header);$i++)
         $this->Cell($w[$i],6,$header[$i],1,0,'C',true);
     $this->Ln();
@@ -85,16 +82,13 @@ function ingresosFacturacion($header, $data, &$TotalIngresos)
 	$this->SetFont('Arial','',8);
     while ($row = mysql_fetch_array($data))
     {
-		$total = $total + $row[4];
+		$total = $total + $row[3];
 		$totalcant = $totalcant + 1;
 		
-        $this->Cell($w[0],4,$row[0],'LR',0,'L',$fill);
-		$this->Cell($w[1],4,$row[1],'LR',0,'L',$fill);
-        $this->Cell($w[2],4,$row[2],'LR',0,'C',$fill);
-		$this->Cell($w[3],4,$row[3],'LR',0,'C',$fill);
-		$this->Cell($w[4],4,number_format($row[4],2,',','.'),'LR',0,'R',$fill);
-		$this->Cell($w[5],4,number_format($row[5],2,',','.'),'LR',0,'R',$fill);
-		$this->Cell($w[6],4,number_format($row[6],2,',','.'),'LR',0,'R',$fill);
+		$this->Cell($w[0],4,$row[0],'LR',0,'L',$fill);
+		$this->Cell($w[1],4,number_format($row[1],2,',','.'),'LR',0,'R',$fill);
+		$this->Cell($w[2],4,number_format($row[2],2,',','.'),'LR',0,'R',$fill);
+		$this->Cell($w[3],4,number_format($row[3],2,',','.'),'LR',0,'R',$fill);
         $this->Ln();
         $fill = !$fill;
     }
@@ -102,9 +96,6 @@ function ingresosFacturacion($header, $data, &$TotalIngresos)
     // Línea de cierre
     $this->Cell(array_sum($w),0,'','T');
 	$this->SetFont('Arial','',12);
-	$this->Ln();
-	$this->Ln();
-	$this->Cell(60,7,'Cantidad de Facturas: '.$totalcant,0,0,'L',false);
 	$this->Ln();
 	$this->Cell(60,7,'Total: $'.number_format($total, 2, '.', ','),0,0,'L',false);
 	
@@ -123,13 +114,13 @@ $pdf = new PDF();
 
 // Títulos de las columnas
 
-$headerFacturacion = array("Factura", "Cliente", "Referencia","Fecha", "Importe", "Abonos", "Saldo");
+$headerFacturacion = array("Nombre", "Cargos", "Abonos", "Saldo");
 // Carga de datos
 
 $pdf->AddPage();
 
 $pdf->SetFont('Arial','U',17);
-$pdf->Cell(180,7,'Reporte General de Facturación',0,0,'C',false);
+$pdf->Cell(180,7,'Reporte Saldos de Clientes',0,0,'C',false);
 $pdf->Ln();
 $pdf->SetFont('Arial','U',14);
 $pdf->Cell(180,7,"Empresa: ".strtoupper($empresa),0,0,'C',false);
@@ -145,7 +136,7 @@ $pdf->Ln();
 
 $pdf->SetFont('Arial','',13);
 
-$nombreTurno = "rptFacturacionGeneral-".$fecha.".pdf";
+$nombreTurno = "rptSaldosClientes-".$fecha.".pdf";
 
 $pdf->Output($nombreTurno,'D');
 

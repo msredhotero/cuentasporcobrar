@@ -49,6 +49,9 @@ case 'eliminarClientes':
 eliminarClientes($serviciosClientes); 
 break; 
 
+case 'traerClientesPorEmpresa':
+traerClientesPorEmpresa($serviciosClientes);
+break;
 /* Fin */
 
 /* PARA Empresas */
@@ -159,6 +162,18 @@ $id = $_POST['id'];
 $res = $serviciosClientes->eliminarClientes($id); 
 echo $res; 
 } 
+
+function traerClientesPorEmpresa($serviciosClientes) {
+	$idEmpresa = $_POST['idEmpresa']; 
+	$res = $serviciosClientes->traerClientesPorEmpresa($idEmpresa);
+	
+	$cad = '';
+	while ($row = mysql_fetch_array($res)) {
+		$cad .= '<option value="'.$row[0].'">'.$row[1].'</option>';	
+	}
+	
+	echo $cad; 
+}
 
 /* Fin */
 

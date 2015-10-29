@@ -122,7 +122,7 @@ if ($_SESSION['refroll_predio'] != 1) {
                 	<h4>Empresa Actual: <?php echo utf8_encode(mysql_result($resEmpresaActual,0,1)); ?></h4>
                 </div>
                 <div class="form-group col-md-6">
-               	 <label class="control-label" style="text-align:left" for="reftorneo">Tipo de Torneo</label>
+               	 <label class="control-label" style="text-align:left" for="reftorneo">Empresa</label>
                     <div class="input-group col-md-12">
                     	<select id="idempresa" class="form-control" name="idempresa">
                         	<option value="0">----Seleccionar----</option>

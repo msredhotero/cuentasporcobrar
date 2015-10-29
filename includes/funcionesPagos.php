@@ -124,6 +124,41 @@ return $res;
 } 
 
 
+function traerPagosFacturasPorEmpresa($empresa) { 
+$sql = "select 
+			pf.idpagofactura,
+			e.razonsocial as empresa,
+			c.razonsocial as cliente,
+			f.nrofactura,
+			p.fechapago,
+			sum(p.montoapagar) as abono,
+			p.referencia,
+			p.comentarios,
+			et.estatus,
+			pf.refpago,
+			pf.reffactura,
+			pf.refestatu,
+			c.idcliente,
+			e.idempresa
+		from
+			dbpagosfacturas pf
+				inner join
+			dbpagos p ON pf.refpago = p.idpago
+				inner join
+			dbfacturas f ON f.idfactura = pf.reffactura
+				inner join
+			dbclientes c ON c.idcliente = f.refcliente
+				inner join
+			tbestatus et ON et.idestatu = pf.refestatu
+				inner join
+			dbempresas e ON e.idempresa = f.refempresa
+		where e.idempresa = ".$empresa."
+		group by pf.idpagofactura , e.razonsocial , c.razonsocial , f.nrofactura , p.fechapago , p.referencia , p.comentarios , et.estatus , pf.refpago , pf.reffactura , pf.refestatu , c.idcliente , e.idempresa
+		order by 1"; 
+$res = $this->query($sql,0); 
+return $res; 
+} 
+
 function traerPagosFacturasPorId($id) { 
 $sql = "select idpagofactura,refpago,reffactura,refestatu from dbpagosfacturas 
 		where idpagofactura =".$id; 
