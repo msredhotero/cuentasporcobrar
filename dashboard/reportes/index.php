@@ -172,14 +172,6 @@ if ($_SESSION['idroll_predio'] != 1) {
                     </div>
                 </div>
                 
-            	<div class="form-group col-md-6">
-                    <label class="control-label" style="text-align:left" for="refcliente">Seleccione el Cliente</label>
-                    <div class="input-group col-md-12">
-                    	<select id="refcliente1" class="form-control" name="refcliente1">
-							
-                    	</select>
-                    </div>
-                </div>
                 
                 <div class="form-group col-md-6">
                     <label class="control-label" style="text-align:left" for="refcliente">Acción</label>
@@ -213,9 +205,19 @@ if ($_SESSION['idroll_predio'] != 1) {
         	<form class="form-inline formulario" role="form">
         	<div class="row">
             	<div class="form-group col-md-6">
+                    <label class="control-label" style="text-align:left" for="refcliente">Seleccione la Empresa</label>
+                    <div class="input-group col-md-12">
+                    	<select id="refempresa4" class="form-control" name="refempresa4">
+							<option value="0">-------Seleccione-------</option>
+							<?php echo $cadRefE; ?>
+                    	</select>
+                    </div>
+                </div>
+                
+            	<div class="form-group col-md-6">
                     <label class="control-label" style="text-align:left" for="refcliente">Seleccione el Cliente</label>
                     <div class="input-group col-md-12">
-                    	<select id="refcliente" class="form-control" name="refcliente">
+                    	<select id="refcliente1" class="form-control" name="refcliente1">
 							
                     	</select>
                     </div>
@@ -224,7 +226,7 @@ if ($_SESSION['idroll_predio'] != 1) {
                 <div class="form-group col-md-6">
                     <label class="control-label" style="text-align:left" for="refcliente">Acción</label>
                     <div class="input-group col-md-12">
-                    	<button type="button" class="btn btn-success" id="rptcc" style="margin-left:0px;">Generar</button>
+                    	<button type="button" class="btn btn-success" id="rptscc" style="margin-left:0px;">Generar</button>
                     </div>
                 </div>
             </div>
@@ -253,10 +255,11 @@ if ($_SESSION['idroll_predio'] != 1) {
         	<form class="form-inline formulario" role="form">
         	<div class="row">
             	<div class="form-group col-md-6">
-                    <label class="control-label" style="text-align:left" for="refcliente">Seleccione el Cliente</label>
+                    <label class="control-label" style="text-align:left" for="refcliente">Seleccione la Empresa</label>
                     <div class="input-group col-md-12">
-                    	<select id="refcliente" class="form-control" name="refcliente">
-							
+                    	<select id="refempresa3" class="form-control" name="refempresa3">
+							<option value="0">-------Seleccione-------</option>
+							<?php echo $cadRefE; ?>
                     	</select>
                     </div>
                 </div>
@@ -264,7 +267,7 @@ if ($_SESSION['idroll_predio'] != 1) {
                 <div class="form-group col-md-6">
                     <label class="control-label" style="text-align:left" for="refcliente">Acción</label>
                     <div class="input-group col-md-12">
-                    	<button type="button" class="btn btn-success" id="rpte" style="margin-left:0px;">Generar</button>
+                    	<button type="button" class="btn btn-success" id="rptcc" style="margin-left:0px;">Generar</button>
                     </div>
                 </div>
             </div>
@@ -282,6 +285,9 @@ if ($_SESSION['idroll_predio'] != 1) {
             </form>
     	</div>
     </div>
+    
+    
+    
     
     
 
@@ -317,7 +323,7 @@ $(document).ready(function(){
 		});
 	}
 	
-	$('#refempresa2').change(function(e) {
+	$('#refempresa4').change(function(e) {
 		traerClientesPorEmpresa($(this).val());	
 	});
 	
@@ -391,8 +397,17 @@ $(document).ready(function(){
     });
 	
 	$("#rptsc").click(function(event) {
-        window.open("../../reportes/rptSaldosClientes.php?idEmp=" + $("#refempresa2").val() + "&idClie=" + $("#refcliente1").val(),'_blank');	
+        window.open("../../reportes/rptSaldosClientes.php?idEmp=" + $("#refempresa2").val(),'_blank');	
 						
+    });
+	
+	$("#rptscc").click(function(event) {
+        window.open("../../reportes/rptSaldosPorClientes.php?idEmp=" + $("#refempresa4").val() + "&idClie=" + $("#refcliente1").val(),'_blank');	
+						
+    });
+	
+	$('#rptcc').click(function(e) {
+        window.open("../../reportes/rptSaldosEmpresa.php?idEmp=" + $("#refempresa3").val(),'_blank');
     });
 
 	 

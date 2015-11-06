@@ -58,7 +58,7 @@ function ingresosFacturacion($header, $data, &$TotalIngresos)
 	$this->Ln();
 	$this->Ln();
 	$this->Cell(60,7,'Facturación General',0,0,'L',false);
-	$this->SetFont('Arial','',10);
+	$this->SetFont('Arial','',11);
     // Colores, ancho de línea y fuente en negrita
     $this->SetFillColor(255,0,0);
     $this->SetTextColor(255);
@@ -68,7 +68,7 @@ function ingresosFacturacion($header, $data, &$TotalIngresos)
 	
 	
     // Cabecera
-    $w = array(20,65,20,18,25,25,25);
+    $w = array(20,75,60,22,30,30,30);
     for($i=0;$i<count($header);$i++)
         $this->Cell($w[$i],6,$header[$i],1,0,'C',true);
     $this->Ln();
@@ -82,21 +82,40 @@ function ingresosFacturacion($header, $data, &$TotalIngresos)
 	$total = 0;
 	$totalcant = 0;
 	
-	$this->SetFont('Arial','',8);
+	$this->SetFont('Arial','',9);
     while ($row = mysql_fetch_array($data))
     {
 		$total = $total + $row[4];
 		$totalcant = $totalcant + 1;
 		
-        $this->Cell($w[0],4,$row[0],'LR',0,'L',$fill);
-		$this->Cell($w[1],4,$row[1],'LR',0,'L',$fill);
-        $this->Cell($w[2],4,$row[2],'LR',0,'C',$fill);
-		$this->Cell($w[3],4,$row[3],'LR',0,'C',$fill);
-		$this->Cell($w[4],4,number_format($row[4],2,',','.'),'LR',0,'R',$fill);
-		$this->Cell($w[5],4,number_format($row[5],2,',','.'),'LR',0,'R',$fill);
-		$this->Cell($w[6],4,number_format($row[6],2,',','.'),'LR',0,'R',$fill);
+        $this->Cell($w[0],5,$row[0],'LR',0,'L',$fill);
+		$this->Cell($w[1],5,substr($row[1],0,60),'LR',0,'L',$fill);
+        $this->Cell($w[2],5,substr($row[2],0,45),'LR',0,'L',$fill);
+		$this->Cell($w[3],5,$row[3],'LR',0,'C',$fill);
+		$this->Cell($w[4],5,number_format($row[4],2,',','.'),'LR',0,'R',$fill);
+		$this->Cell($w[5],5,number_format($row[5],2,',','.'),'LR',0,'R',$fill);
+		$this->Cell($w[6],5,number_format($row[6],2,',','.'),'LR',0,'R',$fill);
         $this->Ln();
         $fill = !$fill;
+		
+		if ($totalcant == 25) {
+			$this->AddPage();
+			$this->SetFont('Arial','',11);
+			// Colores, ancho de línea y fuente en negrita
+			$this->SetFillColor(255,0,0);
+			$this->SetTextColor(255);
+			$this->SetDrawColor(128,0,0);
+			$this->SetLineWidth(.3);
+			for($i=0;$i<count($header);$i++)
+				$this->Cell($w[$i],6,$header[$i],1,0,'C',true);
+			$this->Ln();
+			$this->SetFillColor(224,235,255);
+			$this->SetTextColor(0);
+			$this->SetFont('');
+			// Datos
+			$fill = false;
+			$this->SetFont('Arial','',9);
+		}
     }
 	
     // Línea de cierre
@@ -118,7 +137,7 @@ function ingresosFacturacion($header, $data, &$TotalIngresos)
 
 
 
-$pdf = new PDF();
+$pdf = new PDF("L");
 
 
 // Títulos de las columnas
@@ -129,12 +148,12 @@ $headerFacturacion = array("Factura", "Cliente", "Referencia","Fecha", "Importe"
 $pdf->AddPage();
 
 $pdf->SetFont('Arial','U',17);
-$pdf->Cell(180,7,'Reporte General de Facturación',0,0,'C',false);
+$pdf->Cell(260,7,'Reporte General de Facturación',0,0,'C',false);
 $pdf->Ln();
 $pdf->SetFont('Arial','U',14);
-$pdf->Cell(180,7,"Empresa: ".strtoupper($empresa),0,0,'C',false);
+$pdf->Cell(260,7,"Empresa: ".strtoupper($empresa),0,0,'C',false);
 $pdf->Ln();
-$pdf->Cell(180,7,'Fecha: '.date('Y-m-d'),0,0,'C',false);
+$pdf->Cell(260,7,'Fecha: '.date('Y-m-d'),0,0,'C',false);
 $pdf->Ln();
 
 $pdf->SetFont('Arial','',10);

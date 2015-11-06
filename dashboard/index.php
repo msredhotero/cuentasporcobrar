@@ -91,11 +91,11 @@ $resMenu = $serviciosHTML->menu(utf8_encode($_SESSION['nombre_predio']),"Dashboa
 
     <div class="boxInfoLargo">
         <div id="headBoxInfo">
-        	<p style="color: #fff; font-size:18px; height:16px;">Algo</p>
+        	<p style="color: #fff; font-size:18px; height:16px;">Información</p>
         	
         </div>
     	<div class="cuerpoBox">
-    		
+    		<h3>Bienvenidos al sistema Facturación - Cuentas Por Cobrar</h3>
     	</div>
     </div>
     

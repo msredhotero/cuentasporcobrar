@@ -30,13 +30,12 @@ require('fpdf.php');
 //$header = array("Hora", "Cancha 1", "Cancha 2", "Cancha 3");
 
 $idEmpresa		=	$_GET['idEmp'];
-$idCliente		=	$_GET['idClie'];
 
 $resEmpresa		=	$serviciosEmpresas->traerEmpresasPorId($idEmpresa);
 
 $empresa		=	mysql_result($resEmpresa,0,1);
 
-$datos			=	$serviciosReportes->rptSaldoCliente($idEmpresa, $idCliente);
+$datos			=	$serviciosReportes->rptSaldoCliente($idEmpresa);
 
 $TotalIngresos = 0;
 $TotalEgresos = 0;
@@ -82,7 +81,7 @@ function ingresosFacturacion($header, $data, &$TotalIngresos)
 	$this->SetFont('Arial','',8);
     while ($row = mysql_fetch_array($data))
     {
-		$total = $total + $row[3];
+		$total = $total + $row[1];
 		$totalcant = $totalcant + 1;
 		
 		$this->Cell($w[0],4,$row[0],'LR',0,'L',$fill);

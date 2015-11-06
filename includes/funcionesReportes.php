@@ -41,14 +41,14 @@ $sql = "select
 			
 			
 		from
-			dbpagosfacturas pf
-				inner join
+			dbfacturas f
+				left join
+			dbpagosfacturas pf ON f.idfactura = pf.reffactura
+				left join
 			dbpagos p ON pf.refpago = p.idpago
 				inner join
-			dbfacturas f ON f.idfactura = pf.reffactura
-				inner join
 			dbclientes c ON c.idcliente = f.refcliente
-				inner join
+				left join
 			tbestatus et ON et.idestatu = pf.refestatu
 				inner join
 			dbempresas e ON e.idempresa = f.refempresa
@@ -64,7 +64,7 @@ return $res;
 }
 
 
-function rptSaldoCliente($empresa,$idcliente) { 
+function rptSaldoCliente($empresa) { 
 $sql = "select
 			r.cliente,
 			r.total,
@@ -79,18 +79,18 @@ $sql = "select
 			
 			
 		from
-			dbpagosfacturas pf
-				inner join
+			dbfacturas f
+				left join
+			dbpagosfacturas pf ON f.idfactura = pf.reffactura
+				left join
 			dbpagos p ON pf.refpago = p.idpago
 				inner join
-			dbfacturas f ON f.idfactura = pf.reffactura
-				inner join
 			dbclientes c ON c.idcliente = f.refcliente
-				inner join
+				left join
 			tbestatus et ON et.idestatu = pf.refestatu
 				inner join
 			dbempresas e ON e.idempresa = f.refempresa
-		where	e.idempresa = ".$empresa." and c.idcliente = ".$idcliente."
+		where	e.idempresa = ".$empresa."
 		group by c.razonsocial
 		) as r
 		order by 2"; 
@@ -98,6 +98,83 @@ $res = $this->query($sql,0);
 return $res; 
 } 
 
+
+function rptSaldoPorCliente($empresa,$idcliente) { 
+	$sql = "select
+			r.nrofactura,
+			r.referencia,
+			r.fechapago,
+			r.total,
+			r.abono,
+			r.comentarios
+		from
+		(
+		select 
+			f.nrofactura,
+			p.referencia,
+			max(p.fechapago) as fechapago,
+			f.total,
+			sum(p.montoapagar) as abono,
+			p.comentarios
+			
+			
+		from
+			dbfacturas f
+				left join
+			dbpagosfacturas pf ON f.idfactura = pf.reffactura
+				left join
+			dbpagos p ON pf.refpago = p.idpago
+				inner join
+			dbclientes c ON c.idcliente = f.refcliente
+				left join
+			tbestatus et ON et.idestatu = pf.refestatu
+				inner join
+			dbempresas e ON e.idempresa = f.refempresa
+		where	e.idempresa = ".$empresa." and c.idcliente = ".$idcliente."
+		group by f.nrofactura,
+			p.comentarios,
+			p.referencia,
+			f.total
+		) as r
+		order by 2"; 
+$res = $this->query($sql,0); 
+return $res; 
+} 
+
+
+function rptSaldoEmpresa($empresa) { 
+$sql = "select
+			r.cliente,
+			r.total,
+			r.abono,
+			r.total - r.abono as saldo
+		from
+		(
+		select 
+			e.razonsocial as cliente,
+			sum(f.total) as total,
+			sum(p.montoapagar) as abono
+			
+			
+		from
+			dbfacturas f
+				left join
+			dbpagosfacturas pf ON f.idfactura = pf.reffactura
+				left join
+			dbpagos p ON pf.refpago = p.idpago
+				inner join
+			dbclientes c ON c.idcliente = f.refcliente
+				left join
+			tbestatus et ON et.idestatu = pf.refestatu
+				inner join
+			dbempresas e ON e.idempresa = f.refempresa
+		where	e.idempresa = ".$empresa."
+		group by e.razonsocial
+		) as r
+		order by 2"; 
+$res = $this->query($sql,0); 
+return $res; 
+} 
 
 
 
