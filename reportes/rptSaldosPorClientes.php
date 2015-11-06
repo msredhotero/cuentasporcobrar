@@ -69,7 +69,7 @@ function ingresosFacturacion($header, $data, &$TotalIngresos)
 	
 	
     // Cabecera
-    $w = array(20,20,18,25,25,75);
+    $w = array(20,60,18,25,25,115);
     for($i=0;$i<count($header);$i++)
         $this->Cell($w[$i],6,$header[$i],1,0,'C',true);
     $this->Ln();
@@ -89,12 +89,12 @@ function ingresosFacturacion($header, $data, &$TotalIngresos)
 		$total = $total + $row[3];
 		$totalcant = $totalcant + 1;
 		
-		$this->Cell($w[0],4,$row[0],'LR',0,'L',$fill);
-        $this->Cell($w[1],4,$row[1],'LR',0,'C',$fill);
-		$this->Cell($w[2],4,$row[2],'LR',0,'C',$fill);
-		$this->Cell($w[3],4,number_format($row[3],2,',','.'),'LR',0,'R',$fill);
-		$this->Cell($w[4],4,number_format($row[4],2,',','.'),'LR',0,'R',$fill);
-		$this->Cell($w[5],4,substr($row[5],0,50),'LR',0,'R',$fill);
+		$this->Cell($w[0],5,$row[0],'LR',0,'L',$fill);
+        $this->Cell($w[1],5,substr($row[1],0,45),'LR',0,'C',$fill);
+		$this->Cell($w[2],5,$row[2],'LR',0,'C',$fill);
+		$this->Cell($w[3],5,number_format($row[3],2,',','.'),'LR',0,'R',$fill);
+		$this->Cell($w[4],5,number_format($row[4],2,',','.'),'LR',0,'R',$fill);
+		$this->Cell($w[5],5,substr($row[5],0,80),'LR',0,'L',$fill);
         $this->Ln();
         $fill = !$fill;
     }
@@ -115,7 +115,7 @@ function ingresosFacturacion($header, $data, &$TotalIngresos)
 
 
 
-$pdf = new PDF();
+$pdf = new PDF("L");
 
 
 // Títulos de las columnas
@@ -126,15 +126,15 @@ $headerFacturacion = array("Factura", "Referencia", "Fecha", "Cargos", "Abonos",
 $pdf->AddPage();
 
 $pdf->SetFont('Arial','U',17);
-$pdf->Cell(180,7,'Reporte Saldos de Clientes',0,0,'C',false);
+$pdf->Cell(260,7,'Reporte Saldos de Clientes',0,0,'C',false);
 $pdf->Ln();
 $pdf->SetFont('Arial','U',14);
-$pdf->Cell(180,7,"Empresa: ".strtoupper($empresa),0,0,'C',false);
+$pdf->Cell(260,7,"Empresa: ".strtoupper($empresa),0,0,'C',false);
 $pdf->Ln();
 $pdf->SetFont('Arial','U',14);
-$pdf->Cell(180,7,"Cliente: ".strtoupper($cliente),0,0,'C',false);
+$pdf->Cell(260,7,"Cliente: ".strtoupper($cliente),0,0,'C',false);
 $pdf->Ln();
-$pdf->Cell(180,7,'Fecha: '.date('Y-m-d'),0,0,'C',false);
+$pdf->Cell(260,7,'Fecha: '.date('Y-m-d'),0,0,'C',false);
 $pdf->Ln();
 
 $pdf->SetFont('Arial','',10);
