@@ -120,10 +120,7 @@ if ($_SESSION['refroll_predio'] != 1) {
     <!-- Latest compiled and minified JavaScript -->
     <script src="../../bootstrap/js/bootstrap.min.js"></script>
 
-	<style type="text/css">
-
-		
-	</style>
+	
     
    
    <link href="../../css/perfect-scrollbar.css" rel="stylesheet">
@@ -136,6 +133,13 @@ if ($_SESSION['refroll_predio'] != 1) {
         $('#navigation').perfectScrollbar();
       });
     </script>
+    <style type="text/css">
+		#example2 tr {
+   max-height: 35px !important;
+   height: 35px !important;
+}
+		
+	</style>
 </head>
 
 <body>
@@ -154,13 +158,34 @@ if ($_SESSION['refroll_predio'] != 1) {
     	<div class="cuerpoBox">
         	<form class="form-inline formulario" role="form">
         	<div class="row">
-            	<div class="form-group col-md-6">
+            	<div class="form-group col-md-4">
                     <label class="control-label" style="text-align:left" for="refcliente">Seleccione el Cliente</label>
                     <div class="input-group col-md-12">
                     	<select id="refcliente" class="form-control" name="refcliente">
 							<option value="0">-----Seleccionar-----</option>
 							<?php echo $cadRefC; ?>
                     	</select>
+                    </div>
+           		</div>
+                
+                <div class="form-group col-md-3">
+                    <label class="control-label" style="text-align:left" for="refcliente">Fecha Desde</label>
+                    <div class="input-group col-md-12">
+                    	<input class="form-control" type="text" name="fechainicio" id="fechainicio" value="Date"/>
+                    </div>
+                </div>
+                
+                <div class="form-group col-md-3">
+                    <label class="control-label" style="text-align:left" for="refcliente">Fecha Hasta</label>
+                    <div class="input-group col-md-12">
+                    	<input class="form-control" type="text" name="fechafin" id="fechafin" value="Date"/>
+                    </div>
+                </div>
+                
+                <div class="form-group col-md-2">
+                    <label class="control-label" style="text-align:left" for="refcliente">Filtrar</label>
+                    <div class="input-group col-md-12">
+                    	<button type="button" class="btn btn-primary" id="buscar" style="margin-left:0px;">Buscar</button>
                     </div>
                 </div>
             </div>
@@ -280,6 +305,33 @@ $(document).ready(function(){
 		  }
 	} );
 	
+	$('#example2').dataTable({
+		"order": [[ 0, "asc" ]],
+		"language": {
+			"emptyTable":     "No hay datos cargados",
+			"info":           "Mostrar _START_ hasta _END_ del total de _TOTAL_ filas",
+			"infoEmpty":      "Mostrar 0 hasta 0 del total de 0 filas",
+			"infoFiltered":   "(filtrados del total de _MAX_ filas)",
+			"infoPostFix":    "",
+			"thousands":      ",",
+			"lengthMenu":     "Mostrar _MENU_ filas",
+			"loadingRecords": "Cargando...",
+			"processing":     "Procesando...",
+			"search":         "Buscar:",
+			"zeroRecords":    "No se encontraron resultados",
+			"paginate": {
+				"first":      "Primero",
+				"last":       "Ultimo",
+				"next":       "Siguiente",
+				"previous":   "Anterior"
+			},
+			"aria": {
+				"sortAscending":  ": activate to sort column ascending",
+				"sortDescending": ": activate to sort column descending"
+			}
+		  }
+	} );
+	
 	$('.varborrar').click(function(event){
 		  usersid =  $(this).attr("id");
 		  if (!isNaN(usersid)) {
@@ -313,6 +365,8 @@ $(document).ready(function(){
 		$.ajax({
 				data:  {refcliente: $('#refcliente').val(),
 						refempresa: <?php echo $_SESSION['usua_idempresa']; ?>,
+						fechainicio: $('#fechainicio').val(),
+						fechafin: $('#fechafin').val(),
 						forma: 'check',
 						accion: 'traerFacturasPorClienteEmpresa'},
 				url:   '../../ajax/ajax.php',
@@ -364,8 +418,9 @@ $(document).ready(function(){
 		}
 	});//fin de los check
 
-	$('#refcliente').change( function() {
+	$('#buscar').click( function() {
 		$('#total').val(0);
+		$('#saldo').val(0);
 		traerFacturas();
 		
 	});
@@ -454,8 +509,8 @@ $(document).ready(function(){
 												
 											});
 											$("#load").html('');
-											url = "index.php";
-											$(location).attr('href',url);
+											//url = "index.php";
+											//$(location).attr('href',url);
                                             
 											
                                         } else {
@@ -477,6 +532,7 @@ $(document).ready(function(){
 });
 </script>
 <script type="text/javascript">
+/*
 $('.form_date').datetimepicker({
 	language:  'es',
 	weekStart: 1,
@@ -488,7 +544,40 @@ $('.form_date').datetimepicker({
 	forceParse: 0,
 	format: 'dd/mm/yyyy'
 });
+*/
 </script>
+
+<script>
+  $(function() {
+	  $.datepicker.regional['es'] = {
+ closeText: 'Cerrar',
+ prevText: '<Ant',
+ nextText: 'Sig>',
+ currentText: 'Hoy',
+ monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+ monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
+ dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+ dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
+ dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
+ weekHeader: 'Sm',
+ dateFormat: 'dd/mm/yy',
+ firstDay: 1,
+ isRTL: false,
+ showMonthAfterYear: false,
+ yearSuffix: ''
+ };
+ $.datepicker.setDefaults($.datepicker.regional['es']);
+ 
+    $( "#fechapago" ).datepicker();
+    $( "#fechapago" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+	
+	$( "#fechainicio" ).datepicker();
+    $( "#fechainicio" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+	
+	$( "#fechafin" ).datepicker();
+    $( "#fechafin" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+  });
+  </script>
 <?php } ?>
 </body>
 </html>

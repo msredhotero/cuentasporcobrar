@@ -258,6 +258,15 @@ $(document).ready(function(){
 		
 	});//calcula el iva
 	
+	$("#importebruto").blur( function(){
+		var iva 	= parseFloat($("#importebruto").val()) * 0.16;
+		var total	= parseFloat($("#importebruto").val()) * 1.16;
+		
+		$("#iva").val(iva);
+		$("#total").val(total);
+		
+	});//calcula el iva
+	
 	$("#importebruto").number( true, 2 , '.', '');
 	$("#iva").number( true, 2 , '.', '');
 	$("#total").number( true, 2 , '.', '');
@@ -395,6 +404,7 @@ $(document).ready(function(){
 });
 </script>
 <script type="text/javascript">
+/*
 $('.form_date').datetimepicker({
 	language:  'es',
 	weekStart: 1,
@@ -406,7 +416,35 @@ $('.form_date').datetimepicker({
 	forceParse: 0,
 	format: 'dd/mm/yyyy'
 });
+*/
 </script>
+
+<script>
+  $(function() {
+	  $.datepicker.regional['es'] = {
+ closeText: 'Cerrar',
+ prevText: '<Ant',
+ nextText: 'Sig>',
+ currentText: 'Hoy',
+ monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+ monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
+ dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+ dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
+ dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
+ weekHeader: 'Sm',
+ dateFormat: 'dd/mm/yy',
+ firstDay: 1,
+ isRTL: false,
+ showMonthAfterYear: false,
+ yearSuffix: ''
+ };
+ $.datepicker.setDefaults($.datepicker.regional['es']);
+ 
+    $( "#fecha" ).datepicker();
+
+    $( "#fecha" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+  });
+  </script>
 
 <?php } ?>
 </body>

@@ -305,12 +305,16 @@ function traerFacturasPorClienteEmpresa($serviciosFacturas) {
 	$refCliente		= $_POST['refcliente'];
 	$refEmpresa		= $_POST['refempresa'];
 	
+	$fechaDesde		= $_POST['fechainicio'];
+	$fechaHasta		= $_POST['fechafin'];
+	
 	$forma			= $_POST['forma'];
 	
-	$resFacturas = $serviciosFacturas->traerFacturasPorClienteEmpresa($refCliente, $refEmpresa);
+	$resFacturas = $serviciosFacturas->traerFacturasPorClienteEmpresa($refCliente, $refEmpresa, $fechaDesde, $fechaHasta);
 
 	switch ($forma) {
 		case 'check':
+			/*
 			$cadFacturasS = '<ul class="list-inline">';
 			while ($rowFS = mysql_fetch_array($resFacturas)) {
 				if ($rowFS['saldo'] == 0) {
@@ -320,11 +324,61 @@ function traerFacturasPorClienteEmpresa($serviciosFacturas) {
 				}
 			}
 			$cadFacturasS = $cadFacturasS."</ul>";
+			*/
+			
+			
+			$cadRows = '';
+			while ($rowFS = mysql_fetch_array($resFacturas)) {
+				
+				if ($rowFS['saldo'] == 0) {
+					$cadRows .= '<tr>';
+						$cadRows .= '<td><span style="color:#2DE404;" class="glyphicon glyphicon-ok"></span></td>'.
+									'<td>'.$rowFS[1].'</td>'.
+									'<td>'.$rowFS['fecha'].'</td>'.
+									'<td>'.number_format($rowFS['total'],2,'.',',').'</td>'.
+									'<td>'.number_format($rowFS['total']-$rowFS['saldo'],2,'.',',').'</td>'.
+									'<td>'.number_format($rowFS['saldo'],2,'.',',').'</td>'.
+									'<td style="text-align:center;">'.'<input id="factura'.$rowFS[0].'" class="form-control lstcheck" type="checkbox" required="" name="factura'.$rowFS[0].'" style="height:15px;">'.'</td>';
+					$cadRows .= '</tr>';	
+				} else {
+					$cadRows .= '<tr>';
+						$cadRows .= '<td><span style="color:#E40404;" class="glyphicon glyphicon-remove"></span></td>'.
+									'<td>'.$rowFS[1].'</td>'.
+									'<td>'.$rowFS['fecha'].'</td>'.
+									'<td>'.number_format($rowFS['total'],2,'.',',').'</td>'.
+									'<td>'.number_format($rowFS['total']-$rowFS['saldo'],2,'.',',').'</td>'.
+									'<td>'.number_format($rowFS['saldo'],2,'.',',').'</td>'.
+									'<td style="text-align:center;">'.'<input id="factura'.$rowFS[0].'" class="form-control lstcheck" type="checkbox" required="" name="factura'.$rowFS[0].'" style="height:15px;">'.'</td>';
+					$cadRows .= '</tr>';
+				}
+			}
+			
+			$cadFacturasS = '<table class="table table-striped table-responsive table-bordered" id="example2">
+            	<thead>
+                	<tr>
+                    	<th></th>
+						<th>Nro</th>
+						<th>Fecha</th>
+						<th>Importe</th>
+						<th>Abono</th>
+						<th>Saldo</th>
+                        <th style="text-align:center;">Seleccionar</th>
+                    </tr>
+                </thead>
+                <tbody id="lstFacturasCliente">';
+			
+			$cadFacturasS .= utf8_encode($cadRows).'
+                </tbody>
+            </table>
+			
+		
+		';	
 			break;
 		
 	}
 	
 	echo $cadFacturasS;
+	//echo $resFacturas;
 }
 
 function traerMontoFacturasPorId($serviciosFacturas) {
@@ -363,7 +417,7 @@ function insertarPagos($serviciosPagos, $serviciosFacturas) {
 	$idcliente		= $_POST['refcliente']; 
 	$idempresa		= $_SESSION['usua_idempresa']; 
 	
-	$resFacturas = $serviciosFacturas->traerFacturasPorClienteEmpresa($idcliente, $idempresa);
+	$resFacturas = $serviciosFacturas->traerFacturasPorClienteEmpresa($idcliente, $idempresa, '', '');
 	
 	$lstFacturas = array();
 	

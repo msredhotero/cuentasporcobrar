@@ -248,7 +248,7 @@ class Servicios {
 								if (strpos($row[1],"date") !== false) {
 									$label = ucwords($label);
 									$campo = strtolower($row[0]);
-									
+									/*
 									$form	=	$form.'
 									
 									<div class="form-group col-md-6">
@@ -258,6 +258,19 @@ class Servicios {
 											<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 										</div>
 										<input type="hidden" name="'.$campo.'" id="'.$campo.'" value="" />
+									</div>
+									
+									';
+									*/
+									
+									$form	=	$form.'
+									
+									<div class="form-group col-md-6">
+										<label for="'.$campo.'" class="control-label" style="text-align:left">'.$label.'</label>
+										<div class="input-group col-md-6">
+											<input class="form-control" type="text" name="'.$campo.'" id="'.$campo.'" value="Date"/>
+										</div>
+										
 									</div>
 									
 									';
@@ -494,7 +507,7 @@ class Servicios {
 								if (strpos($row[1],"date") !== false) {
 									$label = ucwords($label);
 									$campo = strtolower($row[0]);
-									
+									/*
 									$form	=	$form.'
 									
 									<div class="form-group col-md-6">
@@ -504,6 +517,19 @@ class Servicios {
 											<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 										</div>
 										<input type="hidden" name="'.$campo.'" id="'.$campo.'" value="'.mysql_result($resMod,0,$row[0]).'" />
+									</div>
+									
+									';
+									*/
+									
+									$form	=	$form.'
+									
+									<div class="form-group col-md-6">
+										<label for="'.$campo.'" class="control-label" style="text-align:left">'.$label.'</label>
+										<div class="input-group col-md-6">
+											<input class="form-control" type="text" name="'.$campo.'" id="'.$campo.'" value="Date"/>
+										</div>
+										
 									</div>
 									
 									';

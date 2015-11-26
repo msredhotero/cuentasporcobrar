@@ -86,8 +86,10 @@ return $res;
 }
 
 
-function traerFacturasPorClienteEmpresa($idCliente, $idEmpresa) {
-$sql = "select  f.idfactura, f.nrofactura, f.fecha, c.razonsocial, 
+function traerFacturasPorClienteEmpresa($idCliente, $idEmpresa, $fechaDesde, $fechaHasta) {
+
+if (($fechaDesde == '') && ($fechaHasta == '')) {
+	$sql = "select  f.idfactura, f.nrofactura, f.fecha, c.razonsocial, 
 				f.concepto, f.importebruto, f.iva, f.total, e.razonsocial,
 				f.refcliente, f.refempresa, coalesce(saldoFactura( f.idfactura ),f.total) as saldo
 		from dbfacturas f 
@@ -95,6 +97,16 @@ $sql = "select  f.idfactura, f.nrofactura, f.fecha, c.razonsocial,
 		inner join dbempresas e on f.refempresa = e.idempresa
 		where e.idempresa = ".$idEmpresa." and c.idcliente = ".$idCliente." 
 		order by f.fecha";
+} else {
+	$sql = "select  f.idfactura, f.nrofactura, f.fecha, c.razonsocial, 
+				f.concepto, f.importebruto, f.iva, f.total, e.razonsocial,
+				f.refcliente, f.refempresa, coalesce(saldoFactura( f.idfactura ),f.total) as saldo
+		from dbfacturas f 
+		inner join dbclientes c on f.refcliente = c.idcliente
+		inner join dbempresas e on f.refempresa = e.idempresa
+		where e.idempresa = ".$idEmpresa." and c.idcliente = ".$idCliente." and (f.fecha BETWEEN '".$fechaDesde."' and '".$fechaHasta."')
+		order by f.fecha";
+}
 $res = $this->query($sql,0);
 return $res;
 }

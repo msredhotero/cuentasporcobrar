@@ -254,17 +254,6 @@ $resEmpresa = $serviciosEmpresas->traerEmpresas();
      </div>
 </div><!-- fin del content -->
 
-<footer>
-
-<div class="row">
-	<div class="col-md-12" align="center">
-    	<p style="text-shadow: 1px 1px #0000FF;"><strong>Copyright © 2015. Diseño Web: Saupurein Marcos.</strong></p>
-
-    </div>
-</div>
-
-</footer>
-
 
 
 </body>

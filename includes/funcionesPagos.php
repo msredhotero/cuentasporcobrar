@@ -26,6 +26,7 @@ $sql = "insert into dbpagos(idpago,fechapago,montoapagar,referencia,comentarios)
 values ('','".utf8_decode($fechapago)."',".$montoapagar.",'".utf8_decode($referencia)."','".utf8_decode($comentarios)."')"; 
 $res = $this->query($sql,1); 
 return $res; 
+//return $sql;
 } 
 
 

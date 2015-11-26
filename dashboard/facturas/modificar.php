@@ -41,6 +41,8 @@ $lblreemplazo	= array("Nro Factura","Importe Bruto","IVA","Cliente","Empresa");
 
 $resCliente 	= $serviciosClientes->traerClientesPorEmpresa($_SESSION['usua_idempresa']);
 
+$fecha = mysql_result($resResultado,0,'fecha');
+
 $cadRef = '';
 while ($rowTT = mysql_fetch_array($resCliente)) {
 	if (mysql_result($resResultado,0,'refcliente')== $rowTT[0]) {
@@ -344,6 +346,7 @@ $(document).ready(function(){
 });
 </script>
 <script type="text/javascript">
+/*
 $('.form_date').datetimepicker({
 	language:  'es',
 	weekStart: 1,
@@ -355,7 +358,36 @@ $('.form_date').datetimepicker({
 	forceParse: 0,
 	format: 'dd/mm/yyyy'
 });
+*/
 </script>
+
+<script>
+  $(function() {
+	  $.datepicker.regional['es'] = {
+ closeText: 'Cerrar',
+ prevText: '<Ant',
+ nextText: 'Sig>',
+ currentText: 'Hoy',
+ monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+ monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
+ dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+ dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
+ dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
+ weekHeader: 'Sm',
+ dateFormat: 'dd/mm/yy',
+ firstDay: 1,
+ isRTL: false,
+ showMonthAfterYear: false,
+ yearSuffix: ''
+ };
+ $.datepicker.setDefaults($.datepicker.regional['es']);
+ 
+    $( "#fecha" ).datepicker();
+	
+    $( "#fecha" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+	$('#fecha').datepicker('setDate', <?php echo "'".$fecha."'"; ?>);
+  });
+  </script>
 <?php } ?>
 </body>
 </html>
