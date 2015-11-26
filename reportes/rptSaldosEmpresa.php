@@ -29,11 +29,13 @@ require('fpdf.php');
 
 //$header = array("Hora", "Cancha 1", "Cancha 2", "Cancha 3");
 
-$idEmpresa		=	$_GET['idEmp'];
+//$idEmpresa		=	$_GET['idEmp'];
 
-$resEmpresa		=	$serviciosEmpresas->traerEmpresasPorId($idEmpresa);
+//$resEmpresa		=	$serviciosEmpresas->traerEmpresasPorId($idEmpresa);
 
-$empresa		=	mysql_result($resEmpresa,0,1);
+//$empresa		=	mysql_result($resEmpresa,0,1);
+
+$idEmpresa = 0;
 
 $datos			=	$serviciosReportes->rptSaldoEmpresa($idEmpresa);
 
@@ -77,12 +79,16 @@ function ingresosFacturacion($header, $data, &$TotalIngresos)
 	
 	$total = 0;
 	$totalcant = 0;
+	$sumSaldos = 0;
+	$sumAbonos = 0;
 	
 	$this->SetFont('Arial','',8);
     while ($row = mysql_fetch_array($data))
     {
 		$total = $total + $row[1];
 		$totalcant = $totalcant + 1;
+		$sumSaldos = $sumSaldos + $row[3];
+		$sumAbonos = $sumAbonos + $row[2];
 		
 		$this->Cell($w[0],4,$row[0],'LR',0,'L',$fill);
 		$this->Cell($w[1],4,number_format($row[1],2,',','.'),'LR',0,'R',$fill);
@@ -92,11 +98,20 @@ function ingresosFacturacion($header, $data, &$TotalIngresos)
         $fill = !$fill;
     }
 	
+	
+	$this->Cell($w[0],5,'Totales:','LRT',0,'L',$fill);
+	$this->Cell($w[1],5,number_format($total,2,',','.'),'LRT',0,'R',$fill);
+	$this->Cell($w[2],5,number_format($sumAbonos,2,',','.'),'LRT',0,'R',$fill);
+	$this->Cell($w[3],5,number_format($sumSaldos,2,',','.'),'LRT',0,'R',$fill);
+	$fill = !$fill;
+	$this->Ln();
+	
     // Línea de cierre
     $this->Cell(array_sum($w),0,'','T');
 	$this->SetFont('Arial','',12);
 	$this->Ln();
-	$this->Cell(60,7,'Total: $'.number_format($total, 2, '.', ','),0,0,'L',false);
+	$this->Ln();
+	$this->Cell(60,7,'Total: $'.number_format($sumSaldos, 2, '.', ','),0,0,'L',false);
 	
 	$TotalIngresos = $TotalIngresos + $total;
 }
@@ -120,9 +135,9 @@ $pdf->AddPage();
 
 $pdf->SetFont('Arial','U',17);
 $pdf->Cell(180,7,'Reporte Saldos de Clientes',0,0,'C',false);
-$pdf->Ln();
-$pdf->SetFont('Arial','U',14);
-$pdf->Cell(180,7,"Empresa: ".strtoupper($empresa),0,0,'C',false);
+//$pdf->Ln();
+//$pdf->SetFont('Arial','U',14);
+//$pdf->Cell(180,7,"Empresa: ".strtoupper($empresa),0,0,'C',false);
 $pdf->Ln();
 $pdf->Cell(180,7,'Fecha: '.date('Y-m-d'),0,0,'C',false);
 $pdf->Ln();

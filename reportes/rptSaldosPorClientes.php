@@ -82,12 +82,16 @@ function ingresosFacturacion($header, $data, &$TotalIngresos)
 	
 	$total = 0;
 	$totalcant = 0;
+	$sumSaldos = 0;
+	$sumAbonos = 0;
 	
 	$this->SetFont('Arial','',8);
     while ($row = mysql_fetch_array($data))
     {
 		$total = $total + $row[3];
 		$totalcant = $totalcant + 1;
+		$sumSaldos = $sumSaldos + ($row[3] - $row[4]);
+		$sumAbonos = $sumAbonos + $row[4];
 		
 		$this->Cell($w[0],5,$row[0],'LR',0,'L',$fill);
         $this->Cell($w[1],5,substr($row[1],0,45),'LR',0,'C',$fill);
@@ -99,11 +103,18 @@ function ingresosFacturacion($header, $data, &$TotalIngresos)
         $fill = !$fill;
     }
 	
+	$this->Cell($w[0]+$w[1]+$w[2],5,'Totales:','LRT',0,'L',$fill);
+	$this->Cell($w[3],5,number_format($total,2,',','.'),'LRT',0,'R',$fill);
+	$this->Cell($w[4],5,number_format($sumAbonos,2,',','.'),'LRT',0,'R',$fill);
+	
+	$fill = !$fill;
+	$this->Ln();
+	
     // Línea de cierre
     $this->Cell(array_sum($w),0,'','T');
 	$this->SetFont('Arial','',12);
 	$this->Ln();
-	$this->Cell(60,7,'Total: $'.number_format($total, 2, '.', ','),0,0,'L',false);
+	$this->Cell(60,7,'Total: $'.number_format($sumSaldos, 2, '.', ','),0,0,'L',false);
 	
 	$TotalIngresos = $TotalIngresos + $total;
 }

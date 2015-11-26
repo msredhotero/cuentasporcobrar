@@ -48,7 +48,7 @@ while ($rowTTE = mysql_fetch_array($resEmpresas)) {
 }
 
 
-if ($_SESSION['idroll_predio'] != 1) {
+if ($_SESSION['idroll_predio'] == 2) {
 	header('Location: ../index.php');
 } else {
 
@@ -248,21 +248,21 @@ if ($_SESSION['idroll_predio'] != 1) {
     
     <div class="boxInfoLargo">
         <div id="headBoxInfo">
-        	<p style="color: #fff; font-size:18px; height:16px;">Reporte por Empresas</p>
+        	<p style="color: #fff; font-size:18px; height:16px;">Reporte por Empresa</p>
         	
         </div>
     	<div class="cuerpoBox">
         	<form class="form-inline formulario" role="form">
         	<div class="row">
-            	<div class="form-group col-md-6">
+            	<!--<div class="form-group col-md-6">
                     <label class="control-label" style="text-align:left" for="refcliente">Seleccione la Empresa</label>
                     <div class="input-group col-md-12">
                     	<select id="refempresa3" class="form-control" name="refempresa3">
 							<option value="0">-------Seleccione-------</option>
-							<?php echo $cadRefE; ?>
+							<?php //echo $cadRefE; ?>
                     	</select>
                     </div>
-                </div>
+                </div>-->
                 
                 <div class="form-group col-md-6">
                     <label class="control-label" style="text-align:left" for="refcliente">Acción</label>
@@ -407,7 +407,7 @@ $(document).ready(function(){
     });
 	
 	$('#rptcc').click(function(e) {
-        window.open("../../reportes/rptSaldosEmpresa.php?idEmp=" + $("#refempresa3").val(),'_blank');
+        window.open("../../reportes/rptSaldosEmpresa.php",'_blank');
     });
 
 	 

@@ -37,7 +37,7 @@ $sql = "select
 			p.referencia,
 			max(p.fechapago) as fechapago,
 			f.total,
-			sum(p.montoapagar) as abono
+			coalesce(sum(p.montoapagar),0) as abono
 			
 			
 		from
@@ -75,7 +75,7 @@ $sql = "select
 		select 
 			c.razonsocial as cliente,
 			sum(f.total) as total,
-			sum(p.montoapagar) as abono
+			coalesce(sum(p.montoapagar),0) as abono
 			
 			
 		from
@@ -114,7 +114,7 @@ function rptSaldoPorCliente($empresa,$idcliente) {
 			p.referencia,
 			max(p.fechapago) as fechapago,
 			f.total,
-			sum(p.montoapagar) as abono,
+			coalesce(sum(p.montoapagar),0) as abono,
 			p.comentarios
 			
 			
@@ -153,7 +153,7 @@ $sql = "select
 		select 
 			e.razonsocial as cliente,
 			sum(f.total) as total,
-			sum(p.montoapagar) as abono
+			coalesce(sum(p.montoapagar),0) as abono
 			
 			
 		from
@@ -168,7 +168,7 @@ $sql = "select
 			tbestatus et ON et.idestatu = pf.refestatu
 				inner join
 			dbempresas e ON e.idempresa = f.refempresa
-		where	e.idempresa = ".$empresa."
+		
 		group by e.razonsocial
 		) as r
 		order by 2"; 
