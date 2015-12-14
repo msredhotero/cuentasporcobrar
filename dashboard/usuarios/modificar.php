@@ -31,7 +31,7 @@ $resMenu = $serviciosHTML->menu(utf8_encode($_SESSION['nombre_predio']),"Usuario
 
 $id = $_GET['id'];
 
-$resResultado = $serviciosFactuas->traerFacturasPorId($id);
+$resResultado = $serviciosUsuario->traerUsuarioId($id);
 
 /////////////////////// Opciones para la creacion del formulario  /////////////////////
 $tabla 			= "dbusuarios";
@@ -39,7 +39,7 @@ $tabla 			= "dbusuarios";
 $lblCambio	 	= array("refroll","nombrecompleto");
 $lblreemplazo	= array("Perfil","Nombre Completo");
 
-if ($_SESSION['refroll_predio'] != 1) {
+if ($_SESSION['idroll_predio'] != 1) {
 	$resRoles 	= $serviciosUsuario->traerRolesSimple();
 } else {
 	$resRoles 	= $serviciosUsuario->traerRoles();
@@ -64,7 +64,7 @@ $refCampo 	=  array("refroll");
 
 
 
-$formulario 	= $serviciosFunciones->camposTablaModificar($id, "idfactura", "modificarFacturas",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
+$formulario 	= $serviciosFunciones->camposTablaModificar($id, "idusuario", "modificarUsuario",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
 
 
 if ($_SESSION['refroll_predio'] != 1) {
@@ -133,11 +133,11 @@ if ($_SESSION['refroll_predio'] != 1) {
 
 <div id="content">
 
-<h3>Facturas</h3>
+<h3>Usuarios</h3>
 
     <div class="boxInfoLargo">
         <div id="headBoxInfo">
-        	<p style="color: #fff; font-size:18px; height:16px;">Modificar Factura</p>
+        	<p style="color: #fff; font-size:18px; height:16px;">Modificar Usuario</p>
         	
         </div>
     	<div class="cuerpoBox">
@@ -186,9 +186,9 @@ if ($_SESSION['refroll_predio'] != 1) {
 <div id="dialog2" title="Eliminar Equipos">
     	<p>
         	<span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
-            ¿Esta seguro que desea eliminar la Factura?.<span id="proveedorEli"></span>
+            ¿Esta seguro que desea eliminar el Usuario?.<span id="proveedorEli"></span>
         </p>
-        <p><strong>Importante: </strong>Si elimina el equipo se perderan todos los datos de esta</p>
+        <p><strong>Importante: </strong>Si elimina el Usuario se perderan todos los datos de esta</p>
         <input type="hidden" value="" id="idEliminar" name="idEliminar">
 </div>
 <script type="text/javascript" src="../../js/jquery.dataTables.min.js"></script>
@@ -239,7 +239,7 @@ $(document).ready(function(){
 				    "Eliminar": function() {
 	
 						$.ajax({
-									data:  {id: $('#idEliminar').val(), accion: 'eliminarFacturas'},
+									data:  {id: $('#idEliminar').val(), accion: 'eliminarUsuario'},
 									url:   '../../ajax/ajax.php',
 									type:  'post',
 									beforeSend: function () {
@@ -305,7 +305,7 @@ $(document).ready(function(){
                                             $(".alert").removeClass("alert-danger");
 											$(".alert").removeClass("alert-info");
                                             $(".alert").addClass("alert-success");
-                                            $(".alert").html('<strong>Ok!</strong> Se modifico exitosamente la <strong>Factura</strong>. ');
+                                            $(".alert").html('<strong>Ok!</strong> Se modifico exitosamente el <strong>Usuario</strong>. ');
 											$(".alert").delay(3000).queue(function(){
 												/*aca lo que quiero hacer 
 												  después de los 2 segundos de retraso*/

@@ -339,6 +339,15 @@ function modificarUsuario($id,$usuario,$password,$refroll,$email,$nombrecompleto
 	}
 }
 
+function eliminarUsuario($id) {
+	$sql = "delete from dbusuarios where idusuario = ".$id;
+	$res = $this->query($sql,0);
+	if ($res == false) {
+		return 'Error al eliminar datos';
+	} else {
+		return '';
+	}
+}
 
 
 function query($sql,$accion) {

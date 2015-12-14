@@ -34,6 +34,9 @@ switch ($accion) {
 	case 'modificarUsuario':
         modificarUsuario($serviciosUsuarios);
         break;
+	case 'eliminarUsuario':
+		eliminarUsuario($serviciosUsuarios);
+        break;
 	case 'registrar':
 		registrar($serviciosUsuarios);
         break;
@@ -565,7 +568,21 @@ function modificarUsuario($serviciosUsuarios) {
 	$email				=	$_POST['email'];
 	$nombre				=	$_POST['nombrecompleto'];
 	
-	echo $serviciosUsuarios->modificarUsuario($id,$apellido,$password,$refroll,$email,$nombre);
+	$res = $serviciosUsuarios->modificarUsuario($id,$apellido,$password,$refroll,$email,$nombre);
+	
+	if ($res == true) { 
+		echo ''; 
+	} else { 
+		echo 'Huvo un error al modificar datos'; 
+	} 
+}
+
+function eliminarUsuario($serviciosUsuarios) {
+	$id					=	$_POST['id'];
+	
+	$res = $serviciosUsuarios->eliminarUsuario($id);
+	
+	echo $res;
 }
 
 
