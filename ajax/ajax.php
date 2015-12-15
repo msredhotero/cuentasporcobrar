@@ -190,7 +190,19 @@ $email = $_POST['email'];
 $telefono = $_POST['telefono']; 
 $celular = $_POST['celular']; 
 $objetoempresa = $_POST['objetoempresa']; 
-$res = $serviciosEmpresas->insertarEmpresas($razonsocial,$rfc,$direccion,$email,$telefono,$celular,$objetoempresa); 
+$notaria = $_POST['notaria']; 
+$notario = $_POST['notario']; 
+$giro = $_POST['giro']; 
+$socia_a = $_POST['socia_a']; 
+$socio_b = $_POST['socio_b']; 
+$administrador = $_POST['administrador']; 
+$comisario = $_POST['comisario']; 
+$apoderado = $_POST['apoderado']; 
+$rpp = $_POST['rpp']; 
+$plataforma = $_POST['plataforma']; 
+$usuario = $_POST['usuario']; 
+$contrasenia = $_POST['contrasenia']; 
+$res = $serviciosEmpresas->insertarEmpresas($razonsocial,$rfc,$direccion,$email,$telefono,$celular,$objetoempresa,$notaria,$notario,$giro,$socia_a,$socio_b,$administrador,$comisario,$apoderado,$rpp,$plataforma,$usuario,$contrasenia);
 if ((integer)$res > 0) { 
 echo ''; 
 } else { 
@@ -206,13 +218,26 @@ $email = $_POST['email'];
 $telefono = $_POST['telefono']; 
 $celular = $_POST['celular']; 
 $objetoempresa = $_POST['objetoempresa']; 
-$res = $serviciosEmpresas->modificarEmpresas($id,$razonsocial,$rfc,$direccion,$email,$telefono,$celular,$objetoempresa); 
+$notaria = $_POST['notaria']; 
+$notario = $_POST['notario']; 
+$giro = $_POST['giro']; 
+$socia_a = $_POST['socia_a']; 
+$socio_b = $_POST['socio_b']; 
+$administrador = $_POST['administrador']; 
+$comisario = $_POST['comisario']; 
+$apoderado = $_POST['apoderado']; 
+$rpp = $_POST['rpp']; 
+$plataforma = $_POST['plataforma']; 
+$usuario = $_POST['usuario']; 
+$contrasenia = $_POST['contrasenia']; 
+$res = $serviciosEmpresas->modificarEmpresas($id,$razonsocial,$rfc,$direccion,$email,$telefono,$celular,$objetoempresa,$notaria,$notario,$giro,$socia_a,$socio_b,$administrador,$comisario,$apoderado,$rpp,$plataforma,$usuario,$contrasenia);
 if ($res == true) { 
 echo ''; 
 } else { 
 echo 'Huvo un error al modificar datos'; 
 } 
 } 
+
 function eliminarEmpresas($serviciosEmpresas) { 
 $id = $_POST['id']; 
 $res = $serviciosEmpresas->eliminarEmpresas($id); 
