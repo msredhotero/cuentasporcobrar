@@ -160,7 +160,7 @@ function query($sql,$accion) {
 
 
 
-<title>Gesti&oacute;n: Tres Sesenta F&uacute;tbol</title>
+<title>Gestión: Facturación - Cuentas Por Cobrar</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style type="text/css">

@@ -36,18 +36,15 @@ require('fpdf.php');
 
 //$header = array("Hora", "Cancha 1", "Cancha 2", "Cancha 3");
 
-$idEmpresa		=	$_GET['idEmp'];
-$idCliente		=	$_GET['idClie'];
+//$idEmpresa		=	$_GET['idEmp'];
 
-$resEmpresa		=	$serviciosEmpresas->traerEmpresasPorId($idEmpresa);
+//$resEmpresa		=	$serviciosEmpresas->traerEmpresasPorId($idEmpresa);
 
-$empresa		=	mysql_result($resEmpresa,0,1);
+//$empresa		=	mysql_result($resEmpresa,0,1);
 
-$resCliente		=	$serviciosClientes->traerClientesPorId($idCliente);
+$idEmpresa = 0;
 
-$cliente		=	mysql_result($resCliente,0,1);
-
-$datos			=	$serviciosReportes->rptSaldoPorCliente($idEmpresa, $idCliente);
+$datos			=	$serviciosReportes->rptSaldoEmpresa($idEmpresa);
 
 $TotalIngresos = 0;
 $TotalEgresos = 0;
@@ -104,11 +101,9 @@ function query($sql,$accion) {
 	
 	
 	$tituloReporte = "<h2>Reporte Saldos de Clientes</h2>";
-	$tituloReporte2 = "<h3>Empresa: ".strtoupper($empresa)."</h3>"; 
-	$tituloReporte3 = "<h3>Cliente: ".strtoupper($cliente)."</h3>"; 
-	$tituloReporte4 = "<h3>Fecha: ".date('Y-m-d')."</h3>"; 
+	$tituloReporte3 = "<h3>Fecha: ".date('Y-m-d')."</h3>"; 
 
-	$titulosColumnas = array("Factura", "Referencia", "Fecha", "Cargos", "Abonos", "Comentarios");
+	$titulosColumnas = array("Nombre", "Cargos", "Abonos", "Saldo");
 	// Se combinan las celdas A1 hasta D1, para colocar ahí el titulo del reporte
 
 	
@@ -121,21 +116,13 @@ function query($sql,$accion) {
 						<th colspan="7">'.$tituloReporte.'</th>
 					</tr>
 					<tr>
-						<th colspan="7">'.$tituloReporte2.'</th>
-					</tr>
-					<tr>
 						<th colspan="7">'.$tituloReporte3.'</th>
 					</tr>
 					<tr>
-						<th colspan="7">'.$tituloReporte4.'</th>
-					</tr>
-					<tr>
-						<th style="background-color:#ababab;">Factura</th>
-						<th style="background-color:#ababab;">Referencia</th>
-						<th style="background-color:#ababab;">Fecha</th>
+						<th style="background-color:#ababab;">Nombre</th>
 						<th style="background-color:#ababab;">Cargos</th>
 						<th style="background-color:#ababab;">Abonos</th>
-						<th style="background-color:#ababab;">Comentarios</th>
+						<th style="background-color:#ababab;">Saldo</th>
 					</tr>';
 		$i = 4; //Numero de fila donde se va a comenzar a rellenar
 		 while ($fila = mysql_fetch_array($datos)) {
@@ -143,16 +130,14 @@ function query($sql,$accion) {
 			 $i++;
 			 $cad .= '<tr>';
 			 $cad .= '<td>'.$fila[0].'</td>';
-			 $cad .= '<td>'.$fila[1].'</td>';
-			 $cad .= '<td>'.$fila[2].'</td>';
+			 $cad .= '<td>'.str_replace(".",",",$fila[1]).'</td>';
+			 $cad .= '<td>'.str_replace(".",",",$fila[2]).'</td>';
 			 $cad .= '<td>'.str_replace(".",",",$fila[3]).'</td>';
-			 $cad .= '<td>'.str_replace(".",",",$fila[4]).'</td>';
-			 $cad .= '<td>'.$fila[6].'</td>';
 			 $cad .= '</tr>';
 		 }
 		$cad .= '</table>';
 	
-
+	
 }
 ?>
 
@@ -188,7 +173,7 @@ tr td:hover { background: #666; color: #FFF; }
 <?php 
 
 header("Content-type: application/vnd.ms-excel; name='excel'");
-		header("Content-Disposition: filename=rptSaldosPorClientesExcel.xls");
+		header("Content-Disposition: filename=rptSaldosEmpresaExcel.xls");
 		header("Pragma: no-cache");
 		header("Expires: 0");
 		

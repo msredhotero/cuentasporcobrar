@@ -289,9 +289,15 @@ if ($_SESSION['idroll_predio'] == 2) {
                 
                 <div class="form-group col-md-6">
                     <label class="control-label" style="text-align:left" for="refcliente">Acción</label>
-                    <div class="input-group col-md-12">
-                    	<button type="button" class="btn btn-success" id="rptcc" style="margin-left:0px;">Generar</button>
-                    </div>
+                    <ul class="list-inline">
+                        <li>
+                            <button type="button" class="btn btn-success" id="rptcc" style="margin-left:0px;">Generar</button>
+                        </li>
+                        <li>
+                            <button type="button" class="btn btn-default" id="rptccExcel" style="margin-left:0px;">Generar Excel</button>
+                        </li>
+                    </ul>
+
                 </div>
             </div>
             
