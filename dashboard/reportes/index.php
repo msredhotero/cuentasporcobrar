@@ -134,10 +134,19 @@ if ($_SESSION['idroll_predio'] == 2) {
                 
                 <div class="form-group col-md-6">
                     <label class="control-label" style="text-align:left" for="refcliente">Acción</label>
-                    <div class="input-group col-md-12">
-                    	<button type="button" class="btn btn-success" id="rptgf" style="margin-left:0px;">Generar</button>
-                    </div>
+
+                    	<ul class="list-inline">
+                        	<li>
+                    			<button type="button" class="btn btn-success" id="rptgf" style="margin-left:0px;">Generar</button>
+                            </li>
+                            <li>
+                        		<button type="button" class="btn btn-default" id="rptgfExcel" style="margin-left:0px;">Generar Excel</button>
+                            </li>
+                        </ul>
+
                 </div>
+                
+
             </div>
             
             
@@ -175,9 +184,15 @@ if ($_SESSION['idroll_predio'] == 2) {
                 
                 <div class="form-group col-md-6">
                     <label class="control-label" style="text-align:left" for="refcliente">Acción</label>
-                    <div class="input-group col-md-12">
-                    	<button type="button" class="btn btn-success" id="rptsc" style="margin-left:0px;">Generar</button>
-                    </div>
+
+                    <ul class="list-inline">
+                        <li>
+                            <button type="button" class="btn btn-success" id="rptsc" style="margin-left:0px;">Generar</button>
+                        </li>
+                        <li>
+                            <button type="button" class="btn btn-default" id="rptscExcel" style="margin-left:0px;">Generar Excel</button>
+                        </li>
+                    </ul>
                 </div>
             </div>
             
@@ -225,10 +240,18 @@ if ($_SESSION['idroll_predio'] == 2) {
                 
                 <div class="form-group col-md-6">
                     <label class="control-label" style="text-align:left" for="refcliente">Acción</label>
-                    <div class="input-group col-md-12">
-                    	<button type="button" class="btn btn-success" id="rptscc" style="margin-left:0px;">Generar</button>
-                    </div>
+                    <ul class="list-inline">
+                        <li>
+                            <button type="button" class="btn btn-success" id="rptscc" style="margin-left:0px;">Generar</button>
+                        </li>
+                        <li>
+                            <button type="button" class="btn btn-default" id="rptsccExcel" style="margin-left:0px;">Generar Excel</button>
+                        </li>
+                    </ul>
                 </div>
+                
+                
+
             </div>
             
             
@@ -396,6 +419,7 @@ $(document).ready(function(){
 						
     });
 	
+	
 	$("#rptsc").click(function(event) {
         window.open("../../reportes/rptSaldosClientes.php?idEmp=" + $("#refempresa2").val(),'_blank');	
 						
@@ -410,7 +434,25 @@ $(document).ready(function(){
         window.open("../../reportes/rptSaldosEmpresa.php",'_blank');
     });
 
-	 
+	
+	$("#rptgfExcel").click(function(event) {
+        window.open("../../reportes/rptFacturacionGeneralExcel.php?id=" + $("#refempresa1").val(),'_blank');	
+						
+    });
+	
+	$("#rptscExcel").click(function(event) {
+        window.open("../../reportes/rptSaldosClientesExcel.php?idEmp=" + $("#refempresa2").val(),'_blank');	
+						
+    });
+	
+	$("#rptsccExcel").click(function(event) {
+        window.open("../../reportes/rptSaldosPorClientesExcel.php?idEmp=" + $("#refempresa4").val() + "&idClie=" + $("#refcliente1").val(),'_blank');	
+						
+    });
+	
+	$('#rptccExcel').click(function(e) {
+        window.open("../../reportes/rptSaldosEmpresaExcel.php",'_blank');
+    });
 
 });
 </script>

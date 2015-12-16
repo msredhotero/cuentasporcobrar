@@ -20,39 +20,7 @@ SET time_zone = "+00:00";
 -- Base de datos: `facturacion`
 --
 
-DELIMITER $$
---
--- Funciones
---
-CREATE DEFINER=`root`@`localhost` FUNCTION `saldoFactura`(`idFact` INT) RETURNS decimal(18,2)
-    DETERMINISTIC
-BEGIN
-declare saldo decimal(18,2);
 
-set saldo = (select 
-    f.total - sum(p.montoapagar)
-from
-    dbfacturas f
-        inner join
-    dbclientes c ON f.refcliente = c.idcliente
-        inner join
-    dbempresas e ON f.refempresa = e.idempresa
-        left join
-    dbpagosfacturas pg ON pg.reffactura = f.idfactura
-        inner join
-    dbpagos p ON p.idpago = pg.refpago
-        inner join
-    tbestatus et on et.idestatu = pg.refestatu
-where f.idfactura = idFact
-group by f.total);
-    IF saldo <= 0 THEN
-        RETURN 0;
-    END IF;
-
-RETURN saldo;
-END$$
-
-DELIMITER ;
 
 -- --------------------------------------------------------
 
