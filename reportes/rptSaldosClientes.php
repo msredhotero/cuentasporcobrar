@@ -31,11 +31,19 @@ require('fpdf.php');
 
 $idEmpresa		=	$_GET['idEmp'];
 
+//////////////////              PARA LAS FECHAS        /////////////////////////////////////////////////////////////////
+
+$fechadesde		=	$_GET['fechadesde'];
+$fechahasta		=	$_GET['fechahasta'];
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 $resEmpresa		=	$serviciosEmpresas->traerEmpresasPorId($idEmpresa);
 
 $empresa		=	mysql_result($resEmpresa,0,1);
 
-$datos			=	$serviciosReportes->rptSaldoCliente($idEmpresa);
+$datos			=	$serviciosReportes->rptSaldoCliente($idEmpresa,$fechadesde,$fechahasta);
 
 $TotalIngresos = 0;
 $TotalEgresos = 0;

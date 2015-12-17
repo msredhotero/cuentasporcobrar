@@ -132,6 +132,20 @@ if ($_SESSION['idroll_predio'] == 2) {
                     </div>
                 </div>
                 
+                <div class="form-group col-md-3">
+                    <label for="'.$campo.'" class="control-label" style="text-align:left">Fecha Desde</label>
+                    <div class="input-group col-md-12">
+                        <input class="form-control" type="text" name="fechadesde1" id="fechadesde1" value="Date"/>
+                    </div>
+                </div>
+                
+                <div class="form-group col-md-3">
+                    <label for="'.$campo.'" class="control-label" style="text-align:left">Fecha Hasta</label>
+                    <div class="input-group col-md-12">
+                        <input class="form-control" type="text" name="fechahasta1" id="fechahasta1" value="Date"/>
+                    </div>
+                </div>
+                
                 <div class="form-group col-md-6">
                     <label class="control-label" style="text-align:left" for="refcliente">Acción</label>
 
@@ -181,6 +195,19 @@ if ($_SESSION['idroll_predio'] == 2) {
                     </div>
                 </div>
                 
+                <div class="form-group col-md-3">
+                    <label for="'.$campo.'" class="control-label" style="text-align:left">Fecha Desde</label>
+                    <div class="input-group col-md-12">
+                        <input class="form-control" type="text" name="fechadesde2" id="fechadesde2" value="Date"/>
+                    </div>
+                </div>
+                
+                <div class="form-group col-md-3">
+                    <label for="'.$campo.'" class="control-label" style="text-align:left">Fecha Hasta</label>
+                    <div class="input-group col-md-12">
+                        <input class="form-control" type="text" name="fechahasta2" id="fechahasta2" value="Date"/>
+                    </div>
+                </div>
                 
                 <div class="form-group col-md-6">
                     <label class="control-label" style="text-align:left" for="refcliente">Acción</label>
@@ -238,6 +265,20 @@ if ($_SESSION['idroll_predio'] == 2) {
                     </div>
                 </div>
                 
+                <div class="form-group col-md-3">
+                    <label for="'.$campo.'" class="control-label" style="text-align:left">Fecha Desde</label>
+                    <div class="input-group col-md-12">
+                        <input class="form-control" type="text" name="fechadesde3" id="fechadesde3" value="Date"/>
+                    </div>
+                </div>
+                
+                <div class="form-group col-md-3">
+                    <label for="'.$campo.'" class="control-label" style="text-align:left">Fecha Hasta</label>
+                    <div class="input-group col-md-12">
+                        <input class="form-control" type="text" name="fechahasta3" id="fechahasta3" value="Date"/>
+                    </div>
+                </div>
+                
                 <div class="form-group col-md-6">
                     <label class="control-label" style="text-align:left" for="refcliente">Acción</label>
                     <ul class="list-inline">
@@ -287,6 +328,20 @@ if ($_SESSION['idroll_predio'] == 2) {
                     </div>
                 </div>-->
                 
+                <div class="form-group col-md-3">
+                    <label for="'.$campo.'" class="control-label" style="text-align:left">Fecha Desde</label>
+                    <div class="input-group col-md-12">
+                        <input class="form-control" type="text" name="fechadesde4" id="fechadesde4" value="Date"/>
+                    </div>
+                </div>
+                
+                <div class="form-group col-md-3">
+                    <label for="'.$campo.'" class="control-label" style="text-align:left">Fecha Hasta</label>
+                    <div class="input-group col-md-12">
+                        <input class="form-control" type="text" name="fechahasta4" id="fechahasta4" value="Date"/>
+                    </div>
+                </div>
+                
                 <div class="form-group col-md-6">
                     <label class="control-label" style="text-align:left" for="refcliente">Acción</label>
                     <ul class="list-inline">
@@ -317,7 +372,68 @@ if ($_SESSION['idroll_predio'] == 2) {
     
     
     
-    
+    <div class="boxInfoLargo">
+        <div id="headBoxInfo">
+        	<p style="color: #fff; font-size:18px; height:16px;">Reporte de Estado de Cuenta de Cliente a las Empresas</p>
+        	
+        </div>
+    	<div class="cuerpoBox">
+        	<form class="form-inline formulario" role="form">
+        	<div class="row">
+
+                
+            	<div class="form-group col-md-6">
+                    <label class="control-label" style="text-align:left" for="refcliente">Seleccione el Cliente</label>
+                    <div class="input-group col-md-12">
+                    	<select id="refcliente5" class="form-control" name="refcliente5">
+							<?php echo $cadRef; ?>
+                    	</select>
+                    </div>
+                </div>
+                
+                <div class="form-group col-md-3">
+                    <label for="'.$campo.'" class="control-label" style="text-align:left">Fecha Desde</label>
+                    <div class="input-group col-md-12">
+                        <input class="form-control" type="text" name="fechadesde5" id="fechadesde5" value="Date"/>
+                    </div>
+                </div>
+                
+                <div class="form-group col-md-3">
+                    <label for="'.$campo.'" class="control-label" style="text-align:left">Fecha Hasta</label>
+                    <div class="input-group col-md-12">
+                        <input class="form-control" type="text" name="fechahasta5" id="fechahasta5" value="Date"/>
+                    </div>
+                </div>
+                
+                <div class="form-group col-md-6">
+                    <label class="control-label" style="text-align:left" for="refcliente">Acción</label>
+                    <ul class="list-inline">
+                        <li>
+                            <button type="button" class="btn btn-success" id="rpt5" style="margin-left:0px;">Generar</button>
+                        </li>
+                        <li>
+                            <button type="button" class="btn btn-default" id="rpt5Excel" style="margin-left:0px;">Generar Excel</button>
+                        </li>
+                    </ul>
+                </div>
+                
+                
+
+            </div>
+            
+            
+            <div class='row' style="margin-left:25px; margin-right:25px;">
+                <div class='alert'>
+                
+                </div>
+                <div id='load'>
+                
+                </div>
+            </div>
+
+            </form>
+    	</div>
+    </div>
     
 
     
@@ -421,48 +537,62 @@ $(document).ready(function(){
 	});*/
 	
 	$("#rptgf").click(function(event) {
-        window.open("../../reportes/rptFacturacionGeneral.php?id=" + $("#refempresa1").val(),'_blank');	
+        window.open("../../reportes/rptFacturacionGeneral.php?id=" + $("#refempresa1").val() + "&fechadesde=" + $("#fechadesde1").val()+ "&fechahasta=" + $("#fechahasta1").val(),'_blank');	
 						
     });
 	
 	
 	$("#rptsc").click(function(event) {
-        window.open("../../reportes/rptSaldosClientes.php?idEmp=" + $("#refempresa2").val(),'_blank');	
+        window.open("../../reportes/rptSaldosClientes.php?idEmp=" + $("#refempresa2").val() + "&fechadesde=" + $("#fechadesde2").val()+ "&fechahasta=" + $("#fechahasta2").val(),'_blank');	
 						
     });
 	
 	$("#rptscc").click(function(event) {
-        window.open("../../reportes/rptSaldosPorClientes.php?idEmp=" + $("#refempresa4").val() + "&idClie=" + $("#refcliente1").val(),'_blank');	
+        window.open("../../reportes/rptSaldosPorClientes.php?idEmp=" + $("#refempresa4").val() + "&idClie=" + $("#refcliente1").val() + "&fechadesde=" + $("#fechadesde3").val()+ "&fechahasta=" + $("#fechahasta3").val(),'_blank');	
 						
     });
 	
 	$('#rptcc').click(function(e) {
-        window.open("../../reportes/rptSaldosEmpresa.php",'_blank');
+        window.open("../../reportes/rptSaldosEmpresa.php?fechadesde=" + $("#fechadesde4").val()+ "&fechahasta=" + $("#fechahasta4").val(),'_blank');
+    });
+	
+	$("#rpt5").click(function(event) {
+        window.open("../../reportes/rptSaldosClientesEmpresas.php?idClie=" + $("#refcliente5").val() + "&fechadesde=" + $("#fechadesde5").val()+ "&fechahasta=" + $("#fechahasta5").val(),'_blank');	
+						
     });
 
 	
+	
+	
+	
 	$("#rptgfExcel").click(function(event) {
-        window.open("../../reportes/rptFacturacionGeneralExcel.php?id=" + $("#refempresa1").val(),'_blank');	
+        window.open("../../reportes/rptFacturacionGeneralExcel.php?id=" + $("#refempresa1").val() + "&fechadesde=" + $("#fechadesde1").val()+ "&fechahasta=" + $("#fechahasta1").val(),'_blank');	
 						
     });
 	
 	$("#rptscExcel").click(function(event) {
-        window.open("../../reportes/rptSaldosClientesExcel.php?idEmp=" + $("#refempresa2").val(),'_blank');	
+        window.open("../../reportes/rptSaldosClientesExcel.php?idEmp=" + $("#refempresa2").val() + "&fechadesde=" + $("#fechadesde2").val()+ "&fechahasta=" + $("#fechahasta2").val(),'_blank');	
 						
     });
 	
 	$("#rptsccExcel").click(function(event) {
-        window.open("../../reportes/rptSaldosPorClientesExcel.php?idEmp=" + $("#refempresa4").val() + "&idClie=" + $("#refcliente1").val(),'_blank');	
+        window.open("../../reportes/rptSaldosPorClientesExcel.php?idEmp=" + $("#refempresa4").val() + "&idClie=" + $("#refcliente1").val() + "&fechadesde=" + $("#fechadesde3").val()+ "&fechahasta=" + $("#fechahasta3").val(),'_blank');	
 						
     });
 	
 	$('#rptccExcel').click(function(e) {
-        window.open("../../reportes/rptSaldosEmpresaExcel.php",'_blank');
+        window.open("../../reportes/rptSaldosEmpresaExcel.php?fechadesde=" + $("#fechadesde4").val()+ "&fechahasta=" + $("#fechahasta4").val(),'_blank');
+    });
+	
+	$("#rpt5Excel").click(function(event) {
+        window.open("../../reportes/rptSaldosClientesEmpresasExcel.php?idClie=" + $("#refcliente5").val() + "&fechadesde=" + $("#fechadesde5").val()+ "&fechahasta=" + $("#fechahasta5").val(),'_blank');	
+						
     });
 
 });
 </script>
 <script type="text/javascript">
+/*
 $('.form_date').datetimepicker({
 	language:  'es',
 	weekStart: 1,
@@ -474,7 +604,63 @@ $('.form_date').datetimepicker({
 	forceParse: 0,
 	format: 'dd/mm/yyyy'
 });
+*/
 </script>
+
+<script>
+  $(function() {
+	  $.datepicker.regional['es'] = {
+ closeText: 'Cerrar',
+ prevText: '<Ant',
+ nextText: 'Sig>',
+ currentText: 'Hoy',
+ monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+ monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
+ dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+ dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
+ dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
+ weekHeader: 'Sm',
+ dateFormat: 'dd/mm/yy',
+ firstDay: 1,
+ isRTL: false,
+ showMonthAfterYear: false,
+ yearSuffix: ''
+ };
+ $.datepicker.setDefaults($.datepicker.regional['es']);
+ 
+    $( "#fechadesde1" ).datepicker();
+    $( "#fechadesde1" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+	
+	$( "#fechadesde2" ).datepicker();
+    $( "#fechadesde2" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+	
+	$( "#fechadesde3" ).datepicker();
+    $( "#fechadesde3" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+	
+	$( "#fechadesde4" ).datepicker();
+    $( "#fechadesde4" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+	
+	$( "#fechadesde5" ).datepicker();
+    $( "#fechadesde5" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+	
+	
+	$( "#fechahasta1" ).datepicker();
+    $( "#fechahasta1" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+	
+	$( "#fechahasta2" ).datepicker();
+    $( "#fechahasta2" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+	
+	$( "#fechahasta3" ).datepicker();
+    $( "#fechahasta3" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+	
+	$( "#fechahasta4" ).datepicker();
+    $( "#fechahasta4" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+	
+	$( "#fechahasta5" ).datepicker();
+    $( "#fechahasta5" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+	
+  });
+  </script>
 <?php } ?>
 </body>
 </html>

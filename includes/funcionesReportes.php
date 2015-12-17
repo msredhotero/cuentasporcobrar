@@ -20,7 +20,7 @@ function GUID()
 }
 
 
-function rptFacturacionGeneralPorEmpresa($empresa) { 
+function rptFacturacionGeneralPorEmpresa($empresa,$fechadesde,$fechahasta) { 
 $sql = "select
 			r.nrofactura,
 			r.cliente,
@@ -52,8 +52,19 @@ $sql = "select
 			tbestatus et ON et.idestatu = pf.refestatu
 				inner join
 			dbempresas e ON e.idempresa = f.refempresa
-		where	e.idempresa = ".$empresa."
-		group by f.nrofactura,
+		where	e.idempresa = ".$empresa;
+	if (($fechadesde != '') && ($fechahasta != '')) {
+		$sql .= " and f.fecha BETWEEN '".$fechadesde."' and '".$fechahasta."' ";
+	} else {
+		if ($fechadesde != '') {
+			$sql .= " and f.fecha >= '".$fechadesde."' ";
+		} else {
+			if ($fechahasta != '') {
+				$sql .= " and f.fecha <= '".$fechahasta."' ";
+			}
+		}
+	}
+	$sql .= "	group by f.nrofactura,
 			c.razonsocial,
 			p.referencia,
 			f.total
@@ -64,7 +75,7 @@ return $res;
 }
 
 
-function rptSaldoCliente($empresa) { 
+function rptSaldoCliente($empresa,$fechadesde,$fechahasta) { 
 $sql = "select
 			r.cliente,
 			r.total,
@@ -90,8 +101,19 @@ $sql = "select
 			tbestatus et ON et.idestatu = pf.refestatu
 				inner join
 			dbempresas e ON e.idempresa = f.refempresa
-		where	e.idempresa = ".$empresa."
-		group by c.razonsocial
+		where	e.idempresa = ".$empresa;
+	if (($fechadesde != '') && ($fechahasta != '')) {
+		$sql .= " and f.fecha BETWEEN '".$fechadesde."' and '".$fechahasta."' ";
+	} else {
+		if ($fechadesde != '') {
+			$sql .= " and f.fecha >= '".$fechadesde."' ";
+		} else {
+			if ($fechahasta != '') {
+				$sql .= " and f.fecha <= '".$fechahasta."' ";
+			}
+		}
+	}
+	$sql .= "	group by c.razonsocial
 		) as r
 		order by 2"; 
 $res = $this->query($sql,0); 
@@ -99,7 +121,7 @@ return $res;
 } 
 
 
-function rptSaldoPorCliente($empresa,$idcliente) { 
+function rptSaldoPorCliente($empresa,$idcliente,$fechadesde,$fechahasta) { 
 	$sql = "select
 			r.nrofactura,
 			r.referencia,
@@ -130,7 +152,20 @@ function rptSaldoPorCliente($empresa,$idcliente) {
 			tbestatus et ON et.idestatu = pf.refestatu
 				inner join
 			dbempresas e ON e.idempresa = f.refempresa
-		where	e.idempresa = ".$empresa." and c.idcliente = ".$idcliente."
+		where	e.idempresa = ".$empresa." and c.idcliente = ".$idcliente;
+	
+	if (($fechadesde != '') && ($fechahasta != '')) {
+		$sql .= " and f.fecha BETWEEN '".$fechadesde."' and '".$fechahasta."' ";
+	} else {
+		if ($fechadesde != '') {
+			$sql .= " and f.fecha >= '".$fechadesde."' ";
+		} else {
+			if ($fechahasta != '') {
+				$sql .= " and f.fecha <= '".$fechahasta."' ";
+			}
+		}
+	}
+	$sql .="	
 		group by f.nrofactura,
 			p.comentarios,
 			p.referencia,
@@ -142,7 +177,7 @@ return $res;
 } 
 
 
-function rptSaldoEmpresa($empresa) { 
+function rptSaldoEmpresa($empresa,$fechadesde,$fechahasta) { 
 $sql = "select
 			r.cliente,
 			r.total,
@@ -167,15 +202,72 @@ $sql = "select
 				left join
 			tbestatus et ON et.idestatu = pf.refestatu
 				inner join
-			dbempresas e ON e.idempresa = f.refempresa
-		
-		group by e.razonsocial
+			dbempresas e ON e.idempresa = f.refempresa";
+	if (($fechadesde != '') && ($fechahasta != '')) {
+		$sql .= " and f.fecha BETWEEN '".$fechadesde."' and '".$fechahasta."' ";
+	} else {
+		if ($fechadesde != '') {
+			$sql .= " and f.fecha >= '".$fechadesde."' ";
+		} else {
+			if ($fechahasta != '') {
+				$sql .= " and f.fecha <= '".$fechahasta."' ";
+			}
+		}
+	}
+	$sql .="	group by e.razonsocial
 		) as r
 		order by 2"; 
 $res = $this->query($sql,0); 
 return $res; 
 } 
 
+
+function rptSaldosClientesEmpresas($idcliente,$fechadesde,$fechahasta) {
+	$sql = "select
+			r.empresa,
+			r.total,
+			r.abono,
+			r.total - r.abono as saldo
+		from
+		(
+		select 
+			e.razonsocial as empresa,
+			sum(f.total) as total,
+			coalesce(sum(p.montoapagar),0) as abono
+			
+			
+		from
+			dbfacturas f
+				left join
+			dbpagosfacturas pf ON f.idfactura = pf.reffactura
+				left join
+			dbpagos p ON pf.refpago = p.idpago
+				inner join
+			dbclientes c ON c.idcliente = f.refcliente
+				left join
+			tbestatus et ON et.idestatu = pf.refestatu
+				inner join
+			dbempresas e ON e.idempresa = f.refempresa
+		where	c.idcliente = ".$idcliente;
+	
+	if (($fechadesde != '') && ($fechahasta != '')) {
+		$sql .= " and f.fecha BETWEEN '".$fechadesde."' and '".$fechahasta."' ";
+	} else {
+		if ($fechadesde != '') {
+			$sql .= " and f.fecha >= '".$fechadesde."' ";
+		} else {
+			if ($fechahasta != '') {
+				$sql .= " and f.fecha <= '".$fechahasta."' ";
+			}
+		}
+	}
+	$sql .=" group by e.razonsocial
+		) as r
+		order by 2";	
+	
+	$res = $this->query($sql,0); 
+	return $res; 
+}
 
 
 function query($sql,$accion) {

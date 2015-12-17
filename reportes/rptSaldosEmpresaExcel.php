@@ -44,7 +44,15 @@ require('fpdf.php');
 
 $idEmpresa = 0;
 
-$datos			=	$serviciosReportes->rptSaldoEmpresa($idEmpresa);
+//////////////////              PARA LAS FECHAS        /////////////////////////////////////////////////////////////////
+
+$fechadesde		=	$_GET['fechadesde'];
+$fechahasta		=	$_GET['fechahasta'];
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+$datos			=	$serviciosReportes->rptSaldoEmpresa($idEmpresa,$fechadesde,$fechahasta);
 
 $TotalIngresos = 0;
 $TotalEgresos = 0;

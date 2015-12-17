@@ -29,13 +29,7 @@ require('fpdf.php');
 
 //$header = array("Hora", "Cancha 1", "Cancha 2", "Cancha 3");
 
-//$idEmpresa		=	$_GET['idEmp'];
-
-//$resEmpresa		=	$serviciosEmpresas->traerEmpresasPorId($idEmpresa);
-
-//$empresa		=	mysql_result($resEmpresa,0,1);
-
-$idEmpresa = 0;
+$idCliente		=	$_GET['idClie'];
 
 //////////////////              PARA LAS FECHAS        /////////////////////////////////////////////////////////////////
 
@@ -45,7 +39,11 @@ $fechahasta		=	$_GET['fechahasta'];
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-$datos			=	$serviciosReportes->rptSaldoEmpresa($idEmpresa,$fechadesde,$fechahasta);
+$resCliente		=	$serviciosClientes->traerClientesPorId($idCliente);
+
+$empresa		=	mysql_result($resCliente,0,1);
+
+$datos			=	$serviciosReportes->rptSaldosClientesEmpresas($idCliente,$fechadesde,$fechahasta);
 
 $TotalIngresos = 0;
 $TotalEgresos = 0;
@@ -90,6 +88,7 @@ function ingresosFacturacion($header, $data, &$TotalIngresos)
 	$sumSaldos = 0;
 	$sumAbonos = 0;
 	
+	
 	$this->SetFont('Arial','',8);
     while ($row = mysql_fetch_array($data))
     {
@@ -103,9 +102,8 @@ function ingresosFacturacion($header, $data, &$TotalIngresos)
 		$this->Cell($w[2],4,number_format($row[2],2,',','.'),'LR',0,'R',$fill);
 		$this->Cell($w[3],4,number_format($row[3],2,',','.'),'LR',0,'R',$fill);
         $this->Ln();
-        $fill = !$fill;
+
     }
-	
 	
 	$this->Cell($w[0],5,'Totales:','LRT',0,'L',$fill);
 	$this->Cell($w[1],5,number_format($total,2,',','.'),'LRT',0,'R',$fill);
@@ -136,16 +134,16 @@ $pdf = new PDF();
 
 // Títulos de las columnas
 
-$headerFacturacion = array("Nombre", "Cargos", "Abonos", "Saldo");
+$headerFacturacion = array("Empresa", "Cargos", "Abonos", "Saldo");
 // Carga de datos
 
 $pdf->AddPage();
 
 $pdf->SetFont('Arial','U',17);
-$pdf->Cell(180,7,'Reporte Saldos de Clientes',0,0,'C',false);
-//$pdf->Ln();
-//$pdf->SetFont('Arial','U',14);
-//$pdf->Cell(180,7,"Empresa: ".strtoupper($empresa),0,0,'C',false);
+$pdf->Cell(180,7,'Reporte Saldos de Clientes a Empresas',0,0,'C',false);
+$pdf->Ln();
+$pdf->SetFont('Arial','U',14);
+$pdf->Cell(180,7,"Empresa: ".strtoupper($empresa),0,0,'C',false);
 $pdf->Ln();
 $pdf->Cell(180,7,'Fecha: '.date('Y-m-d'),0,0,'C',false);
 $pdf->Ln();
@@ -158,7 +156,7 @@ $pdf->Ln();
 
 $pdf->SetFont('Arial','',13);
 
-$nombreTurno = "rptSaldosClientes-".$fecha.".pdf";
+$nombreTurno = "rptSaldosClientesEmpresas-".$fecha.".pdf";
 
 $pdf->Output($nombreTurno,'D');
 
