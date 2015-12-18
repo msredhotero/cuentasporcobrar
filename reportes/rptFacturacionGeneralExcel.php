@@ -19,6 +19,7 @@ include ('../includes/funcionesFacturas.php');
 include ('../includes/funcionesPagos.php');
 include ('../includes/funcionesReportes.php');
 
+require_once '../excelClass/PHPExcel.php';
 
 $serviciosUsuarios  		= new ServiciosUsuarios();
 $serviciosFunciones 		= new Servicios();
@@ -55,6 +56,62 @@ $TotalIngresos = 0;
 $TotalEgresos = 0;
 $Totales = 0;
 $Caja = 0;
+/*
+// Crea un nuevo objeto PHPExcel
+$objPHPExcel = new PHPExcel();
+
+
+
+
+$objPHPExcel->getProperties()
+->setCreator("Cattivo")
+->setLastModifiedBy("Cattivo")
+->setTitle("Documento Excel de Prueba")
+->setSubject("Documento Excel de Prueba")
+->setDescription("Demostracion sobre como crear archivos de Excel desde PHP.")
+->setKeywords("Excel Office 2007 openxml php")
+->setCategory("Pruebas de Excel");
+ 
+// Agregar Informacion
+$objPHPExcel->setActiveSheetIndex(0)
+->setCellValue('A1', 'Valor 1')
+->setCellValue('B1', 'Valor 2')
+->setCellValue('C1', 'Total')
+->setCellValue('A2', '10')
+->setCellValue('C2', '=sum(A2:B2)');
+ 
+// Renombrar Hoja
+$objPHPExcel->getActiveSheet()->setTitle('Tecnologia Simple');
+ 
+// Establecer la hoja activa, para que cuando se abra el documento se muestre primero.
+$objPHPExcel->setActiveSheetIndex(0);
+ 
+// Se modifican los encabezados del HTTP para indicar que se envia un archivo de Excel.
+header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+header('Content-Disposition: attachment;filename="rptFacturacionGeneral.xlsx"');
+header('Cache-Control: max-age=0');
+$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+$objWriter->save('php://output');
+exit;
+
+
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 function query($sql,$accion) {
@@ -82,6 +139,7 @@ function query($sql,$accion) {
 		mysql_close($conex);
 		return $result;
 		*/
+
                 $error = 0;
 		mysql_query("BEGIN");
 		$result=mysql_query($sql,$conex);
@@ -155,6 +213,8 @@ function query($sql,$accion) {
 	
 	
 }
+
+
 ?>
 
 <!DOCTYPE HTML>
@@ -186,8 +246,9 @@ tr td:hover { background: #666; color: #FFF; }
     </head>
 
 <body>
-<?php 
 
+<?php 
+/*
 header("Content-type: application/vnd.ms-excel; name='excel'");
 header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
 header("Content-Type: application/force-download");
@@ -195,11 +256,16 @@ header("Content-Type: application/octet-stream");
 header("Content-Type: application/download");;
 		header("Content-Disposition: attachment; filename=rptFacturacionGeneral.xls");
 		header("Pragma: no-cache");
-		header("Expires: 0");
+		header("Expires: 0");*/
+header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+header('Content-Disposition: attachment;filename="rptFacturacionGeneral.xlsx"');
+header('Cache-Control: max-age=0');
+		echo $cad; 
 
 	
-		echo $cad; ?>
+?>
 </body>
 </html>
+
 <?php } ?>
 
