@@ -95,7 +95,7 @@ if (($fechaDesde == '') && ($fechaHasta == '')) {
 		from dbfacturas f 
 		inner join dbclientes c on f.refcliente = c.idcliente
 		inner join dbempresas e on f.refempresa = e.idempresa
-		where e.idempresa = ".$idEmpresa." and c.idcliente = ".$idCliente." 
+		where e.idempresa = ".$idEmpresa." and c.idcliente = ".$idCliente."
 		order by f.fecha";
 } else {
 	$sql = "select  f.idfactura, f.nrofactura, f.fecha, c.razonsocial, 

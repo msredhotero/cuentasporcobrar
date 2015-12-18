@@ -37,7 +37,7 @@ return $res;
 
 
 function traerEmpresas() { 
-$sql = "select idempresa,razonsocial,rfc,direccion,email,telefono,celular,objetoempresa,notaria,notario,giro,socia_a,socio_b,administrador,comisario,apoderado,rpp,plataforma,usuario,contrasenia,contraseniaemail from dbempresas order by 1"; 
+$sql = "select idempresa,razonsocial,rfc,direccion,email,telefono,celular,objetoempresa,notaria,notario,giro,socia_a,socio_b,administrador,comisario,apoderado,rpp,plataforma,usuario,contrasenia,contraseniaemail from dbempresas order by 2"; 
 $res = $this->query($sql,0); 
 return $res; 
 } 

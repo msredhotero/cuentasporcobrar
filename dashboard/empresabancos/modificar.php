@@ -13,40 +13,53 @@ include ('../../includes/funciones.php');
 include ('../../includes/funcionesUsuarios.php');
 include ('../../includes/funcionesHTML.php');
 include ('../../includes/funcionesEmpresas.php');
+include ('../../includes/funcionesEmpresaBancos.php');
 
 $serviciosFunciones = new Servicios();
 $serviciosUsuario 	= new ServiciosUsuarios();
 $serviciosHTML 		= new ServiciosHTML();
-$serviciosEmpresas 	= new ServiciosEmpresas();
+$serviciosEmpresas  = new ServiciosEmpresas();
+$serviciosEmpresaBancos = new ServiciosEmpresaBancos();
 
 
 
 $fecha = date('Y-m-d');
 
 //$resProductos = $serviciosProductos->traerProductosLimite(6);
-$resMenu = $serviciosHTML->menu(utf8_encode($_SESSION['nombre_predio']),"Empresas",$_SESSION['refroll_predio'],$_SESSION['usua_empresa']);
+$resMenu = $serviciosHTML->menu(utf8_encode($_SESSION['nombre_predio']),"Empresa-Bancos",$_SESSION['refroll_predio'],$_SESSION['usua_empresa']);
 
 
 $id = $_GET['id'];
 
-$resResultado = $serviciosEmpresas->traerEmpresasPorId($id);
+$resResultado = $serviciosEmpresaBancos->traerEmpresaBancosPorId($id);
 
 /////////////////////// Opciones para la creacion del formulario  /////////////////////
-$tabla 			= "dbempresas";
+$tabla 			= "dbempresasbancos";
 
-$lblCambio	 	= array("razonsocial","rfc","direccion","telefono", "objetoempresa");
-$lblreemplazo	= array("Razon Social","RFC","Dirección","Teléfono","Objeto Empresa");
+$lblCambio	 	= array("refempresa");
+$lblreemplazo	= array("Empresa");
 
-$cadRef = '';
 
-$refdescripcion = array(0 => "");
-$refCampo[] 	= ""; 
+$resEmpresa 	= $serviciosEmpresas->traerEmpresasPorId($_SESSION['usua_idempresa']);
+
+$cadEmpresa = '';
+while ($rowFF = mysql_fetch_array($resEmpresa)) {
+	if ($rowFF[0] == $_SESSION['usua_idempresa']) {
+		$cadEmpresa = $cadEmpresa.'<option value="'.$rowFF[0].'" selected>'.utf8_encode($rowFF[1]).'</option>';
+	} else {
+		$cadEmpresa = $cadEmpresa.'<option value="'.$rowFF[0].'">'.utf8_encode($rowFF[1]).'</option>';	
+	}
+	
+}
+
+$refdescripcion = array(0=>$cadEmpresa);
+$refCampo 	=  array("refempresa");
 //////////////////////////////////////////////  FIN de los opciones //////////////////////////
 
 
 
 
-$formulario 	= $serviciosFunciones->camposTablaModificar($id, "idempresa", "modificarEmpresas",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
+$formulario 	= $serviciosFunciones->camposTablaModificar($id, "idempresabanco", "modificarEmpresaBancos",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
 
 
 if ($_SESSION['refroll_predio'] != 1) {
@@ -114,11 +127,11 @@ if ($_SESSION['refroll_predio'] != 1) {
 
 <div id="content">
 
-<h3>Empresas</h3>
+<h3>Empresa-Bancos</h3>
 
     <div class="boxInfoLargo">
         <div id="headBoxInfo">
-        	<p style="color: #fff; font-size:18px; height:16px;">Modificar Empresa</p>
+        	<p style="color: #fff; font-size:18px; height:16px;">Modificar Banco</p>
         	
         </div>
     	<div class="cuerpoBox">
@@ -167,9 +180,9 @@ if ($_SESSION['refroll_predio'] != 1) {
 <div id="dialog2" title="Eliminar Equipos">
     	<p>
         	<span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
-            ¿Esta seguro que desea eliminar la Empresa?.<span id="proveedorEli"></span>
+            ¿Esta seguro que desea eliminar el banco?.<span id="proveedorEli"></span>
         </p>
-        <p><strong>Importante: </strong>Si elimina el equipo se perderan todos los datos de este</p>
+
         <input type="hidden" value="" id="idEliminar" name="idEliminar">
 </div>
 <script type="text/javascript" src="../../js/jquery.dataTables.min.js"></script>
@@ -209,7 +222,7 @@ $(document).ready(function(){
 				    "Eliminar": function() {
 	
 						$.ajax({
-									data:  {id: $('#idEliminar').val(), accion: 'eliminarEmpresas'},
+									data:  {id: $('#idEliminar').val(), accion: 'eliminarEmpresaBancos'},
 									url:   '../../ajax/ajax.php',
 									type:  'post',
 									beforeSend: function () {
@@ -275,7 +288,7 @@ $(document).ready(function(){
                                             $(".alert").removeClass("alert-danger");
 											$(".alert").removeClass("alert-info");
                                             $(".alert").addClass("alert-success");
-                                            $(".alert").html('<strong>Ok!</strong> Se modifico exitosamente la <strong>Empresa</strong>. ');
+                                            $(".alert").html('<strong>Ok!</strong> Se modifico exitosamente el <strong>Banco</strong> de la Empresa. ');
 											$(".alert").delay(3000).queue(function(){
 												/*aca lo que quiero hacer 
 												  después de los 2 segundos de retraso*/

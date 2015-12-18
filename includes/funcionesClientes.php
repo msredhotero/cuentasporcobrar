@@ -38,7 +38,7 @@ return $res;
 
 function traerClientes() { 
 $sql = "select c.idcliente, c.razonsocial, c.rfc, c.direccion, c.email, c.telefono, c.celular 
-		from dbclientes c order by 1"; 
+		from dbclientes c order by 2"; 
 $res = $this->query($sql,0); 
 return $res; 
 } 
@@ -49,7 +49,7 @@ $sql = "select c.idcliente, c.razonsocial, c.rfc, c.direccion, c.email, c.telefo
 		inner join dbempresaclientes ec on ec.refcliente = c.idcliente
 		inner join dbempresas e on ec.refempresa = e.idempresa
 		where e.idempresa = ".$idEmpresa." 
-		order by 1"; 
+		order by 2"; 
 $res = $this->query($sql,0); 
 return $res; 
 } 
