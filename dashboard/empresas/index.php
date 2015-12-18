@@ -29,8 +29,8 @@ $resMenu = $serviciosHTML->menu(utf8_encode($_SESSION['nombre_predio']),"Empresa
 /////////////////////// Opciones para la creacion del formulario  /////////////////////
 $tabla 			= "dbempresas";
 
-$lblCambio	 	= array("razonsocial","rfc","direccion","telefono", "objetoempresa");
-$lblreemplazo	= array("Razon Social","RFC","Dirección","Teléfono","Objeto Empresa");
+$lblCambio	 	= array("razonsocial","rfc","direccion","telefono", "objetoempresa","socia_a","socio_b","rpp","contrasenia","contraseniaemail");
+$lblreemplazo	= array("Razon Social","RFC","Dirección","Teléfono","Objeto Empresa","Socio A","Socio B","RPP","Contraseña","Contraseña Email");
 
 $cadRef = '';
 

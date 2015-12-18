@@ -670,6 +670,33 @@ padding-bottom: 10px;
 
 			}
 			
+	.boxInfoLargo2{ 
+				width: 97%; 
+				height: auto; 
+				margin-top:30px;
+				margin-bottom:30px;
+				min-width: 800px;
+				float:left; 
+				background:#fff; 
+				z-index:-1;
+				overflow: hidden; 
+				position: relative; 
+				margin-right:15px;
+				border:1px solid #CCC;
+				/*opacity: 0.9;
+  				filter:  alpha(opacity=90);
+				box-shadow: 2px 2px 5px #0e6390;
+				-webkit-box-shadow: 2px 2px 5px #0e6390;
+  				-moz-box-shadow: 2px 2px 5px #0e6390;
+  				filter: shadow(color=#0e6390, direction=135, strength=2);*/
+				/*border-top-left-radius: 16px;
+ 				border-top-right-radius: 16px;
+				-moz-border-radius-topright: 16px;
+				-moz-border-radius-topleft: 16px;*/
+
+
+			}
+			
 	.boxInfo .cuerpoBox,.boxInfoLargo .cuerpoBox {
 		padding:10px;
 	}

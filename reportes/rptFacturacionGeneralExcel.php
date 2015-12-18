@@ -189,10 +189,15 @@ tr td:hover { background: #666; color: #FFF; }
 <?php 
 
 header("Content-type: application/vnd.ms-excel; name='excel'");
-		header("Content-Disposition: filename=rptFacturacionGeneral.xls");
+header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+header("Content-Type: application/force-download");
+header("Content-Type: application/octet-stream");
+header("Content-Type: application/download");;
+		header("Content-Disposition: attachment; filename=rptFacturacionGeneral.xls");
 		header("Pragma: no-cache");
 		header("Expires: 0");
-		
+
+	
 		echo $cad; ?>
 </body>
 </html>

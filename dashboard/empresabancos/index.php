@@ -13,38 +13,63 @@ include ('../../includes/funciones.php');
 include ('../../includes/funcionesUsuarios.php');
 include ('../../includes/funcionesHTML.php');
 include ('../../includes/funcionesEmpresas.php');
+include ('../../includes/funcionesEmpresaBancos.php');
 
 $serviciosFunciones = new Servicios();
 $serviciosUsuario 	= new ServiciosUsuarios();
 $serviciosHTML 		= new ServiciosHTML();
-$serviciosEmpresas 	= new ServiciosEmpresas();
+$serviciosEmpresas  = new ServiciosEmpresas();
+$serviciosEmpresaBancos = new ServiciosEmpresaBancos();
 
 $fecha = date('Y-m-d');
 
 //$resProductos = $serviciosProductos->traerProductosLimite(6);
-$resMenu = $serviciosHTML->menu(utf8_encode($_SESSION['nombre_predio']),"Empresas",$_SESSION['refroll_predio'],$_SESSION['usua_empresa']);
+$resMenu = $serviciosHTML->menu(utf8_encode($_SESSION['nombre_predio']),"Empresa-Bancos",$_SESSION['refroll_predio'],utf8_encode($_SESSION['usua_empresa']));
 
 
-$id = $_GET['id'];
-
-$resResultado = $serviciosEmpresas->traerEmpresasPorId($id);
 
 /////////////////////// Opciones para la creacion del formulario  /////////////////////
-$tabla 			= "dbempresas";
+$tabla 			= "dbempresasbancos";
 
-$lblCambio	 	= array("razonsocial","rfc","direccion","telefono", "objetoempresa","socia_a","socio_b","rpp","contrasenia","contraseniaemail");
-$lblreemplazo	= array("Razon Social","RFC","Dirección","Teléfono","Objeto Empresa","Socio A","Socio B","RPP","Contraseña","Contraseña Email");
+$lblCambio	 	= array("refempresa");
+$lblreemplazo	= array("Empresa");
 
-$cadRef = '';
 
-$refdescripcion = array(0 => "");
-$refCampo[] 	= ""; 
+$resEmpresa 	= $serviciosEmpresas->traerEmpresasPorId($_SESSION['usua_idempresa']);
+
+$cadEmpresa = '';
+while ($rowFF = mysql_fetch_array($resEmpresa)) {
+	if ($rowFF[0] == $_SESSION['usua_idempresa']) {
+		$cadEmpresa = $cadEmpresa.'<option value="'.$rowFF[0].'" selected>'.utf8_encode($rowFF[1]).'</option>';
+	} else {
+		$cadEmpresa = $cadEmpresa.'<option value="'.$rowFF[0].'">'.utf8_encode($rowFF[1]).'</option>';	
+	}
+	
+}
+
+$refdescripcion = array(0=>$cadEmpresa);
+$refCampo 	=  array("refempresa");
 //////////////////////////////////////////////  FIN de los opciones //////////////////////////
 
 
 
 
-$formulario 	= $serviciosFunciones->camposTablaModificar($id, "idempresa", "modificarEmpresas",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
+/////////////////////// Opciones para la creacion del view  /////////////////////
+$cabeceras 		= "	<th>Empresa</th>
+				<th>Banco</th>
+				<th>Sucursal</th>
+				<th>Cuenta</th>
+				<th>Clave</th>";
+
+//////////////////////////////////////////////  FIN de los opciones //////////////////////////
+
+
+
+
+$formulario 	= $serviciosFunciones->camposTabla("insertarEmpresaBancos",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
+
+$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosEmpresaBancos->traerEmpresaBancosPorEmpresa($_SESSION['usua_idempresa']),5);
+
 
 
 if ($_SESSION['refroll_predio'] != 1) {
@@ -112,20 +137,18 @@ if ($_SESSION['refroll_predio'] != 1) {
 
 <div id="content">
 
-<h3>Empresas</h3>
+<h3>Empresa-Bancos</h3>
 
     <div class="boxInfoLargo">
         <div id="headBoxInfo">
-        	<p style="color: #fff; font-size:18px; height:16px;">Modificar Empresa</p>
+        	<p style="color: #fff; font-size:18px; height:16px;">Carga de Empresa-Bancos</p>
         	
         </div>
     	<div class="cuerpoBox">
         	<form class="form-inline formulario" role="form">
-        	
-			<div class="row">
+        	<div class="row">
 			<?php echo $formulario; ?>
             </div>
-            
             
             <div class='row' style="margin-left:25px; margin-right:25px;">
                 <div class='alert'>
@@ -140,13 +163,7 @@ if ($_SESSION['refroll_predio'] != 1) {
                 <div class="col-md-12">
                 <ul class="list-inline" style="margin-top:15px;">
                     <li>
-                        <button type="button" class="btn btn-warning" id="cargar" style="margin-left:0px;">Modificar</button>
-                    </li>
-                    <li>
-                        <button type="button" class="btn btn-danger varborrar" id="<?php echo $id; ?>" style="margin-left:0px;">Eliminar</button>
-                    </li>
-                    <li>
-                        <button type="button" class="btn btn-default volver" style="margin-left:0px;">Volver</button>
+                        <button type="button" class="btn btn-primary" id="cargar" style="margin-left:0px;">Guardar</button>
                     </li>
                 </ul>
                 </div>
@@ -155,19 +172,31 @@ if ($_SESSION['refroll_predio'] != 1) {
     	</div>
     </div>
     
+    <div class="boxInfoLargo">
+        <div id="headBoxInfo">
+        	<p style="color: #fff; font-size:18px; height:16px;">Bancos Cargados</p>
+        	
+        </div>
+    	<div class="cuerpoBox">
+        	<?php echo $lstCargados; ?>
+    	</div>
+    </div>
+    
+    
+
+    
     
    
 </div>
 
 
 </div>
-
 <div id="dialog2" title="Eliminar Equipos">
     	<p>
         	<span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
-            ¿Esta seguro que desea eliminar la Empresa?.<span id="proveedorEli"></span>
+            ¿Esta seguro que desea eliminar la Empresa-Banco?.<span id="proveedorEli"></span>
         </p>
-        <p><strong>Importante: </strong>Si elimina el equipo se perderan todos los datos de este</p>
+
         <input type="hidden" value="" id="idEliminar" name="idEliminar">
 </div>
 <script type="text/javascript" src="../../js/jquery.dataTables.min.js"></script>
@@ -175,14 +204,34 @@ if ($_SESSION['refroll_predio'] != 1) {
 
 <script type="text/javascript">
 $(document).ready(function(){
-
-	$('.volver').click(function(event){
-		 
-		url = "index.php";
-		$(location).attr('href',url);
-	});//fin del boton modificar
+	$('#example').dataTable({
+		"order": [[ 0, "asc" ]],
+		"language": {
+			"emptyTable":     "No hay datos cargados",
+			"info":           "Mostrar _START_ hasta _END_ del total de _TOTAL_ filas",
+			"infoEmpty":      "Mostrar 0 hasta 0 del total de 0 filas",
+			"infoFiltered":   "(filtrados del total de _MAX_ filas)",
+			"infoPostFix":    "",
+			"thousands":      ",",
+			"lengthMenu":     "Mostrar _MENU_ filas",
+			"loadingRecords": "Cargando...",
+			"processing":     "Procesando...",
+			"search":         "Buscar:",
+			"zeroRecords":    "No se encontraron resultados",
+			"paginate": {
+				"first":      "Primero",
+				"last":       "Ultimo",
+				"next":       "Siguiente",
+				"previous":   "Anterior"
+			},
+			"aria": {
+				"sortAscending":  ": activate to sort column ascending",
+				"sortDescending": ": activate to sort column descending"
+			}
+		  }
+	} );
 	
-	$('.varborrar').click(function(event){
+		$('.varborrar').click(function(event){
 		  usersid =  $(this).attr("id");
 		  if (!isNaN(usersid)) {
 			$("#idEliminar").val(usersid);
@@ -195,6 +244,17 @@ $(document).ready(function(){
 			alert("Error, vuelva a realizar la acción.");	
 		  }
 	});//fin del boton eliminar
+	
+	$("#example").on("click",'.varmodificar', function(){
+		  usersid =  $(this).attr("id");
+		  if (!isNaN(usersid)) {
+			
+			url = "modificar.php?id=" + usersid;
+			$(location).attr('href',url);
+		  } else {
+			alert("Error, vuelva a realizar la acción.");	
+		  }
+	});//fin del boton modificar
 
 	 $( "#dialog2" ).dialog({
 		 	
@@ -207,7 +267,7 @@ $(document).ready(function(){
 				    "Eliminar": function() {
 	
 						$.ajax({
-									data:  {id: $('#idEliminar').val(), accion: 'eliminarEmpresas'},
+									data:  {id: $('#idEliminar').val(), accion: 'eliminarEmpresaBancos'},
 									url:   '../../ajax/ajax.php',
 									type:  'post',
 									beforeSend: function () {
@@ -233,8 +293,7 @@ $(document).ready(function(){
 		 
 		 
 	 		}); //fin del dialogo para eliminar
-	
-	
+			
 	<?php 
 		echo $serviciosHTML->validacion($tabla);
 	
@@ -273,7 +332,7 @@ $(document).ready(function(){
                                             $(".alert").removeClass("alert-danger");
 											$(".alert").removeClass("alert-info");
                                             $(".alert").addClass("alert-success");
-                                            $(".alert").html('<strong>Ok!</strong> Se modifico exitosamente la <strong>Empresa</strong>. ');
+                                            $(".alert").html('<strong>Ok!</strong> Se cargo exitosamente el <strong>Banco</strong> a la Empresa. ');
 											$(".alert").delay(3000).queue(function(){
 												/*aca lo que quiero hacer 
 												  después de los 2 segundos de retraso*/
@@ -281,8 +340,8 @@ $(document).ready(function(){
 												
 											});
 											$("#load").html('');
-											//url = "index.php";
-											//$(location).attr('href',url);
+											url = "index.php";
+											$(location).attr('href',url);
                                             
 											
                                         } else {

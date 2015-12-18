@@ -6,6 +6,7 @@ include ('../includes/funcionesHTML.php');
 include ('../includes/funcionesClientes.php');
 include ('../includes/funcionesEmpresas.php');
 include ('../includes/funcionesEmpresaClientes.php');
+include ('../includes/funcionesEmpresaBancos.php');
 include ('../includes/funcionesFacturas.php');
 include ('../includes/funcionesPagos.php');
 
@@ -15,6 +16,7 @@ $serviciosHTML				= new ServiciosHTML();
 $serviciosClientes 			= new ServiciosClientes();
 $serviciosEmpresas			= new ServiciosEmpresas();
 $serviciosEmpresaClientes 	= new ServiciosEmpresaClientes();
+$serviciosEmpresaBancos		= new ServiciosEmpresaBancos();
 $serviciosFacturas			= new ServiciosFacturas();
 $serviciosPagos				= new ServiciosPagos();
 
@@ -121,6 +123,19 @@ eliminarPagosFacturas($serviciosPagos);
 break; 
 /* Fin */
 
+
+/* PARA EmpresaBancos */
+case 'insertarEmpresaBancos': 
+insertarEmpresaBancos($serviciosEmpresaBancos); 
+break; 
+case 'modificarEmpresaBancos': 
+modificarEmpresaBancos($serviciosEmpresaBancos); 
+break; 
+case 'eliminarEmpresaBancos': 
+eliminarEmpresaBancos($serviciosEmpresaBancos); 
+break; 
+
+/* Fin */
 }
 
 //////////////////////////Traer datos */////////////////////////////////////////////////////////////
@@ -202,7 +217,9 @@ $rpp = $_POST['rpp'];
 $plataforma = $_POST['plataforma']; 
 $usuario = $_POST['usuario']; 
 $contrasenia = $_POST['contrasenia']; 
-$res = $serviciosEmpresas->insertarEmpresas($razonsocial,$rfc,$direccion,$email,$telefono,$celular,$objetoempresa,$notaria,$notario,$giro,$socia_a,$socio_b,$administrador,$comisario,$apoderado,$rpp,$plataforma,$usuario,$contrasenia);
+$contraseniaemail = $_POST['contraseniaemail']; 
+
+$res = $serviciosEmpresas->insertarEmpresas($razonsocial,$rfc,$direccion,$email,$telefono,$celular,$objetoempresa,$notaria,$notario,$giro,$socia_a,$socio_b,$administrador,$comisario,$apoderado,$rpp,$plataforma,$usuario,$contrasenia,$contraseniaemail);
 if ((integer)$res > 0) { 
 echo ''; 
 } else { 
@@ -230,7 +247,9 @@ $rpp = $_POST['rpp'];
 $plataforma = $_POST['plataforma']; 
 $usuario = $_POST['usuario']; 
 $contrasenia = $_POST['contrasenia']; 
-$res = $serviciosEmpresas->modificarEmpresas($id,$razonsocial,$rfc,$direccion,$email,$telefono,$celular,$objetoempresa,$notaria,$notario,$giro,$socia_a,$socio_b,$administrador,$comisario,$apoderado,$rpp,$plataforma,$usuario,$contrasenia);
+$contraseniaemail = $_POST['contraseniaemail'];
+
+$res = $serviciosEmpresas->modificarEmpresas($id,$razonsocial,$rfc,$direccion,$email,$telefono,$celular,$objetoempresa,$notaria,$notario,$giro,$socia_a,$socio_b,$administrador,$comisario,$apoderado,$rpp,$plataforma,$usuario,$contrasenia,$contraseniaemail);
 if ($res == true) { 
 echo ''; 
 } else { 
@@ -531,6 +550,42 @@ echo $res;
 
 /* Fin */
 
+
+/* PARA EmpresaBancos */
+function insertarEmpresaBancos($serviciosEmpresaBancos) { 
+$refempresa = $_POST['refempresa']; 
+$banco = $_POST['banco']; 
+$sucursal = $_POST['sucursal']; 
+$cuenta = $_POST['cuenta']; 
+$clave = $_POST['clave']; 
+$res = $serviciosEmpresaBancos->insertarEmpresaBancos($refempresa,$banco,$sucursal,$cuenta,$clave); 
+if ((integer)$res > 0) { 
+echo ''; 
+} else { 
+echo 'Huvo un error al insertar datos';	
+} 
+} 
+function modificarEmpresaBancos($serviciosEmpresaBancos) { 
+$id = $_POST['id']; 
+$refempresa = $_POST['refempresa']; 
+$banco = $_POST['banco']; 
+$sucursal = $_POST['sucursal']; 
+$cuenta = $_POST['cuenta']; 
+$clave = $_POST['clave']; 
+$res = $serviciosEmpresaBancos->modificarEmpresaBancos($id,$refempresa,$banco,$sucursal,$cuenta,$clave); 
+if ($res == true) { 
+echo ''; 
+} else { 
+echo 'Huvo un error al modificar datos'; 
+} 
+} 
+function eliminarEmpresaBancos($serviciosEmpresaBancos) { 
+$id = $_POST['id']; 
+$res = $serviciosEmpresaBancos->eliminarEmpresaBancos($id); 
+echo $res; 
+} 
+
+/* Fin */
 
 ////////////////////////// FIN DE TRAER DATOS ////////////////////////////////////////////////////////////
 

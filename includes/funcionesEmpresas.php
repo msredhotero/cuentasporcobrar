@@ -11,18 +11,18 @@ class ServiciosEmpresas {
 
 /* PARA Empresas */
 
-function insertarEmpresas($razonsocial,$rfc,$direccion,$email,$telefono,$celular,$objetoempresa,$notaria,$notario,$giro,$socia_a,$socio_b,$administrador,$comisario,$apoderado,$rpp,$plataforma,$usuario,$contrasenia) { 
-$sql = "insert into dbempresas(idempresa,razonsocial,rfc,direccion,email,telefono,celular,objetoempresa,notaria,notario,giro,socia_a,socio_b,administrador,comisario,apoderado,rpp,plataforma,usuario,contrasenia) 
-values ('','".utf8_decode($razonsocial)."','".utf8_decode($rfc)."','".utf8_decode($direccion)."','".utf8_decode($email)."','".utf8_decode($telefono)."','".utf8_decode($celular)."','".utf8_decode($objetoempresa)."','".utf8_decode($notaria)."','".utf8_decode($notario)."','".utf8_decode($giro)."','".utf8_decode($socia_a)."','".utf8_decode($socio_b)."','".utf8_decode($administrador)."','".utf8_decode($comisario)."','".utf8_decode($apoderado)."','".utf8_decode($rpp)."','".utf8_decode($plataforma)."','".utf8_decode($usuario)."','".utf8_decode($contrasenia)."')";
+function insertarEmpresas($razonsocial,$rfc,$direccion,$email,$telefono,$celular,$objetoempresa,$notaria,$notario,$giro,$socia_a,$socio_b,$administrador,$comisario,$apoderado,$rpp,$plataforma,$usuario,$contrasenia,$contraseniaemail) { 
+$sql = "insert into dbempresas(idempresa,razonsocial,rfc,direccion,email,telefono,celular,objetoempresa,notaria,notario,giro,socia_a,socio_b,administrador,comisario,apoderado,rpp,plataforma,usuario,contrasenia,contraseniaemail) 
+values ('','".utf8_decode($razonsocial)."','".utf8_decode($rfc)."','".utf8_decode($direccion)."','".utf8_decode($email)."','".utf8_decode($telefono)."','".utf8_decode($celular)."','".utf8_decode($objetoempresa)."','".utf8_decode($notaria)."','".utf8_decode($notario)."','".utf8_decode($giro)."','".utf8_decode($socia_a)."','".utf8_decode($socio_b)."','".utf8_decode($administrador)."','".utf8_decode($comisario)."','".utf8_decode($apoderado)."','".utf8_decode($rpp)."','".utf8_decode($plataforma)."','".utf8_decode($usuario)."','".utf8_decode($contrasenia)."','".utf8_decode($contraseniaemail)."')";
 $res = $this->query($sql,1); 
 return $res; 
 } 
 
 
-function modificarEmpresas($id,$razonsocial,$rfc,$direccion,$email,$telefono,$celular,$objetoempresa,$notaria,$notario,$giro,$socia_a,$socio_b,$administrador,$comisario,$apoderado,$rpp,$plataforma,$usuario,$contrasenia) { 
+function modificarEmpresas($id,$razonsocial,$rfc,$direccion,$email,$telefono,$celular,$objetoempresa,$notaria,$notario,$giro,$socia_a,$socio_b,$administrador,$comisario,$apoderado,$rpp,$plataforma,$usuario,$contrasenia,$contraseniaemail) { 
 $sql = "update dbempresas 
 set 
-razonsocial = '".utf8_decode($razonsocial)."',rfc = '".utf8_decode($rfc)."',direccion = '".utf8_decode($direccion)."',email = '".utf8_decode($email)."',telefono = '".utf8_decode($telefono)."',celular = '".utf8_decode($celular)."',objetoempresa = '".utf8_decode($objetoempresa)."',notaria = '".utf8_decode($notaria)."',notario = '".utf8_decode($notario)."',giro = '".utf8_decode($giro)."',socia_a = '".utf8_decode($socia_a)."',socio_b = '".utf8_decode($socio_b)."',administrador = '".utf8_decode($administrador)."',comisario = '".utf8_decode($comisario)."',apoderado = '".utf8_decode($apoderado)."',rpp = '".utf8_decode($rpp)."',plataforma = '".utf8_decode($plataforma)."',usuario = '".utf8_decode($usuario)."',contrasenia = '".utf8_decode($contrasenia)."' 
+razonsocial = '".utf8_decode($razonsocial)."',rfc = '".utf8_decode($rfc)."',direccion = '".utf8_decode($direccion)."',email = '".utf8_decode($email)."',telefono = '".utf8_decode($telefono)."',celular = '".utf8_decode($celular)."',objetoempresa = '".utf8_decode($objetoempresa)."',notaria = '".utf8_decode($notaria)."',notario = '".utf8_decode($notario)."',giro = '".utf8_decode($giro)."',socia_a = '".utf8_decode($socia_a)."',socio_b = '".utf8_decode($socio_b)."',administrador = '".utf8_decode($administrador)."',comisario = '".utf8_decode($comisario)."',apoderado = '".utf8_decode($apoderado)."',rpp = '".utf8_decode($rpp)."',plataforma = '".utf8_decode($plataforma)."',usuario = '".utf8_decode($usuario)."',contrasenia = '".utf8_decode($contrasenia)."' ,contraseniaemail = '".utf8_decode($contraseniaemail)."' 
 where idempresa =".$id; 
 $res = $this->query($sql,0); 
 return $res; 
@@ -37,14 +37,14 @@ return $res;
 
 
 function traerEmpresas() { 
-$sql = "select idempresa,razonsocial,rfc,direccion,email,telefono,celular,objetoempresa,notaria,notario,giro,socia_a,socio_b,administrador,comisario,apoderado,rpp,plataforma,usuario,contrasenia from dbempresas order by 1"; 
+$sql = "select idempresa,razonsocial,rfc,direccion,email,telefono,celular,objetoempresa,notaria,notario,giro,socia_a,socio_b,administrador,comisario,apoderado,rpp,plataforma,usuario,contrasenia,contraseniaemail from dbempresas order by 1"; 
 $res = $this->query($sql,0); 
 return $res; 
 } 
 
 
 function traerEmpresasPorId($id) { 
-$sql = "select idempresa,razonsocial,rfc,direccion,email,telefono,celular,objetoempresa,notaria,notario,giro,socia_a,socio_b,administrador,comisario,apoderado,rpp,plataforma,usuario,contrasenia from dbempresas where idempresa =".$id; 
+$sql = "select idempresa,razonsocial,rfc,direccion,email,telefono,celular,objetoempresa,notaria,notario,giro,socia_a,socio_b,administrador,comisario,apoderado,rpp,plataforma,usuario,contrasenia,contraseniaemail from dbempresas where idempresa =".$id; 
 $res = $this->query($sql,0); 
 return $res; 
 } 

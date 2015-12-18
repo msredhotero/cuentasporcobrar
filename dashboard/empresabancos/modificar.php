@@ -19,6 +19,8 @@ $serviciosUsuario 	= new ServiciosUsuarios();
 $serviciosHTML 		= new ServiciosHTML();
 $serviciosEmpresas 	= new ServiciosEmpresas();
 
+
+
 $fecha = date('Y-m-d');
 
 //$resProductos = $serviciosProductos->traerProductosLimite(6);
@@ -32,8 +34,8 @@ $resResultado = $serviciosEmpresas->traerEmpresasPorId($id);
 /////////////////////// Opciones para la creacion del formulario  /////////////////////
 $tabla 			= "dbempresas";
 
-$lblCambio	 	= array("razonsocial","rfc","direccion","telefono", "objetoempresa","socia_a","socio_b","rpp","contrasenia","contraseniaemail");
-$lblreemplazo	= array("Razon Social","RFC","Dirección","Teléfono","Objeto Empresa","Socio A","Socio B","RPP","Contraseña","Contraseña Email");
+$lblCambio	 	= array("razonsocial","rfc","direccion","telefono", "objetoempresa");
+$lblreemplazo	= array("Razon Social","RFC","Dirección","Teléfono","Objeto Empresa");
 
 $cadRef = '';
 
