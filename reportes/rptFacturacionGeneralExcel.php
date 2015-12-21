@@ -73,21 +73,30 @@ $objPHPExcel->getProperties()
 ->setCategory("Excel");
  
 $tituloReporte = "Reporte General de Facturación";
+$tituloReporte2 = "Empresa: ".strtoupper($empresa); 
+$tituloReporte3 = "Fecha: ".date('Y-m-d');
 $titulosColumnas = array("Factura", "Cliente", "Referencia","Fecha", "Importe", "Abonos", "Saldo");
 
 $objPHPExcel->setActiveSheetIndex(0)
     ->mergeCells('A1:G1');
- 
+$objPHPExcel->setActiveSheetIndex(0)
+    ->mergeCells('A2:G2');
+$objPHPExcel->setActiveSheetIndex(0)
+    ->mergeCells('A3:G3');
+	
+	 
 // Se agregan los titulos del reporte
 $objPHPExcel->setActiveSheetIndex(0)
     ->setCellValue('A1', htmlspecialchars(utf8_encode($tituloReporte))) // Titulo del reporte
-    ->setCellValue('A3',  htmlspecialchars(utf8_encode($titulosColumnas[0])))  //Titulo de las columnas
-    ->setCellValue('B3',  htmlspecialchars(utf8_encode($titulosColumnas[1])))
-    ->setCellValue('C3',  htmlspecialchars(utf8_encode($titulosColumnas[2])))
-    ->setCellValue('D3',  $titulosColumnas[3])
-	->setCellValue('E3',  $titulosColumnas[4])
-    ->setCellValue('F3',  $titulosColumnas[5])
-    ->setCellValue('G3',  $titulosColumnas[6]);
+	->setCellValue('A2', utf8_encode($tituloReporte2))
+	->setCellValue('A3', utf8_encode($tituloReporte3)) // Titulo del reporte
+    ->setCellValue('A4',  utf8_encode($titulosColumnas[0]))  //Titulo de las columnas
+    ->setCellValue('B4',  utf8_encode($titulosColumnas[1]))
+    ->setCellValue('C4',  utf8_encode($titulosColumnas[2]))
+    ->setCellValue('D4',  $titulosColumnas[3])
+	->setCellValue('E4',  $titulosColumnas[4])
+    ->setCellValue('F4',  $titulosColumnas[5])
+    ->setCellValue('G4',  $titulosColumnas[6]);
 
 
 // Agregar Informacion
@@ -98,7 +107,7 @@ $objPHPExcel->setActiveSheetIndex(0)
 ->setCellValue('A2', '10')
 ->setCellValue('C2', '=sum(A2:B2)');*/
 
-$i = 4; //Numero de fila donde se va a comenzar a rellenar
+$i = 5; //Numero de fila donde se va a comenzar a rellenar
  while ($fila = mysql_fetch_array($datos)) {
      $objPHPExcel->setActiveSheetIndex(0)
          ->setCellValue('A'.$i, utf8_encode($fila[0]))
@@ -125,11 +134,11 @@ $estiloTituloReporte = array(
     'fill' => array(
         'type'  => PHPExcel_Style_Fill::FILL_SOLID,
         'color' => array(
-            'argb' => 'FF220835')
+            'argb' => '0B87A9')
     ),
     'borders' => array(
         'allborders' => array(
-            'style' => PHPExcel_Style_Border::BORDER_NONE
+            'style' => PHPExcel_Style_Border::BORDER_MEDIUM
         )
     ),
     'alignment' => array(
@@ -152,14 +161,14 @@ $estiloTituloColumnas = array(
         'type'       => PHPExcel_Style_Fill::FILL_GRADIENT_LINEAR,
     'rotation'   => 90,
         'startcolor' => array(
-            'rgb' => 'c47cf2'
+            'rgb' => '1ACEFF'
         ),
         'endcolor' => array(
-            'argb' => 'FF431a5d'
+            'argb' => '0AA3CE'
         )
     ),
     'borders' => array(
-        'top' => array(
+        'allborders' => array(
             'style' => PHPExcel_Style_Border::BORDER_MEDIUM ,
             'color' => array(
                 'rgb' => '143860'
@@ -190,23 +199,25 @@ $estiloInformacion->applyFromArray( array(
     'fill' => array(
     'type'  => PHPExcel_Style_Fill::FILL_SOLID,
     'color' => array(
-            'argb' => 'FFd9b7f4')
+            'argb' => 'B8FEFF')
     ),
     'borders' => array(
         'left' => array(
             'style' => PHPExcel_Style_Border::BORDER_THIN ,
         'color' => array(
-                'rgb' => '3a2a47'
+                'rgb' => '2A4348'
             )
         )
     )
 ));
 
-$objPHPExcel->getActiveSheet()->getStyle('A1:D1')->applyFromArray($estiloTituloReporte);
-$objPHPExcel->getActiveSheet()->getStyle('A3:G3')->applyFromArray($estiloTituloColumnas);
+$objPHPExcel->getActiveSheet()->getStyle('A1:G1')->applyFromArray($estiloTituloReporte);
+$objPHPExcel->getActiveSheet()->getStyle('A2:G2')->applyFromArray($estiloTituloReporte);
+$objPHPExcel->getActiveSheet()->getStyle('A3:G3')->applyFromArray($estiloTituloReporte);
+$objPHPExcel->getActiveSheet()->getStyle('A4:G4')->applyFromArray($estiloTituloColumnas);
 
 // Renombrar Hoja
-$objPHPExcel->getActiveSheet()->setTitle('Tecnologia Simple');
+$objPHPExcel->getActiveSheet()->setTitle('Hoja1');
  
 // Establecer la hoja activa, para que cuando se abra el documento se muestre primero.
 $objPHPExcel->setActiveSheetIndex(0);

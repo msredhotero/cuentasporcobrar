@@ -19,6 +19,7 @@ include ('../includes/funcionesFacturas.php');
 include ('../includes/funcionesPagos.php');
 include ('../includes/funcionesReportes.php');
 
+require_once '../excelClass/PHPExcel.php';
 
 $serviciosUsuarios  		= new ServiciosUsuarios();
 $serviciosFunciones 		= new Servicios();
@@ -82,11 +83,11 @@ $titulosColumnas = array("Nombre", "Cargos", "Abonos", "Saldo");
 
 	
 $objPHPExcel->setActiveSheetIndex(0)
-    ->mergeCells('A1:G1');
+    ->mergeCells('A1:D1');
 $objPHPExcel->setActiveSheetIndex(0)
-    ->mergeCells('A2:G2');
+    ->mergeCells('A2:D2');
 $objPHPExcel->setActiveSheetIndex(0)
-    ->mergeCells('A3:G3');
+    ->mergeCells('A3:D3');
  
 // Se agregan los titulos del reporte
 $objPHPExcel->setActiveSheetIndex(0)
@@ -131,11 +132,11 @@ $estiloTituloReporte = array(
     'fill' => array(
         'type'  => PHPExcel_Style_Fill::FILL_SOLID,
         'color' => array(
-            'argb' => 'FF220835')
+            'argb' => '0B87A9')
     ),
     'borders' => array(
         'allborders' => array(
-            'style' => PHPExcel_Style_Border::BORDER_NONE
+            'style' => PHPExcel_Style_Border::BORDER_MEDIUM
         )
     ),
     'alignment' => array(
@@ -158,14 +159,14 @@ $estiloTituloColumnas = array(
         'type'       => PHPExcel_Style_Fill::FILL_GRADIENT_LINEAR,
     'rotation'   => 90,
         'startcolor' => array(
-            'rgb' => 'c47cf2'
+            'rgb' => '1ACEFF'
         ),
         'endcolor' => array(
-            'argb' => 'FF431a5d'
+            'argb' => '0AA3CE'
         )
     ),
     'borders' => array(
-        'top' => array(
+        'allborders' => array(
             'style' => PHPExcel_Style_Border::BORDER_MEDIUM ,
             'color' => array(
                 'rgb' => '143860'
@@ -196,23 +197,25 @@ $estiloInformacion->applyFromArray( array(
     'fill' => array(
     'type'  => PHPExcel_Style_Fill::FILL_SOLID,
     'color' => array(
-            'argb' => 'FFd9b7f4')
+            'argb' => 'B8FEFF')
     ),
     'borders' => array(
         'left' => array(
             'style' => PHPExcel_Style_Border::BORDER_THIN ,
         'color' => array(
-                'rgb' => '3a2a47'
+                'rgb' => '2A4348'
             )
         )
     )
 ));
 
 $objPHPExcel->getActiveSheet()->getStyle('A1:D1')->applyFromArray($estiloTituloReporte);
-$objPHPExcel->getActiveSheet()->getStyle('A3:G3')->applyFromArray($estiloTituloColumnas);
+$objPHPExcel->getActiveSheet()->getStyle('A2:D2')->applyFromArray($estiloTituloReporte);
+$objPHPExcel->getActiveSheet()->getStyle('A3:D3')->applyFromArray($estiloTituloReporte);
+$objPHPExcel->getActiveSheet()->getStyle('A4:D4')->applyFromArray($estiloTituloColumnas);
 
 // Renombrar Hoja
-$objPHPExcel->getActiveSheet()->setTitle('Tecnologia Simple');
+$objPHPExcel->getActiveSheet()->setTitle('Hoja1');
  
 // Establecer la hoja activa, para que cuando se abra el documento se muestre primero.
 $objPHPExcel->setActiveSheetIndex(0);
