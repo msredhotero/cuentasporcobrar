@@ -56,7 +56,7 @@ $TotalIngresos = 0;
 $TotalEgresos = 0;
 $Totales = 0;
 $Caja = 0;
-/*
+
 // Crea un nuevo objeto PHPExcel
 $objPHPExcel = new PHPExcel();
 
@@ -64,22 +64,147 @@ $objPHPExcel = new PHPExcel();
 
 
 $objPHPExcel->getProperties()
-->setCreator("Cattivo")
-->setLastModifiedBy("Cattivo")
-->setTitle("Documento Excel de Prueba")
-->setSubject("Documento Excel de Prueba")
-->setDescription("Demostracion sobre como crear archivos de Excel desde PHP.")
+->setCreator("Exebin")
+->setLastModifiedBy("Exebin")
+->setTitle("Documento Excel")
+->setSubject("Documento Excel")
+->setDescription("Documento Excel Facturacion General.")
 ->setKeywords("Excel Office 2007 openxml php")
-->setCategory("Pruebas de Excel");
+->setCategory("Excel");
  
-// Agregar Informacion
+$tituloReporte = "Reporte General de Facturación";
+$titulosColumnas = array("Factura", "Cliente", "Referencia","Fecha", "Importe", "Abonos", "Saldo");
+
 $objPHPExcel->setActiveSheetIndex(0)
+    ->mergeCells('A1:G1');
+ 
+// Se agregan los titulos del reporte
+$objPHPExcel->setActiveSheetIndex(0)
+    ->setCellValue('A1', htmlspecialchars(utf8_encode($tituloReporte))) // Titulo del reporte
+    ->setCellValue('A3',  htmlspecialchars(utf8_encode($titulosColumnas[0])))  //Titulo de las columnas
+    ->setCellValue('B3',  htmlspecialchars(utf8_encode($titulosColumnas[1])))
+    ->setCellValue('C3',  htmlspecialchars(utf8_encode($titulosColumnas[2])))
+    ->setCellValue('D3',  $titulosColumnas[3])
+	->setCellValue('E3',  $titulosColumnas[4])
+    ->setCellValue('F3',  $titulosColumnas[5])
+    ->setCellValue('G3',  $titulosColumnas[6]);
+
+
+// Agregar Informacion
+/*$objPHPExcel->setActiveSheetIndex(0)
 ->setCellValue('A1', 'Valor 1')
 ->setCellValue('B1', 'Valor 2')
 ->setCellValue('C1', 'Total')
 ->setCellValue('A2', '10')
-->setCellValue('C2', '=sum(A2:B2)');
+->setCellValue('C2', '=sum(A2:B2)');*/
+
+$i = 4; //Numero de fila donde se va a comenzar a rellenar
+ while ($fila = mysql_fetch_array($datos)) {
+     $objPHPExcel->setActiveSheetIndex(0)
+         ->setCellValue('A'.$i, utf8_encode($fila[0]))
+         ->setCellValue('B'.$i, utf8_encode($fila[1]))
+         ->setCellValue('C'.$i, utf8_encode($fila[2]))
+         ->setCellValue('D'.$i, $fila[3])
+		 ->setCellValue('E'.$i, $fila[4])
+         ->setCellValue('F'.$i, $fila[5])
+         ->setCellValue('G'.$i, $fila[6]);
+     $i++;
+ }
+
+$estiloTituloReporte = array(
+    'font' => array(
+        'name'      => 'Verdana',
+        'bold'      => true,
+        'italic'    => false,
+        'strike'    => false,
+        'size' =>16,
+        'color'     => array(
+            'rgb' => 'FFFFFF'
+        )
+    ),
+    'fill' => array(
+        'type'  => PHPExcel_Style_Fill::FILL_SOLID,
+        'color' => array(
+            'argb' => 'FF220835')
+    ),
+    'borders' => array(
+        'allborders' => array(
+            'style' => PHPExcel_Style_Border::BORDER_NONE
+        )
+    ),
+    'alignment' => array(
+        'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+        'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+        'rotation' => 0,
+        'wrap' => TRUE
+    )
+);
  
+$estiloTituloColumnas = array(
+    'font' => array(
+        'name'  => 'Arial',
+        'bold'  => true,
+        'color' => array(
+            'rgb' => 'FFFFFF'
+        )
+    ),
+    'fill' => array(
+        'type'       => PHPExcel_Style_Fill::FILL_GRADIENT_LINEAR,
+    'rotation'   => 90,
+        'startcolor' => array(
+            'rgb' => 'c47cf2'
+        ),
+        'endcolor' => array(
+            'argb' => 'FF431a5d'
+        )
+    ),
+    'borders' => array(
+        'top' => array(
+            'style' => PHPExcel_Style_Border::BORDER_MEDIUM ,
+            'color' => array(
+                'rgb' => '143860'
+            )
+        ),
+        'bottom' => array(
+            'style' => PHPExcel_Style_Border::BORDER_MEDIUM ,
+            'color' => array(
+                'rgb' => '143860'
+            )
+        )
+    ),
+    'alignment' =>  array(
+        'horizontal'=> PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+        'vertical'  => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+        'wrap'      => TRUE
+    )
+);
+ 
+$estiloInformacion = new PHPExcel_Style();
+$estiloInformacion->applyFromArray( array(
+    'font' => array(
+        'name'  => 'Arial',
+        'color' => array(
+            'rgb' => '000000'
+        )
+    ),
+    'fill' => array(
+    'type'  => PHPExcel_Style_Fill::FILL_SOLID,
+    'color' => array(
+            'argb' => 'FFd9b7f4')
+    ),
+    'borders' => array(
+        'left' => array(
+            'style' => PHPExcel_Style_Border::BORDER_THIN ,
+        'color' => array(
+                'rgb' => '3a2a47'
+            )
+        )
+    )
+));
+
+$objPHPExcel->getActiveSheet()->getStyle('A1:D1')->applyFromArray($estiloTituloReporte);
+$objPHPExcel->getActiveSheet()->getStyle('A3:G3')->applyFromArray($estiloTituloColumnas);
+
 // Renombrar Hoja
 $objPHPExcel->getActiveSheet()->setTitle('Tecnologia Simple');
  
@@ -87,7 +212,7 @@ $objPHPExcel->getActiveSheet()->setTitle('Tecnologia Simple');
 $objPHPExcel->setActiveSheetIndex(0);
  
 // Se modifican los encabezados del HTTP para indicar que se envia un archivo de Excel.
-header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=utf-8');
 header('Content-Disposition: attachment;filename="rptFacturacionGeneral.xlsx"');
 header('Cache-Control: max-age=0');
 $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
@@ -96,7 +221,6 @@ exit;
 
 
 
-*/
 
 
 
@@ -114,158 +238,6 @@ exit;
 
 
 
-function query($sql,$accion) {
-		
-		
-		require_once '../../includes/appconfig.php';
 
-		$appconfig	= new appconfig();
-		$datos		= $appconfig->conexion();
-		$hostname	= $datos['hostname'];
-		$database	= $datos['database'];
-		$username	= $datos['username'];
-		$password	= $datos['password'];
-        
-
-		
-		$conex = mysql_connect($hostname,$username,$password) or die ("no se puede conectar".mysql_error());
-		
-		mysql_select_db($database);
-		/*
-		$result = mysql_query($sql,$conex);
-		if ($accion && $result) {
-			$result = mysql_insert_id();
-		}
-		mysql_close($conex);
-		return $result;
-		*/
-
-                $error = 0;
-		mysql_query("BEGIN");
-		$result=mysql_query($sql,$conex);
-		if ($accion && $result) {
-			$result = mysql_insert_id();
-		}
-		if(!$result){
-			$error=1;
-		}
-		if($error==1){
-			mysql_query("ROLLBACK");
-			return false;
-		}
-		 else{
-			mysql_query("COMMIT");
-			return $result;
-		}
-	}
-	
-	
-
-	
-	
-	$tituloReporte = "<h2>Reporte General de Facturación</h2>";
-	$tituloReporte2 = "<h3>Empresa: ".strtoupper($empresa)."</h3>"; 
-	$tituloReporte3 = "<h3>Fecha: ".date('Y-m-d')."</h3>"; 
-
-
-	$titulosColumnas = array("Factura", "Cliente", "Referencia","Fecha", "Importe", "Abonos", "Saldo");
-	// Se combinan las celdas A1 hasta D1, para colocar ahí el titulo del reporte
-
-	
-	
-	if ($datos == false) {
-		return 'Error al traer datos';
-	} else {
-		$cad = '<table id="Exportar_a_Excel">
-					<tr>
-						<th colspan="7">'.$tituloReporte.'</th>
-					</tr>
-					<tr>
-						<th colspan="7">'.$tituloReporte2.'</th>
-					</tr>
-					<tr>
-						<th colspan="7">'.$tituloReporte3.'</th>
-					</tr>
-					<tr>
-						<th style="background-color:#ababab;">Factura</th>
-						<th style="background-color:#ababab;">Cliente</th>
-						<th style="background-color:#ababab;">Referencia</th>
-						<th style="background-color:#ababab;">Fecha</th>
-						<th style="background-color:#ababab;">Importe</th>
-						<th style="background-color:#ababab;">Abonos</th>
-						<th style="background-color:#ababab;">Saldo</th>
-					</tr>';
-		$i = 4; //Numero de fila donde se va a comenzar a rellenar
-		 while ($fila = mysql_fetch_array($datos)) {
-
-			 $i++;
-			 $cad .= '<tr>';
-			 $cad .= '<td>'.$fila[0].'</td>';
-			 $cad .= '<td>'.$fila[1].'</td>';
-			 $cad .= '<td>'.$fila[2].'</td>';
-			 $cad .= '<td>'.$fila[3].'</td>';
-			 $cad .= '<td>'.str_replace(".",",",$fila[4]).'</td>';
-			 $cad .= '<td>'.str_replace(".",",",$fila[5]).'</td>';
-			 $cad .= '<td>'.str_replace(".",",",$fila[6]).'</td>';
-			 $cad .= '</tr>';
-		 }
-		$cad .= '</table>';
-	
-	
-}
-
-
-?>
-
-<!DOCTYPE HTML>
-<html>
-
-<head>
-
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
-
-
-<title>Gestión: Facturación - Cuentas Por Cobrar</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style type="text/css">
-		table {  color: #333; font-family: Helvetica, Arial, sans-serif; width: 640px; border-collapse: collapse;}
-td, th { border: 1px solid #333; height: 30px; }
-th { background: #D3D3D3; font-weight: bold; }
-td { background: #FAFAFA; text-align: center; }
-tr:nth-child(even) td { background: #F1F1F1; }  
-tr:nth-child(odd) td { background: #FEFEFE; } 
-tr td:hover { background: #666; color: #FFF; }
-  
-		
-	</style>
-    
-    </head>
-
-<body>
-
-<?php 
-/*
-header("Content-type: application/vnd.ms-excel; name='excel'");
-header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-header("Content-Type: application/force-download");
-header("Content-Type: application/octet-stream");
-header("Content-Type: application/download");;
-		header("Content-Disposition: attachment; filename=rptFacturacionGeneral.xls");
-		header("Pragma: no-cache");
-		header("Expires: 0");*/
-header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-header('Content-Disposition: attachment;filename="rptFacturacionGeneral.xlsx"');
-header('Cache-Control: max-age=0');
-		echo $cad; 
-
-	
-?>
-</body>
-</html>
-
-<?php } ?>
+ } 
 
