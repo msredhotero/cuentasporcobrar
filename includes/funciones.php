@@ -57,7 +57,7 @@ class Servicios {
 			
 			for ($i=1;$i<=$cantidad;$i++) {
 				
-				$cadsubRows = $cadsubRows.'<td><div style="height:60px;overflow:auto;">'.$row[$i].'</div></td>';	
+				$cadsubRows = $cadsubRows.'<td><div style="height:60px;overflow:auto;">'.htmlspecialchars($row[$i],ENT_HTML5).'</div></td>';	
 			}
 			
 			
@@ -126,7 +126,7 @@ class Servicios {
                 </thead>
                 <tbody id="'.$idresultados.'">
 
-                	'.utf8_encode($cadRows).'
+                	'.$cadRows.'
                 </tbody>
             </table>
 			<div style="margin-bottom:85px; margin-right:60px;"></div>
@@ -565,7 +565,7 @@ class Servicios {
 											<div class="form-group col-md-6">
 												<label for="'.$campo.'" class="control-label" style="text-align:left">'.$label.'</label>
 												<div class="input-group col-md-12">
-													<textarea type="text" rows="10" cols="6" class="form-control" id="'.$campo.'" name="'.$campo.'" placeholder="Ingrese el '.$label.'..." required>'.utf8_encode(mysql_result($resMod,0,$row[0])).'</textarea>
+													<textarea type="text" rows="10" cols="6" class="form-control" id="'.$campo.'" name="'.$campo.'" placeholder="Ingrese el '.$label.'..." required>'.htmlspecialchars(mysql_result($resMod,0,$row[0]),ENT_HTML5).'</textarea>
 												</div>
 												
 											</div>
