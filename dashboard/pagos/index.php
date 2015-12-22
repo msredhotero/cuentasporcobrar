@@ -168,14 +168,14 @@ if ($_SESSION['refroll_predio'] != 1) {
                     </div>
            		</div>
                 
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-2">
                     <label class="control-label" style="text-align:left" for="refcliente">Fecha Desde</label>
                     <div class="input-group col-md-12">
                     	<input class="form-control" type="text" name="fechainicio" id="fechainicio" value="Date"/>
                     </div>
                 </div>
                 
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-2">
                     <label class="control-label" style="text-align:left" for="refcliente">Fecha Hasta</label>
                     <div class="input-group col-md-12">
                     	<input class="form-control" type="text" name="fechafin" id="fechafin" value="Date"/>
@@ -185,7 +185,13 @@ if ($_SESSION['refroll_predio'] != 1) {
                 <div class="form-group col-md-2">
                     <label class="control-label" style="text-align:left" for="refcliente">Filtrar</label>
                     <div class="input-group col-md-12">
-                    	<button type="button" class="btn btn-primary" id="buscar" style="margin-left:0px;">Buscar</button>
+                    	<button type="button" class="btn btn-primary" id="buscar" style="margin-left:0px;"><span class="glyphicon glyphicon-search"></span> Buscar</button>
+                    </div>
+                </div>
+                <div class="form-group col-md-2">
+                    <label class="control-label" style="text-align:left" for="refcliente">Reporte</label>
+                    <div class="input-group col-md-12">
+                    	<button type="button" class="btn btn-primary" id="imprimir" style="margin-left:0px;"><span class="glyphicon glyphicon-print"></span> Imprimir</button>
                     </div>
                 </div>
             </div>
@@ -346,7 +352,10 @@ $(document).ready(function(){
 		  }
 	});//fin del boton eliminar
 	
-	
+	$("#imprimir").click(function(event) {
+        window.open("../../reportes/rptFacturas.php?idEmpresa=" + <?php echo $_SESSION['usua_idempresa']; ?> + "&idCliente=" + $("#refcliente").val() + "&fechadesde=" + $("#fechainicio").val()+ "&fechahasta=" + $("#fechafin").val(),'_blank');	
+						
+    });
 	
 	
 	$("#example").on("click",'.varmodificar', function(){

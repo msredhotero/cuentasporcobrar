@@ -358,7 +358,7 @@ function traerFacturasPorClienteEmpresa($serviciosFacturas) {
 	$forma			= $_POST['forma'];
 	
 	$resFacturas = $serviciosFacturas->traerFacturasPorClienteEmpresa($refCliente, $refEmpresa, $fechaDesde, $fechaHasta);
-
+	//echo $resFacturas;
 	switch ($forma) {
 		case 'check':
 			/*

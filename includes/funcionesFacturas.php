@@ -89,24 +89,59 @@ return $res;
 function traerFacturasPorClienteEmpresa($idCliente, $idEmpresa, $fechaDesde, $fechaHasta) {
 
 if (($fechaDesde == '') && ($fechaHasta == '')) {
-	$sql = "select  f.idfactura, f.nrofactura, f.fecha, c.razonsocial, 
-				f.concepto, f.importebruto, f.iva, f.total, e.razonsocial,
-				f.refcliente, f.refempresa, coalesce(saldoFactura( f.idfactura ),f.total) as saldo
-		from dbfacturas f 
-		inner join dbclientes c on f.refcliente = c.idcliente
-		inner join dbempresas e on f.refempresa = e.idempresa
-		where e.idempresa = ".$idEmpresa." and c.idcliente = ".$idCliente."
-		order by f.fecha";
+	$sql = "select tt.idfactura, tt.nrofactura, tt.fecha, tt.razonsocial, 
+					tt.concepto, tt.importebruto, tt.iva, tt.total, tt.razonsocialempresa,
+					tt.refcliente, tt.refempresa, tt.saldo
+			from (
+			select  f.idfactura, f.nrofactura, f.fecha, c.razonsocial, 
+							f.concepto, f.importebruto, f.iva, f.total, e.razonsocial as razonsocialempresa,
+							f.refcliente, f.refempresa, coalesce(saldoFactura( f.idfactura ),f.total) as saldo
+					from dbfacturas f 
+					inner join dbclientes c on f.refcliente = c.idcliente
+					inner join dbempresas e on f.refempresa = e.idempresa
+					inner join dbpagosfacturas pf on pf.reffactura = f.idfactura
+					where e.idempresa = ".$idEmpresa." and c.idcliente = ".$idCliente." and (pf.refestatu = 2 and coalesce(saldoFactura( f.idfactura ),f.total) > 1)
+
+			union all
+			
+			select  f.idfactura, f.nrofactura, f.fecha, c.razonsocial, 
+							f.concepto, f.importebruto, f.iva, f.total, e.razonsocial as razonsocialempresa,
+							f.refcliente, f.refempresa, coalesce(saldoFactura( f.idfactura ),f.total) as saldo
+					from dbfacturas f 
+					inner join dbclientes c on f.refcliente = c.idcliente
+					inner join dbempresas e on f.refempresa = e.idempresa
+					left join dbpagosfacturas pf on pf.reffactura = f.idfactura
+					where e.idempresa = ".$idEmpresa." and c.idcliente = ".$idCliente." and pf.idpagofactura is null
+			) tt
+			order by tt.fecha";
 } else {
-	$sql = "select  f.idfactura, f.nrofactura, f.fecha, c.razonsocial, 
-				f.concepto, f.importebruto, f.iva, f.total, e.razonsocial,
-				f.refcliente, f.refempresa, coalesce(saldoFactura( f.idfactura ),f.total) as saldo
-		from dbfacturas f 
-		inner join dbclientes c on f.refcliente = c.idcliente
-		inner join dbempresas e on f.refempresa = e.idempresa
-		where e.idempresa = ".$idEmpresa." and c.idcliente = ".$idCliente." and (f.fecha BETWEEN '".$fechaDesde."' and '".$fechaHasta."')
-		order by f.fecha";
+	$sql = "select tt.idfactura, tt.nrofactura, tt.fecha, tt.razonsocial, 
+					tt.concepto, tt.importebruto, tt.iva, tt.total, tt.razonsocialempresa,
+					tt.refcliente, tt.refempresa, tt.saldo
+		from 
+				(select  f.idfactura, f.nrofactura, f.fecha, c.razonsocial, 
+							f.concepto, f.importebruto, f.iva, f.total, e.razonsocial as razonsocialempresa,
+							f.refcliente, f.refempresa, coalesce(saldoFactura( f.idfactura ),f.total) as saldo
+					from dbfacturas f 
+					inner join dbclientes c on f.refcliente = c.idcliente
+					inner join dbempresas e on f.refempresa = e.idempresa
+					inner join dbpagosfacturas pf on pf.reffactura = f.idfactura
+					where e.idempresa = ".$idEmpresa." and c.idcliente = ".$idCliente." and (f.fecha BETWEEN '".$fechaDesde."' and '".$fechaHasta."') and (pf.refestatu = 2 and coalesce(saldoFactura( f.idfactura ),f.total) > 1)
+
+			union all
+			
+			select  f.idfactura, f.nrofactura, f.fecha, c.razonsocial, 
+							f.concepto, f.importebruto, f.iva, f.total, e.razonsocial as razonsocialempresa,
+							f.refcliente, f.refempresa, coalesce(saldoFactura( f.idfactura ),f.total) as saldo
+					from dbfacturas f 
+					inner join dbclientes c on f.refcliente = c.idcliente
+					inner join dbempresas e on f.refempresa = e.idempresa
+					left join dbpagosfacturas pf on pf.reffactura = f.idfactura
+					where e.idempresa = ".$idEmpresa." and c.idcliente = ".$idCliente." and pf.idpagofactura is null and (f.fecha BETWEEN '".$fechaDesde."' and '".$fechaHasta."')) tt
+			order by tt.fecha";
+					
 }
+
 $res = $this->query($sql,0);
 return $res;
 }
