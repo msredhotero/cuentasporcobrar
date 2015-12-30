@@ -353,7 +353,7 @@ $(document).ready(function(){
 	});//fin del boton eliminar
 	
 	$("#imprimir").click(function(event) {
-        window.open("../../reportes/rptFacturas.php?idEmpresa=" + <?php echo $_SESSION['usua_idempresa']; ?> + "&idCliente=" + $("#refcliente").val() + "&fechadesde=" + $("#fechainicio").val()+ "&fechahasta=" + $("#fechafin").val(),'_blank');	
+        window.open("../../reportes/rptFacturas.php?idEmp=" + <?php echo $_SESSION['usua_idempresa']; ?> + "&idClie=" + $("#refcliente").val() + "&fechadesde=" + $("#fechainicio").val()+ "&fechahasta=" + $("#fechafin").val(),'_blank');	
 						
     });
 	

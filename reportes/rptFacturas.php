@@ -30,6 +30,7 @@ require('fpdf.php');
 //$header = array("Hora", "Cancha 1", "Cancha 2", "Cancha 3");
 
 $idCliente		=	$_GET['idClie'];
+$idEmpresa		=	$_GET['idEmp'];
 
 //////////////////              PARA LAS FECHAS        /////////////////////////////////////////////////////////////////
 
@@ -39,11 +40,15 @@ $fechahasta		=	$_GET['fechahasta'];
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+$resEmpresa		=	$serviciosEmpresas->traerEmpresasPorId($idEmpresa);
+
+$empresa		=	mysql_result($resEmpresa,0,1);
+
 $resCliente		=	$serviciosClientes->traerClientesPorId($idCliente);
 
-$empresa		=	mysql_result($resCliente,0,1);
+$cliente		=	mysql_result($resCliente,0,1);
 
-$datos			=	$serviciosReportes->rptSaldosClientesEmpresas($idCliente,$fechadesde,$fechahasta);
+$datos			=	$serviciosFacturas->FacturasPorClienteEmpresaEstado($idCliente,$idEmpresa,$fechadesde,$fechahasta);
 
 $TotalIngresos = 0;
 $TotalEgresos = 0;
@@ -72,7 +77,7 @@ function ingresosFacturacion($header, $data, &$TotalIngresos)
 	
 	
     // Cabecera
-    $w = array(65,25,25,25);
+    $w = array(25,25,25,25,25,25);
     for($i=0;$i<count($header);$i++)
         $this->Cell($w[$i],6,$header[$i],1,0,'C',true);
     $this->Ln();
@@ -92,23 +97,26 @@ function ingresosFacturacion($header, $data, &$TotalIngresos)
 	$this->SetFont('Arial','',8);
     while ($row = mysql_fetch_array($data))
     {
-		$total = $total + $row[1];
+		$total = $total + $row['total'];
 		$totalcant = $totalcant + 1;
-		$sumSaldos = $sumSaldos + $row[3];
-		$sumAbonos = $sumAbonos + $row[2];
+		$sumSaldos = $sumSaldos + $row['saldo'];
+		$sumAbonos = $sumAbonos + $row['total']-$row['saldo'];
 		
-		$this->Cell($w[0],4,$row[0],'LR',0,'L',$fill);
-		$this->Cell($w[1],4,number_format($row[1],2,',','.'),'LR',0,'R',$fill);
-		$this->Cell($w[2],4,number_format($row[2],2,',','.'),'LR',0,'R',$fill);
-		$this->Cell($w[3],4,number_format($row[3],2,',','.'),'LR',0,'R',$fill);
+		$this->Cell($w[0],4,$row['nrofactura'],'LR',0,'L',$fill);
+		$this->Cell($w[1],4,$row['fecha'],'LR',0,'L',$fill);
+		$this->Cell($w[2],4,number_format($row['total'],2,'.',','),'LR',0,'R',$fill);
+		$this->Cell($w[3],4,number_format($row['total']-$row['saldo'],2,'.',','),'LR',0,'R',$fill);
+		$this->Cell($w[4],4,number_format($row['saldo'],2,',','.'),'LR',0,'R',$fill);
+		$this->Cell($w[5],4,$row['estado'],'LR',0,'L',$fill);
         $this->Ln();
 
     }
 	
 	$this->Cell($w[0],5,'Totales:','LRT',0,'L',$fill);
-	$this->Cell($w[1],5,number_format($total,2,',','.'),'LRT',0,'R',$fill);
-	$this->Cell($w[2],5,number_format($sumAbonos,2,',','.'),'LRT',0,'R',$fill);
-	$this->Cell($w[3],5,number_format($sumSaldos,2,',','.'),'LRT',0,'R',$fill);
+	$this->Cell($w[1],5,'','LRT',0,'L',$fill);
+	$this->Cell($w[2],5,number_format($total,2,',','.'),'LRT',0,'R',$fill);
+	$this->Cell($w[3],5,number_format($sumAbonos,2,',','.'),'LRT',0,'R',$fill);
+	$this->Cell($w[4],5,number_format($sumSaldos,2,',','.'),'LRT',0,'R',$fill);
 	$fill = !$fill;
 	$this->Ln();
 	
@@ -134,16 +142,19 @@ $pdf = new PDF();
 
 // Títulos de las columnas
 
-$headerFacturacion = array("Empresa", "Cargos", "Abonos", "Saldo");
+$headerFacturacion = array("Nro Factura", "Fecha", "Importe", "Abonos", "Saldo", "Estatus");
 // Carga de datos
 
 $pdf->AddPage();
 
 $pdf->SetFont('Arial','U',17);
-$pdf->Cell(180,7,'Reporte Saldos de Clientes a Empresas',0,0,'C',false);
+$pdf->Cell(180,7,'Reporte Facturas Por Cliente',0,0,'C',false);
 $pdf->Ln();
 $pdf->SetFont('Arial','U',14);
 $pdf->Cell(180,7,"Empresa: ".strtoupper($empresa),0,0,'C',false);
+$pdf->Ln();
+$pdf->SetFont('Arial','U',14);
+$pdf->Cell(180,7,"Empresa: ".strtoupper($cliente),0,0,'C',false);
 $pdf->Ln();
 $pdf->Cell(180,7,'Fecha: '.date('Y-m-d'),0,0,'C',false);
 $pdf->Ln();
@@ -156,7 +167,7 @@ $pdf->Ln();
 
 $pdf->SetFont('Arial','',13);
 
-$nombreTurno = "rptSaldosClientesEmpresas-".$fecha.".pdf";
+$nombreTurno = "rptFacturas-".$fecha.".pdf";
 
 $pdf->Output($nombreTurno,'D');
 

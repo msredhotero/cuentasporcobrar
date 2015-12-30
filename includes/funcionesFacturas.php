@@ -86,6 +86,36 @@ return $res;
 }
 
 
+function FacturasPorClienteEmpresaEstado($idCliente, $idEmpresa, $fechaDesde, $fechaHasta) {
+	
+	if (($fechaDesde == '') && ($fechaHasta == '')) {
+		$sql = "select  f.idfactura, f.nrofactura, f.fecha, c.razonsocial, 
+				f.concepto, f.importebruto, f.iva, f.total, e.razonsocial as razonsocialempresa,
+				f.refcliente, f.refempresa, coalesce(saldoFactura( f.idfactura ),f.total) as saldo,
+				(case when ee.idestatu is null then 'No Pagado' else ee.estatus end) as estado
+		from dbfacturas f 
+		inner join dbclientes c on f.refcliente = c.idcliente
+		inner join dbempresas e on f.refempresa = e.idempresa
+		left join dbpagosfacturas pf on pf.reffactura = f.idfactura
+		left join tbestatus ee on ee.idestatu = pf.refestatu
+		where e.idempresa = ".$idEmpresa." and c.idcliente = ".$idCliente;
+	} else {
+		$sql = "select  f.idfactura, f.nrofactura, f.fecha, c.razonsocial, 
+				f.concepto, f.importebruto, f.iva, f.total, e.razonsocial as razonsocialempresa,
+				f.refcliente, f.refempresa, coalesce(saldoFactura( f.idfactura ),f.total) as saldo,
+				(case when ee.idestatu is null then 'No Pagado' else ee.estatus end) as estado
+		from dbfacturas f 
+		inner join dbclientes c on f.refcliente = c.idcliente
+		inner join dbempresas e on f.refempresa = e.idempresa
+		left join dbpagosfacturas pf on pf.reffactura = f.idfactura
+		left join tbestatus ee on ee.idestatu = pf.refestatu
+		where e.idempresa = ".$idEmpresa." and c.idcliente = ".$idCliente." and (f.fecha BETWEEN '".$fechaDesde."' and '".$fechaHasta."')";
+	}
+	$res = $this->query($sql,0);
+	return $res;
+}
+
+
 function traerFacturasPorClienteEmpresa($idCliente, $idEmpresa, $fechaDesde, $fechaHasta) {
 
 if (($fechaDesde == '') && ($fechaHasta == '')) {
