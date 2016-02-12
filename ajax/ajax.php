@@ -57,6 +57,10 @@ break;
 case 'traerClientesPorEmpresa':
 traerClientesPorEmpresa($serviciosClientes);
 break;
+
+case 'insertarClienteEmpresa':
+	insertarClienteEmpresa($serviciosEmpresaClientes);
+	break;
 /* Fin */
 
 /* PARA Empresas */
@@ -191,6 +195,19 @@ function traerClientesPorEmpresa($serviciosClientes) {
 	}
 	
 	echo $cad; 
+}
+
+function insertarClienteEmpresa($serviciosEmpresaClientes) {
+	$refCliente = $_POST['refclientecargado'];
+	$idEmpresa  = $_POST['idEmpresa'];
+	
+	$res = $serviciosEmpresaClientes->insertarEmpresaClientes($idEmpresa,$refCliente);
+	
+	if ((integer)$res > 0) {
+		echo ''; 
+	} else { 
+		echo 'Huvo un error al insertar datos';	
+	} 
 }
 
 /* Fin */

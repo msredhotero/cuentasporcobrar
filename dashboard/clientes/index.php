@@ -19,6 +19,8 @@ $serviciosUsuario 	= new ServiciosUsuarios();
 $serviciosHTML 		= new ServiciosHTML();
 $serviciosClientes 	= new ServiciosClientes();
 
+$resCli		=	$serviciosClientes->traerClientes();
+
 $fecha = date('Y-m-d');
 
 //$resProductos = $serviciosProductos->traerProductosLimite(6);
@@ -117,6 +119,8 @@ if ($_SESSION['refroll_predio'] != 1) {
         $('#navigation').perfectScrollbar();
       });
     </script>
+    
+    <link rel="stylesheet" href="../../css/chosen.css">
 </head>
 
 <body>
@@ -126,7 +130,51 @@ if ($_SESSION['refroll_predio'] != 1) {
 <div id="content">
 
 <h3>Clientes</h3>
-
+	
+    
+    <div class="panel panel-info">
+        <div id="headBoxInfo">
+        	<p style="color: #fff; font-size:18px; height:16px;">Clientes Cargados</p>
+        	
+        </div>
+    	<div class="panel-body">
+        	<form class="form-inline formulario" role="form">
+        	<div class="form-group col-md-6">
+                	<label class="control-label" style="text-align:left" for="celular1">Clientes Existentes</label>
+                    <div class="input-group col-md-12">
+                    	<select data-placeholder="selecione el cliente..." id="refclientecargado" name="refclientecargado" class="chosen-select" style="width:450px;" tabindex="2">
+                            <option value=""></option>
+                            <?php while ($rowC = mysql_fetch_array($resCli)) { ?>
+                                <option value="<?php echo $rowC[0]; ?>"><?php echo $rowC[1]; ?></option>
+                            <?php } ?>
+                            
+                        </select>
+                    </div>
+                </div>
+            
+            <div class='row' style="margin-left:25px; margin-right:25px; ">
+                <div class='alert2'>
+                
+                </div>
+                <div id='load'>
+                
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-12">
+                <ul class="list-inline" style="margin-top:15px;">
+                    <li>
+                        <button type="button" class="btn btn-primary" id="adjuntar" style="margin-left:0px;">Guardar</button>
+                    </li>
+                </ul>
+                </div>
+            </div>
+            </form>
+    	</div>
+    </div>
+    
+    
     <div class="boxInfoLargo">
         <div id="headBoxInfo">
         	<p style="color: #fff; font-size:18px; height:16px;">Carga de Clientes</p>
@@ -135,6 +183,20 @@ if ($_SESSION['refroll_predio'] != 1) {
     	<div class="cuerpoBox">
         	<form class="form-inline formulario" role="form">
         	<div class="row">
+            	<div class="form-group col-md-6">
+                	<label class="control-label" style="text-align:left" for="celular1">Clientes Cargados</label>
+                    <div class="input-group col-md-12">
+                    	<select id="reftipovivienda" name="reftipovivienda" class="form-control">
+                            <?php while ($rowTV = mysql_fetch_array($resCli)) { ?>
+                                <option value="<?php echo $rowTV[0]; ?>"><?php echo $rowTV[1]; ?></option>
+                            <?php } ?>
+                            
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
 			<?php echo $formulario; ?>
             </div>
             
@@ -288,7 +350,24 @@ $(document).ready(function(){
 	
 	?>
 	
+	$('#adjuntar').click(function(){
+		$.ajax({
+				data:  {refclientecargado: $('#refclientecargado').val(), 
+						idEmpresa: <?php echo $_SESSION['usua_idempresa']; ?>,
+						accion: 'insertarClienteEmpresa'},
+				url:   '../../ajax/ajax.php',
+				type:  'post',
+				beforeSend: function () {
+						
+				},
+				success:  function (response) {
+						url = "index.php";
+						$(location).attr('href',url);
 
+				}
+		});
+		
+	});
 	
 	
 	//al enviar el formulario
@@ -351,6 +430,19 @@ $(document).ready(function(){
 
 });
 </script>
+<script src="../../js/chosen.jquery.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var config = {
+      '.chosen-select'           : {},
+      '.chosen-select-deselect'  : {allow_single_deselect:true},
+      '.chosen-select-no-single' : {disable_search_threshold:10},
+      '.chosen-select-no-results': {no_results_text:'Oops, nothing found!'},
+      '.chosen-select-width'     : {width:"95%"}
+    }
+    for (var selector in config) {
+      $(selector).chosen(config[selector]);
+    }
+  </script>
 <?php } ?>
 </body>
 </html>
