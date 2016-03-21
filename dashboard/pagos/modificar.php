@@ -253,33 +253,18 @@ if ($_SESSION['refroll_predio'] != 1) {
 
 <script type="text/javascript">
 $(document).ready(function(){
-	$('#example').dataTable({
-		"order": [[ 0, "asc" ]],
-		"language": {
-			"emptyTable":     "No hay datos cargados",
-			"info":           "Mostrar _START_ hasta _END_ del total de _TOTAL_ filas",
-			"infoEmpty":      "Mostrar 0 hasta 0 del total de 0 filas",
-			"infoFiltered":   "(filtrados del total de _MAX_ filas)",
-			"infoPostFix":    "",
-			"thousands":      ",",
-			"lengthMenu":     "Mostrar _MENU_ filas",
-			"loadingRecords": "Cargando...",
-			"processing":     "Procesando...",
-			"search":         "Buscar:",
-			"zeroRecords":    "No se encontraron resultados",
-			"paginate": {
-				"first":      "Primero",
-				"last":       "Ultimo",
-				"next":       "Siguiente",
-				"previous":   "Anterior"
-			},
-			"aria": {
-				"sortAscending":  ": activate to sort column ascending",
-				"sortDescending": ": activate to sort column descending"
-			}
-		  }
-	} );
 	
+	
+        $('.volver').click(function(event){
+		 
+		url = "index.php";
+		$(location).attr('href',url);
+	});//fin del boton modificar
+        
+        <?php 
+        
+        if ($_SESSION['idroll_predio'] == 1) {
+        ?>
 	$('.varborrar').click(function(event){
 		  usersid =  $(this).attr("id");
 		  if (!isNaN(usersid)) {
@@ -295,7 +280,48 @@ $(document).ready(function(){
 	});//fin del boton eliminar
 	
 	
-	
+        $( "#dialog2" ).dialog({
+		 	
+            autoOpen: false,
+                resizable: false,
+                width:600,
+                height:240,
+                modal: true,
+                buttons: {
+                    "Eliminar": function() {
+
+                                $.ajax({
+                                                        data:  {id: $('#idEliminar').val(), accion: 'eliminarPagos'},
+                                                        url:   '../../ajax/ajax.php',
+                                                        type:  'post',
+                                                        beforeSend: function () {
+
+                                                        },
+                                                        success:  function (response) {
+                                                                        url = "index.php";
+                                                                        $(location).attr('href',url);
+
+                                                        }
+                                        });
+                                $( this ).dialog( "close" );
+                                $( this ).dialog( "close" );
+                                        $('html, body').animate({
+                                        scrollTop: '1000px'
+                                },
+                                1500);
+                    },
+                    Cancelar: function() {
+                                $( this ).dialog( "close" );
+                    }
+                }
+
+
+        }); //fin del dialogo para eliminar
+	<?php
+        
+        }
+        
+        ?>
 	
 	$("#example").on("click",'.varmodificar', function(){
 		  usersid =  $(this).attr("id");
@@ -370,43 +396,7 @@ $(document).ready(function(){
 		
 	});
 
-	 $( "#dialog2" ).dialog({
-		 	
-			    autoOpen: false,
-			 	resizable: false,
-				width:600,
-				height:240,
-				modal: true,
-				buttons: {
-				    "Eliminar": function() {
 	
-						$.ajax({
-									data:  {id: $('#idEliminar').val(), accion: 'eliminarPagos'},
-									url:   '../../ajax/ajax.php',
-									type:  'post',
-									beforeSend: function () {
-											
-									},
-									success:  function (response) {
-											url = "index.php";
-											$(location).attr('href',url);
-											
-									}
-							});
-						$( this ).dialog( "close" );
-						$( this ).dialog( "close" );
-							$('html, body').animate({
-	           					scrollTop: '1000px'
-	       					},
-	       					1500);
-				    },
-				    Cancelar: function() {
-						$( this ).dialog( "close" );
-				    }
-				}
-		 
-		 
-	 		}); //fin del dialogo para eliminar
 			
 	<?php 
 		echo $serviciosHTML->validacion($tabla);

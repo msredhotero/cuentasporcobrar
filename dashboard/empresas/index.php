@@ -180,7 +180,7 @@ if ($_SESSION['refroll_predio'] != 1) {
 
 
 </div>
-<div id="dialog2" title="Eliminar Equipos">
+<div id="dialog2" title="Eliminar Empresa">
     	<p>
         	<span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
             ¿Esta seguro que desea eliminar la Empresa?.<span id="proveedorEli"></span>

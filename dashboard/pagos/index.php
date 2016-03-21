@@ -79,7 +79,7 @@ $lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosPagos-
 
 
 
-if ($_SESSION['refroll_predio'] != 1) {
+if ($_SESSION['idroll_predio'] != 1) {
 
 } else {
 
@@ -269,7 +269,7 @@ if ($_SESSION['refroll_predio'] != 1) {
 
 
 </div>
-<div id="dialog2" title="Eliminar Equipos">
+<div id="dialog2" title="Eliminar Pago">
     	<p>
         	<span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
             ¿Esta seguro que desea eliminar el Pago?.<span id="proveedorEli"></span>
@@ -338,6 +338,10 @@ $(document).ready(function(){
 		  }
 	} );
 	
+        <?php 
+        
+        if ($_SESSION['idroll_predio'] == 1) {
+        ?>
 	$('.varborrar').click(function(event){
 		  usersid =  $(this).attr("id");
 		  if (!isNaN(usersid)) {
@@ -352,6 +356,50 @@ $(document).ready(function(){
 		  }
 	});//fin del boton eliminar
 	
+        $( "#dialog2" ).dialog({
+		 	
+			    autoOpen: false,
+			 	resizable: false,
+				width:600,
+				height:240,
+				modal: true,
+				buttons: {
+				    "Eliminar": function() {
+	
+						$.ajax({
+									data:  {id: $('#idEliminar').val(), accion: 'eliminarPagos'},
+									url:   '../../ajax/ajax.php',
+									type:  'post',
+									beforeSend: function () {
+											
+									},
+									success:  function (response) {
+											url = "index.php";
+											$(location).attr('href',url);
+											
+									}
+							});
+						$( this ).dialog( "close" );
+						$( this ).dialog( "close" );
+							$('html, body').animate({
+	           					scrollTop: '1000px'
+	       					},
+	       					1500);
+				    },
+				    Cancelar: function() {
+						$( this ).dialog( "close" );
+				    }
+				}
+		 
+		 
+	 		}); //fin del dialogo para eliminar
+        <?php
+        
+        }
+        
+        ?>
+        
+        
 	$("#imprimir").click(function(event) {
         window.open("../../reportes/rptFacturas.php?idEmp=" + <?php echo $_SESSION['usua_idempresa']; ?> + "&idClie=" + $("#refcliente").val() + "&fechadesde=" + $("#fechainicio").val()+ "&fechahasta=" + $("#fechafin").val(),'_blank');	
 						
@@ -433,44 +481,9 @@ $(document).ready(function(){
 		traerFacturas();
 		
 	});
+        
 
-	 $( "#dialog2" ).dialog({
-		 	
-			    autoOpen: false,
-			 	resizable: false,
-				width:600,
-				height:240,
-				modal: true,
-				buttons: {
-				    "Eliminar": function() {
 	
-						$.ajax({
-									data:  {id: $('#idEliminar').val(), accion: 'eliminarPagos'},
-									url:   '../../ajax/ajax.php',
-									type:  'post',
-									beforeSend: function () {
-											
-									},
-									success:  function (response) {
-											url = "index.php";
-											$(location).attr('href',url);
-											
-									}
-							});
-						$( this ).dialog( "close" );
-						$( this ).dialog( "close" );
-							$('html, body').animate({
-	           					scrollTop: '1000px'
-	       					},
-	       					1500);
-				    },
-				    Cancelar: function() {
-						$( this ).dialog( "close" );
-				    }
-				}
-		 
-		 
-	 		}); //fin del dialogo para eliminar
 			
 	<?php 
 		echo $serviciosHTML->validacion($tabla);
