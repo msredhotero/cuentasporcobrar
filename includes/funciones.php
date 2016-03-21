@@ -16,7 +16,7 @@ class Servicios {
 		switch ($cantidad) {
 			case 99:
 				$cantidad = 8;
-				$classMod = '';
+				$classMod = 'varmodificar';
 				$classEli = 'varborrar';
 				$idresultados = "resultados";
 				break;

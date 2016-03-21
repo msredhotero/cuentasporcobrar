@@ -13,21 +13,21 @@ class ServiciosEmpresaBancos {
 
 /* PARA EmpresaBancos */
 
-function insertarEmpresaBancos($refempresa,$banco,$sucursal,$cuenta,$clave) { 
-$sql = "insert into dbempresasbancos(idempresabanco,refempresa,banco,sucursal,cuenta,clave) 
-values ('',".$refempresa.",'".utf8_decode($banco)."','".utf8_decode($sucursal)."','".utf8_decode($cuenta)."','".utf8_decode($clave)."')"; 
-$res = $this->query($sql,1); 
-return $res; 
-} 
+function insertarEmpresaBancos($refempresa,$banco,$sucursal,$cuenta,$clave,$activo) {
+$sql = "insert into dbempresasbancos(idempresabanco,refempresa,banco,sucursal,cuenta,clave,activo)
+values ('',".$refempresa.",'".utf8_decode($banco)."','".utf8_decode($sucursal)."','".utf8_decode($cuenta)."','".utf8_decode($clave)."',".$activo.")";
+$res = $this->query($sql,1);
+return $res;
+}
 
 
-function modificarEmpresaBancos($id,$refempresa,$banco,$sucursal,$cuenta,$clave) { 
-$sql = "update dbempresasbancos 
-set 
-refempresa = ".$refempresa.",banco = '".utf8_decode($banco)."',sucursal = '".utf8_decode($sucursal)."',cuenta = '".utf8_decode($cuenta)."',clave = '".utf8_decode($clave)."' 
-where idempresabanco =".$id; 
-$res = $this->query($sql,0); 
-return $res; 
+function modificarEmpresaBancos($id,$refempresa,$banco,$sucursal,$cuenta,$clave,$activo) {
+$sql = "update dbempresasbancos
+set
+refempresa = ".$refempresa.",banco = '".utf8_decode($banco)."',sucursal = '".utf8_decode($sucursal)."',cuenta = '".utf8_decode($cuenta)."',clave = '".utf8_decode($clave)."',activo = ".$activo."
+where idempresabanco =".$id;
+$res = $this->query($sql,0);
+return $res;
 } 
 
 
@@ -39,20 +39,20 @@ return $res;
 
 
 function traerEmpresaBancos() { 
-$sql = "select idempresabanco,refempresa,banco,sucursal,cuenta,clave from dbempresasbancos order by 1"; 
+$sql = "select idempresabanco,refempresa,banco,sucursal,cuenta,clave,activo from dbempresasbancos order by 1"; 
 $res = $this->query($sql,0); 
 return $res; 
 } 
 
 
 function traerEmpresaBancosPorId($id) { 
-$sql = "select idempresabanco,refempresa,banco,sucursal,cuenta,clave from dbempresasbancos where idempresabanco =".$id; 
+$sql = "select idempresabanco,refempresa,banco,sucursal,cuenta,clave,activo from dbempresasbancos where idempresabanco =".$id; 
 $res = $this->query($sql,0); 
 return $res; 
 } 
 
 function traerEmpresaBancosPorEmpresa($idEmpresa) { 
-$sql = "select eb.idempresabanco,e.razonsocial,eb.banco,eb.sucursal,eb.cuenta,eb.clave ,eb.refempresa
+$sql = "select eb.idempresabanco,e.razonsocial,eb.banco,eb.sucursal,eb.cuenta,eb.clave,(case when eb.activo =1 then 'Si' else 'No' end) as activo ,eb.refempresa
 			from dbempresasbancos eb 
 			inner join dbempresas e on eb.refempresa = e.idempresa 
 			where e.idempresa = ".$idEmpresa."

@@ -83,8 +83,30 @@ return $res;
 } 
 
 
+function modificarPagosFacturasEstado($refpago,$reffactura,$refestatu) { 
+$sql = "update dbpagosfacturas 
+set 
+refestatu = ".$refestatu." 
+where refpago = ".$refpago." and reffactura = ".$reffactura;
+$res = $this->query($sql,0); 
+return $res; 
+} 
+
+
 function eliminarPagosFacturas($id) { 
 $sql = "delete from dbpagosfacturas where idpagofactura =".$id; 
+$res = $this->query($sql,0); 
+return $res; 
+}
+
+function eliminarPagosFacturasPorPago($id) { 
+$sql = "delete from dbpagosfacturas where refpago =".$id; 
+$res = $this->query($sql,0); 
+return $res; 
+} 
+
+function eliminarPagosFacturasPorPagos($idPago) { 
+$sql = "delete from dbpagosfacturas where refpago =".$idPago; 
 $res = $this->query($sql,0); 
 return $res; 
 } 
@@ -166,6 +188,94 @@ $sql = "select idpagofactura,refpago,reffactura,refestatu from dbpagosfacturas
 $res = $this->query($sql,0); 
 return $res; 
 } 
+
+
+function traerPagosFactPorId($id) {
+	$sql = "select 
+			pf.idpagofactura,
+			e.razonsocial as empresa,
+			c.razonsocial as cliente,
+			f.nrofactura,
+			p.fechapago,
+			sum(p.montoapagar) as abono,
+			p.referencia,
+			p.comentarios,
+			et.estatus,
+			pf.refpago,
+			pf.reffactura,
+			pf.refestatu,
+			c.idcliente,
+			e.idempresa,
+			coalesce(saldoFactura( f.idfactura ),f.total) as saldo,
+			f.total
+		from
+			dbpagosfacturas pf
+				inner join
+			dbpagos p ON pf.refpago = p.idpago
+				inner join
+			dbfacturas f ON f.idfactura = pf.reffactura
+				inner join
+			dbclientes c ON c.idcliente = f.refcliente
+				inner join
+			tbestatus et ON et.idestatu = pf.refestatu
+				inner join
+			dbempresas e ON e.idempresa = f.refempresa
+		where p.idpago = ".$id."
+		group by pf.idpagofactura , e.razonsocial , c.razonsocial , f.nrofactura , p.fechapago , p.referencia , p.comentarios , et.estatus , pf.refpago , pf.reffactura , pf.refestatu , c.idcliente , e.idempresa
+		order by 1"; 
+$res = $this->query($sql,0); 
+return $res;
+}
+
+function calcularPagado($idFactura) {
+	$sql = "select 
+				pf.idpagofactura,
+				e.razonsocial as empresa,
+				c.razonsocial as cliente,
+				f.nrofactura,
+				p.fechapago,
+				sum(p.montoapagar) as abono,
+				p.referencia,
+				p.comentarios,
+				et.estatus,
+				pf.refpago,
+				pf.reffactura,
+				pf.refestatu,
+				c.idcliente,
+				e.idempresa,
+				coalesce(saldoFactura( f.idfactura ),f.total) as saldo,
+				f.total
+			from
+				dbpagosfacturas pf
+					inner join
+				dbpagos p ON pf.refpago = p.idpago
+					inner join
+				dbfacturas f ON f.idfactura = pf.reffactura
+					inner join
+				dbclientes c ON c.idcliente = f.refcliente
+					inner join
+				tbestatus et ON et.idestatu = pf.refestatu
+					inner join
+				dbempresas e ON e.idempresa = f.refempresa
+			where f.idfactura = ".$idFactura."
+			group by pf.idpagofactura , e.razonsocial , c.razonsocial , f.nrofactura , p.fechapago , p.referencia , p.comentarios , et.estatus , pf.refpago , pf.reffactura , pf.refestatu , c.idcliente , e.idempresa
+			order by 1"; 
+	$res = $this->query($sql,0); 
+	
+	$resEstatus = 0;
+	$cuenta = 0;
+	$total = 0;
+	while ($row = mysql_fetch_array($res)) {
+		$cuenta += $row['abono'];
+		$total = $row['total'];
+	}
+	
+	if ($total > $cuenta) {
+		return 2;	
+	}
+	return 3;
+	
+}
 
 /* Fin */
 

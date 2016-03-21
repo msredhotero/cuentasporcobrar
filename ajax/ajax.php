@@ -518,21 +518,29 @@ function insertarPagos($serviciosPagos, $serviciosFacturas) {
 	
 } 
 function modificarPagos($serviciosPagos) { 
-$id = $_POST['id']; 
-$fechapago = $_POST['fechapago']; 
-$montoapagar = $_POST['montoapagar']; 
-$referencia = $_POST['referencia']; 
-$comentarios = $_POST['comentarios']; 
-$res = $serviciosPagos->modificarPagos($id,$fechapago,$montoapagar,$referencia,$comentarios); 
-if ($res == true) { 
-echo ''; 
-} else { 
-echo 'Huvo un error al modificar datos'; 
-} 
+	$id = $_POST['id']; 
+	$idFactura = $_POST['idfactura']; 
+	$fechapago = $_POST['fechapago']; 
+	$montoapagar = $_POST['montoapagar']; 
+	$referencia = $_POST['referencia']; 
+	$comentarios = $_POST['comentarios']; 
+	
+	$res = $serviciosPagos->modificarPagos($id,$fechapago,$montoapagar,$referencia,$comentarios); 
+	
+	if ($res == true) { 
+		$idestatus = $serviciosPagos->calcularPagado($idFactura);
+		
+		$serviciosPagos->modificarPagosFacturasEstado($id,$idFactura,$idestatus);
+		echo '';
+		 
+	} else { 
+		echo 'Huvo un error al modificar datos'; 
+	} 
 } 
 function eliminarPagos($serviciosPagos) { 
 $id = $_POST['id']; 
 $res = $serviciosPagos->eliminarPagos($id); 
+$serviciosPagos->eliminarPagosFacturasPorPago($id);
 echo $res; 
 } 
 
@@ -547,6 +555,7 @@ echo '';
 echo 'Huvo un error al insertar datos';	
 } 
 } 
+
 function modificarPagosFacturas($serviciosPagosFacturas) { 
 $id = $_POST['id']; 
 $refpago = $_POST['refpago']; 
@@ -558,7 +567,8 @@ echo '';
 } else { 
 echo 'Huvo un error al modificar datos'; 
 } 
-} 
+}
+ 
 function eliminarPagosFacturas($serviciosPagosFacturas) { 
 $id = $_POST['id']; 
 $res = $serviciosPagosFacturas->eliminarPagosFacturas($id); 
@@ -569,33 +579,45 @@ echo $res;
 
 
 /* PARA EmpresaBancos */
-function insertarEmpresaBancos($serviciosEmpresaBancos) { 
-$refempresa = $_POST['refempresa']; 
-$banco = $_POST['banco']; 
-$sucursal = $_POST['sucursal']; 
-$cuenta = $_POST['cuenta']; 
-$clave = $_POST['clave']; 
-$res = $serviciosEmpresaBancos->insertarEmpresaBancos($refempresa,$banco,$sucursal,$cuenta,$clave); 
-if ((integer)$res > 0) { 
-echo ''; 
-} else { 
-echo 'Huvo un error al insertar datos';	
+function insertarEmpresaBancos($serviciosEmpresaBancos) {
+$refempresa = $_POST['refempresa'];
+$banco = $_POST['banco'];
+$sucursal = $_POST['sucursal'];
+$cuenta = $_POST['cuenta'];
+$clave = $_POST['clave'];
+if (isset($_POST['activo'])) {
+$activo = 1;
+} else {
+$activo = 0;
+}
+$res = $serviciosEmpresaBancos->insertarEmpresaBancos($refempresa,$banco,$sucursal,$cuenta,$clave,$activo);
+if ((integer)$res > 0) {
+echo '';
+} else {
+echo 'Huvo un error al insertar datos';
+}
+}
+
+function modificarEmpresaBancos($serviciosEmpresaBancos) {
+$id = $_POST['id'];
+$refempresa = $_POST['refempresa'];
+$banco = $_POST['banco'];
+$sucursal = $_POST['sucursal'];
+$cuenta = $_POST['cuenta'];
+$clave = $_POST['clave'];
+if (isset($_POST['activo'])) {
+$activo = 1;
+} else {
+$activo = 0;
+}
+$res = $serviciosEmpresaBancos->modificarEmpresaBancos($id,$refempresa,$banco,$sucursal,$cuenta,$clave,$activo);
+if ($res == true) {
+echo '';
+} else {
+echo 'Huvo un error al modificar datos';
+}
 } 
-} 
-function modificarEmpresaBancos($serviciosEmpresaBancos) { 
-$id = $_POST['id']; 
-$refempresa = $_POST['refempresa']; 
-$banco = $_POST['banco']; 
-$sucursal = $_POST['sucursal']; 
-$cuenta = $_POST['cuenta']; 
-$clave = $_POST['clave']; 
-$res = $serviciosEmpresaBancos->modificarEmpresaBancos($id,$refempresa,$banco,$sucursal,$cuenta,$clave); 
-if ($res == true) { 
-echo ''; 
-} else { 
-echo 'Huvo un error al modificar datos'; 
-} 
-} 
+
 function eliminarEmpresaBancos($serviciosEmpresaBancos) { 
 $id = $_POST['id']; 
 $res = $serviciosEmpresaBancos->eliminarEmpresaBancos($id); 
