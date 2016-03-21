@@ -235,8 +235,9 @@ $plataforma = $_POST['plataforma'];
 $usuario = $_POST['usuario']; 
 $contrasenia = $_POST['contrasenia']; 
 $contraseniaemail = $_POST['contraseniaemail']; 
+$cuenta = $_POST['cuenta']; 
 
-$res = $serviciosEmpresas->insertarEmpresas($razonsocial,$rfc,$direccion,$email,$telefono,$celular,$objetoempresa,$notaria,$notario,$giro,$socia_a,$socio_b,$administrador,$comisario,$apoderado,$rpp,$plataforma,$usuario,$contrasenia,$contraseniaemail);
+$res = $serviciosEmpresas->insertarEmpresas($razonsocial,$rfc,$direccion,$email,$telefono,$celular,$objetoempresa,$notaria,$notario,$giro,$socia_a,$socio_b,$administrador,$comisario,$apoderado,$rpp,$plataforma,$usuario,$contrasenia,$contraseniaemail,$cuenta);
 if ((integer)$res > 0) { 
 echo ''; 
 } else { 
@@ -265,8 +266,9 @@ $plataforma = $_POST['plataforma'];
 $usuario = $_POST['usuario']; 
 $contrasenia = $_POST['contrasenia']; 
 $contraseniaemail = $_POST['contraseniaemail'];
+$cuenta = $_POST['cuenta'];
 
-$res = $serviciosEmpresas->modificarEmpresas($id,$razonsocial,$rfc,$direccion,$email,$telefono,$celular,$objetoempresa,$notaria,$notario,$giro,$socia_a,$socio_b,$administrador,$comisario,$apoderado,$rpp,$plataforma,$usuario,$contrasenia,$contraseniaemail);
+$res = $serviciosEmpresas->modificarEmpresas($id,$razonsocial,$rfc,$direccion,$email,$telefono,$celular,$objetoempresa,$notaria,$notario,$giro,$socia_a,$socio_b,$administrador,$comisario,$apoderado,$rpp,$plataforma,$usuario,$contrasenia,$contraseniaemail,$cuenta);
 if ($res == true) { 
 echo ''; 
 } else { 

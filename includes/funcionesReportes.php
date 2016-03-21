@@ -69,7 +69,7 @@ $sql = "select
 			p.referencia,
 			f.total
 		) as r
-		order by 2"; 
+		order by r.nrofactura,r.cliente"; 
 $res = $this->query($sql,0); 
 return $res; 
 }
@@ -115,7 +115,7 @@ $sql = "select
 	}
 	$sql .= "	group by c.razonsocial
 		) as r
-		order by 2"; 
+		order by r.cliente"; 
 $res = $this->query($sql,0); 
 return $res; 
 } 
@@ -171,7 +171,7 @@ function rptSaldoPorCliente($empresa,$idcliente,$fechadesde,$fechahasta) {
 			p.referencia,
 			f.total
 		) as r
-		order by 2"; 
+		order by r.nrofactura"; 
 $res = $this->query($sql,0); 
 return $res; 
 } 
@@ -216,7 +216,7 @@ $sql = "select
 	}
 	$sql .="	group by e.razonsocial
 		) as r
-		order by 2"; 
+		order by r.cliente"; 
 $res = $this->query($sql,0); 
 return $res; 
 } 
@@ -263,7 +263,7 @@ function rptSaldosClientesEmpresas($idcliente,$fechadesde,$fechahasta) {
 	}
 	$sql .=" group by e.razonsocial
 		) as r
-		order by 2";	
+		order by r.empresa";	
 	
 	$res = $this->query($sql,0); 
 	return $res; 

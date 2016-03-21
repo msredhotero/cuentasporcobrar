@@ -226,6 +226,10 @@ if ($_SESSION['refroll_predio'] != 1) {
 
 
 </div>
+<?php 
+        
+if ($_SESSION['idroll_predio'] == 1) {
+?>
 <div id="dialog2" title="Eliminar Pago">
     	<p>
         	<span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
@@ -234,6 +238,9 @@ if ($_SESSION['refroll_predio'] != 1) {
         <p><strong>Importante: </strong>Si elimina el equipo se perderan todos los datos de este</p>
         <input type="hidden" value="" id="idEliminar" name="idEliminar">
 </div>
+<?php
+}
+?>
 <script type="text/javascript" src="../../js/jquery.dataTables.min.js"></script>
 <script src="../../bootstrap/js/dataTables.bootstrap.js"></script>
 <script src="../../js/bootstrap-datetimepicker.min.js"></script>
@@ -248,6 +255,10 @@ $(document).ready(function(){
 		$(location).attr('href',url);
 	});//fin del boton modificar
 	
+	<?php 
+        
+	if ($_SESSION['idroll_predio'] == 1) {
+	?>
 	$('.varborrar').click(function(event){
 		  usersid =  $(this).attr("id");
 		  if (!isNaN(usersid)) {
@@ -262,8 +273,60 @@ $(document).ready(function(){
 		  }
 	});//fin del boton eliminar
 	
+	$( "#dialog2" ).dialog({
+		 	
+			    autoOpen: false,
+			 	resizable: false,
+				width:600,
+				height:240,
+				modal: true,
+				buttons: {
+				    "Eliminar": function() {
+	
+						$.ajax({
+									data:  {id: $('#idEliminar').val(), accion: 'eliminarPagos'},
+									url:   '../../ajax/ajax.php',
+									type:  'post',
+									beforeSend: function () {
+											
+									},
+									success:  function (response) {
+											url = "index.php";
+											$(location).attr('href',url);
+											
+									}
+							});
+						$( this ).dialog( "close" );
+						$( this ).dialog( "close" );
+							$('html, body').animate({
+	           					scrollTop: '1000px'
+	       					},
+	       					1500);
+				    },
+				    Cancelar: function() {
+						$( this ).dialog( "close" );
+				    }
+				}
+		 
+		 
+	 		}); //fin del dialogo para eliminar
+	<?php
+	} else {
+        
+        ?>
+		$('.varborrar').click(function(event){
+		  
+			alert("No posee permisos para eliminar un pago.");	
 
-
+		});//fin del boton eliminar
+		
+		<?php
+        
+        }
+        
+        ?>
+	
+	
 	function traerFacturas() {
 		
 		$.ajax({

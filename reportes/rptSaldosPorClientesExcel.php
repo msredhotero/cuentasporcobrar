@@ -80,7 +80,7 @@ $objPHPExcel->getProperties()
 ->setCategory("Excel");
 
 
-$tituloReporte = "Reporte Saldos de Clientes";
+$tituloReporte = "Estado de Cuenta";
 $tituloReporte2 = "Empresa: ".strtoupper($empresa); 
 $tituloReporte3 = "Cliente: ".strtoupper($cliente); 
 $tituloReporte4 = "Fecha: ".date('Y-m-d'); 

@@ -111,9 +111,9 @@ $resBancos		=		$serviciosEmpresaBancos->traerEmpresaBancosPorEmpresa($_SESSION['
                 </tr>
             	<tr>
                 	<th>CORREO ELECTRONICO</th>
-                    <td colspan="2"><?php echo strtoupper(mysql_result($resEmpresa,0,'email')); ?></td>
+                    <td colspan="2"><?php echo (mysql_result($resEmpresa,0,'email')); ?></td>
                     <th>CONTRASEÑA</th>
-                    <td colspan="2"><?php echo strtoupper(mysql_result($resEmpresa,0,'contrasenia')); ?></td>
+                    <td colspan="2"><?php echo (mysql_result($resEmpresa,0,'contrasenia')); ?></td>
                 </tr>
                 
                 <tr>
@@ -136,6 +136,10 @@ $resBancos		=		$serviciosEmpresaBancos->traerEmpresaBancosPorEmpresa($_SESSION['
                 <tr>
             		<th>GIRO</th>
             		<td colspan="5"><?php echo strtoupper(mysql_result($resEmpresa,0,'giro')); ?></td>
+            	</tr>
+                <tr>
+            		<th>OBJETO</th>
+            		<td colspan="5"><?php echo strtoupper(mysql_result($resEmpresa,0,'objetoempresa')); ?></td>
             	</tr>
 
             	<tr>
@@ -162,8 +166,8 @@ $resBancos		=		$serviciosEmpresaBancos->traerEmpresaBancosPorEmpresa($_SESSION['
            			<th>COMISARIO</th>
                     <td><?php echo strtoupper(mysql_result($resEmpresa,0,'comisario')); ?></td>
                     <th>USUARIO</th>
-                    <td colspan="2"><?php echo strtoupper(mysql_result($resEmpresa,0,'usuario')); ?></td>
-                    <td><?php echo strtoupper(mysql_result($resEmpresa,0,'contrasenia')); ?></td>
+                    <td colspan="2"><?php echo (mysql_result($resEmpresa,0,'usuario')); ?></td>
+                    <td><?php echo (mysql_result($resEmpresa,0,'contraseniaemail')); ?></td>
             	</tr>
                 
                 <tr>
@@ -174,6 +178,10 @@ $resBancos		=		$serviciosEmpresaBancos->traerEmpresaBancosPorEmpresa($_SESSION['
                 <tr>
             		<th>RPP</th>
             		<td colspan="5"><?php echo strtoupper(mysql_result($resEmpresa,0,'rpp')); ?></td>
+            	</tr>
+                <tr>
+            		<th>CUENTA</th>
+            		<td colspan="5"><?php echo (mysql_result($resEmpresa,0,'cuenta')); ?></td>
             	</tr>
             <?php while ($row = mysql_fetch_array($resBancos)) { ?>
             	<tr>

@@ -75,7 +75,7 @@ $objPHPExcel->getProperties()
 $tituloReporte = "Reporte General de Facturación";
 $tituloReporte2 = "Empresa: ".strtoupper($empresa); 
 $tituloReporte3 = "Fecha: ".date('Y-m-d');
-$titulosColumnas = array("Factura", "Cliente", "Referencia","Fecha", "Importe", "Abonos", "Saldo");
+$titulosColumnas = array("Factura", "Cliente", "Referencia de Pago","Fecha", "Importe", "Abonos", "Saldo");
 
 $objPHPExcel->setActiveSheetIndex(0)
     ->mergeCells('A1:G1');

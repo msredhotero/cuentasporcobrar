@@ -269,6 +269,10 @@ if ($_SESSION['idroll_predio'] != 1) {
 
 
 </div>
+<?php 
+        
+if ($_SESSION['idroll_predio'] == 1) {
+?>
 <div id="dialog2" title="Eliminar Pago">
     	<p>
         	<span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
@@ -277,6 +281,9 @@ if ($_SESSION['idroll_predio'] != 1) {
         <p><strong>Importante: </strong>Si elimina el equipo se perderan todos los datos de este</p>
         <input type="hidden" value="" id="idEliminar" name="idEliminar">
 </div>
+<?php
+}
+?>
 <script type="text/javascript" src="../../js/jquery.dataTables.min.js"></script>
 <script src="../../bootstrap/js/dataTables.bootstrap.js"></script>
 <script src="../../js/bootstrap-datetimepicker.min.js"></script>
@@ -342,7 +349,7 @@ $(document).ready(function(){
         
         if ($_SESSION['idroll_predio'] == 1) {
         ?>
-	$('.varborrar').click(function(event){
+		$('.varborrar').click(function(event){
 		  usersid =  $(this).attr("id");
 		  if (!isNaN(usersid)) {
 			$("#idEliminar").val(usersid);
@@ -354,7 +361,7 @@ $(document).ready(function(){
 		  } else {
 			alert("Error, vuelva a realizar la acción.");	
 		  }
-	});//fin del boton eliminar
+		});//fin del boton eliminar
 	
         $( "#dialog2" ).dialog({
 		 	
@@ -394,6 +401,17 @@ $(document).ready(function(){
 		 
 	 		}); //fin del dialogo para eliminar
         <?php
+        
+        } else {
+        
+        ?>
+		$('.varborrar').click(function(event){
+		  
+			alert("No posee permisos para eliminar un pago.");	
+
+		});//fin del boton eliminar
+		
+		<?php
         
         }
         

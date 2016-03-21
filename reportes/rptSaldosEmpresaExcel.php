@@ -81,7 +81,7 @@ $tituloReporte = "Reporte Saldos de Clientes";
 $tituloReporte2 = "Fecha: ".date('Y-m-d'); 
 
 //$titulosColumnas = array("Nombre", "Cargos", "Abonos", "Saldo");
-$titulosColumnas = array("Nombre", "Cargos", "Abonos", "Saldo");
+$titulosColumnas = array("Empresa", "Cargos", "Abonos", "Saldo");
 
 	
 

@@ -122,6 +122,17 @@ function ingresosFacturacion($header, $data, &$TotalIngresos)
 	$TotalIngresos = $TotalIngresos + $total;
 }
 
+//Pie de página
+function Footer()
+{
+
+$this->SetY(-10);
+
+$this->SetFont('Arial','I',8);
+
+$this->Cell(0,10,'Pagina '.$this->PageNo()." - Fecha: ".date('Y-m-d'),0,0,'C');
+}
+
 }
 
 
@@ -145,7 +156,7 @@ $pdf->Ln();
 $pdf->SetFont('Arial','U',14);
 $pdf->Cell(180,7,"Empresa: ".strtoupper($empresa),0,0,'C',false);
 $pdf->Ln();
-$pdf->Cell(180,7,'Fecha: '.date('Y-m-d'),0,0,'C',false);
+$pdf->Cell(180,7,'Fecha: desde '.$fechadesde." hasta ".$fechahasta,0,0,'C',false);
 $pdf->Ln();
 
 $pdf->SetFont('Arial','',10);
@@ -153,7 +164,7 @@ $pdf->SetFont('Arial','',10);
 $pdf->ingresosFacturacion($headerFacturacion,$datos,$TotalFacturacion);
 
 $pdf->Ln();
-
+$pdf->Footer();
 $pdf->SetFont('Arial','',13);
 
 $nombreTurno = "rptSaldosClientesEmpresas-".$fecha.".pdf";
