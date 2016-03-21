@@ -31,8 +31,8 @@ $resMenu = $serviciosHTML->menu(utf8_encode($_SESSION['nombre_predio']),"Empresa
 /////////////////////// Opciones para la creacion del formulario  /////////////////////
 $tabla 			= "dbempresasbancos";
 
-$lblCambio	 	= array("refempresa");
-$lblreemplazo	= array("Empresa");
+$lblCambio	 	= array("refempresa","clave");
+$lblreemplazo	= array("Empresa","Clabe");
 
 
 $resEmpresa 	= $serviciosEmpresas->traerEmpresasPorId($_SESSION['usua_idempresa']);
@@ -59,7 +59,8 @@ $cabeceras 		= "	<th>Empresa</th>
 				<th>Banco</th>
 				<th>Sucursal</th>
 				<th>Cuenta</th>
-				<th>Clave</th>";
+				<th>Clabe</th>
+				<th>Activo</th>";
 
 //////////////////////////////////////////////  FIN de los opciones //////////////////////////
 
@@ -68,7 +69,7 @@ $cabeceras 		= "	<th>Empresa</th>
 
 $formulario 	= $serviciosFunciones->camposTabla("insertarEmpresaBancos",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
 
-$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosEmpresaBancos->traerEmpresaBancosPorEmpresa($_SESSION['usua_idempresa']),5);
+$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosEmpresaBancos->traerEmpresaBancosPorEmpresa($_SESSION['usua_idempresa']),6);
 
 
 

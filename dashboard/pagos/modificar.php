@@ -30,6 +30,15 @@ $fecha = date('Y-m-d');
 //$resProductos = $serviciosProductos->traerProductosLimite(6);
 $resMenu = $serviciosHTML->menu(utf8_encode($_SESSION['nombre_predio']),"Pagos",$_SESSION['refroll_predio'],utf8_encode($_SESSION['usua_empresa']));
 
+$id				=	$_GET['id'];
+
+$resResultado	=	$serviciosPagos->traerPagosFactPorId($id);
+
+$fecha 		= mysql_result($resResultado,0,'fechapago');
+$saldo 		= mysql_result($resResultado,0,'saldo');
+$total 		= mysql_result($resResultado,0,'total');
+$nroFactura = mysql_result($resResultado,0,'nrofactura');
+$idFactura  = mysql_result($resResultado,0,'reffactura');
 
 /////////////////////// Opciones para la creacion del formulario  /////////////////////
 $tabla 			= "dbpagos";
@@ -59,23 +68,8 @@ while ($rowTT = mysql_fetch_array($resCliente)) {
 ////////////////////////////////////////////////////////////////////////////////////////
 
 
-/////////////////////// Opciones para la creacion del view  /////////////////////
-$cabeceras 		= "<th>Empresa</th>
-				<th>Cliente</th>
-				<th>Nro Factura</th>
-				<th>Fecha Pago</th>
-				<th>Abono</th>
-				<th>Referencia</th>
-				<th>Comentario</th>
-				<th>Estatus</th>
-				";
-
-//////////////////////////////////////////////  FIN de los opciones //////////////////////////
-
-$formulario 	= $serviciosFunciones->camposTabla("insertarPagos",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
-
-
-$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosPagos->traerPagosFacturas(),8);
+//$formulario 	= $serviciosFunciones->camposTabla("insertarPagos",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
+$formulario 	= $serviciosFunciones->camposTablaModificar($id, "idpago", "modificarPagos",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
 
 
 
@@ -120,10 +114,7 @@ if ($_SESSION['refroll_predio'] != 1) {
     <!-- Latest compiled and minified JavaScript -->
     <script src="../../bootstrap/js/bootstrap.min.js"></script>
 
-	<style type="text/css">
-
-		
-	</style>
+	
     
    
    <link href="../../css/perfect-scrollbar.css" rel="stylesheet">
@@ -136,6 +127,13 @@ if ($_SESSION['refroll_predio'] != 1) {
         $('#navigation').perfectScrollbar();
       });
     </script>
+    <style type="text/css">
+		#example2 tr {
+   max-height: 35px !important;
+   height: 35px !important;
+}
+		
+	</style>
 </head>
 
 <body>
@@ -153,29 +151,19 @@ if ($_SESSION['refroll_predio'] != 1) {
         </div>
     	<div class="cuerpoBox">
         	<form class="form-inline formulario" role="form">
-        	<div class="row">
-            	<div class="form-group col-md-6">
-                    <label class="control-label" style="text-align:left" for="refcliente">Seleccione el Cliente</label>
-                    <div class="input-group col-md-12">
-                    	<select id="refcliente" class="form-control" name="refcliente">
-							<option value="0">-----Seleccionar-----</option>
-							<?php echo $cadRefC; ?>
-                    	</select>
-                    </div>
-                </div>
-            </div>
+        	
             <div class="row">
             	<div class="form-group col-md-12">
-                	<label class="control-label" style="text-align:left" for="facturas">Facturas</label>
+                	<label class="control-label" style="text-align:left" for="facturas">Factura</label>
                     <div class="input-group col-md-12 lstFacturas">
-                    	
+                    	<p>NºFactura: <?php echo $nroFactura; ?></p>
                     </div>
                 </div>
                 <div class="form-group col-md-6">
                 	<label class="control-label" style="text-align:left" for="facturas">Total a Pagar</label>
                     <div class="input-group col-md-7">
                     	<span class="input-group-addon">$</span>
-                        <input class="form-control" type="text" value="0" name="total" id="total" readonly>
+                        <input class="form-control" type="text" value="<?php echo $total; ?>" name="total" id="total" readonly>
                         <span class="input-group-addon">.00</span>
                     </div>
                 </div>
@@ -184,7 +172,7 @@ if ($_SESSION['refroll_predio'] != 1) {
                 	<label class="control-label" style="text-align:left" for="facturas">Saldo</label>
                     <div class="input-group col-md-7">
                     	<span class="input-group-addon">$</span>
-                        <input class="form-control" type="text" value="0" name="saldo" id="saldo" readonly>
+                        <input class="form-control" type="text" value="<?php echo $saldo; ?>" name="saldo" id="saldo" readonly>
                         <span class="input-group-addon">.00</span>
                     </div>
                 </div>
@@ -195,6 +183,9 @@ if ($_SESSION['refroll_predio'] != 1) {
             <div class="row">
 			<?php echo $formulario; ?>
             <input type="hidden" id="refempresa" name="refempresa" value="<?php echo $_SESSION['usua_idempresa']; ?>" />
+            <input type="hidden" id="idfactura" name="idfactura" value="<?php echo $idFactura; ?>" />
+            
+            
             </div>
             
             <div class='row' style="margin-left:25px; margin-right:25px;">
@@ -210,7 +201,13 @@ if ($_SESSION['refroll_predio'] != 1) {
                 <div class="col-md-12">
                 <ul class="list-inline" style="margin-top:15px;">
                     <li>
-                        <button type="button" class="btn btn-primary" id="cargar" style="margin-left:0px;">Guardar</button>
+                        <button type="button" class="btn btn-warning" id="cargar" style="margin-left:0px;">Modificar</button>
+                    </li>
+                    <li>
+                        <button type="button" class="btn btn-danger varborrar" id="<?php echo $id; ?>" style="margin-left:0px;">Eliminar</button>
+                    </li>
+                    <li>
+                        <button type="button" class="btn btn-default volver" style="margin-left:0px;">Volver</button>
                     </li>
                 </ul>
                 </div>
@@ -219,15 +216,6 @@ if ($_SESSION['refroll_predio'] != 1) {
     	</div>
     </div>
     
-    <div class="boxInfoLargo">
-        <div id="headBoxInfo">
-        	<p style="color: #fff; font-size:18px; height:16px;">Pagos Cargados</p>
-        	
-        </div>
-    	<div class="cuerpoBox">
-        	<?php echo $lstCargados; ?>
-    	</div>
-    </div>
     
     
 
@@ -238,7 +226,7 @@ if ($_SESSION['refroll_predio'] != 1) {
 
 
 </div>
-<div id="dialog2" title="Eliminar Equipos">
+<div id="dialog2" title="Eliminar Pago">
     	<p>
         	<span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
             ¿Esta seguro que desea eliminar el Pago?.<span id="proveedorEli"></span>
@@ -254,17 +242,12 @@ if ($_SESSION['refroll_predio'] != 1) {
 <script type="text/javascript">
 $(document).ready(function(){
 	
-	
-        $('.volver').click(function(event){
+	$('.volver').click(function(event){
 		 
 		url = "index.php";
 		$(location).attr('href',url);
 	});//fin del boton modificar
-        
-        <?php 
-        
-        if ($_SESSION['idroll_predio'] == 1) {
-        ?>
+	
 	$('.varborrar').click(function(event){
 		  usersid =  $(this).attr("id");
 		  if (!isNaN(usersid)) {
@@ -279,66 +262,15 @@ $(document).ready(function(){
 		  }
 	});//fin del boton eliminar
 	
-	
-        $( "#dialog2" ).dialog({
-		 	
-            autoOpen: false,
-                resizable: false,
-                width:600,
-                height:240,
-                modal: true,
-                buttons: {
-                    "Eliminar": function() {
 
-                                $.ajax({
-                                                        data:  {id: $('#idEliminar').val(), accion: 'eliminarPagos'},
-                                                        url:   '../../ajax/ajax.php',
-                                                        type:  'post',
-                                                        beforeSend: function () {
-
-                                                        },
-                                                        success:  function (response) {
-                                                                        url = "index.php";
-                                                                        $(location).attr('href',url);
-
-                                                        }
-                                        });
-                                $( this ).dialog( "close" );
-                                $( this ).dialog( "close" );
-                                        $('html, body').animate({
-                                        scrollTop: '1000px'
-                                },
-                                1500);
-                    },
-                    Cancelar: function() {
-                                $( this ).dialog( "close" );
-                    }
-                }
-
-
-        }); //fin del dialogo para eliminar
-	<?php
-        
-        }
-        
-        ?>
-	
-	$("#example").on("click",'.varmodificar', function(){
-		  usersid =  $(this).attr("id");
-		  if (!isNaN(usersid)) {
-			
-			url = "modificar.php?id=" + usersid;
-			$(location).attr('href',url);
-		  } else {
-			alert("Error, vuelva a realizar la acción.");	
-		  }
-	});//fin del boton modificar
 
 	function traerFacturas() {
 		
 		$.ajax({
 				data:  {refcliente: $('#refcliente').val(),
 						refempresa: <?php echo $_SESSION['usua_idempresa']; ?>,
+						fechainicio: $('#fechainicio').val(),
+						fechafin: $('#fechafin').val(),
 						forma: 'check',
 						accion: 'traerFacturasPorClienteEmpresa'},
 				url:   '../../ajax/ajax.php',
@@ -390,8 +322,9 @@ $(document).ready(function(){
 		}
 	});//fin de los check
 
-	$('#refcliente').change( function() {
+	$('#buscar').click( function() {
 		$('#total').val(0);
+		$('#saldo').val(0);
 		traerFacturas();
 		
 	});
@@ -444,8 +377,8 @@ $(document).ready(function(){
 												
 											});
 											$("#load").html('');
-											url = "index.php";
-											$(location).attr('href',url);
+											//url = "index.php";
+											//$(location).attr('href',url);
                                             
 											
                                         } else {
@@ -467,6 +400,7 @@ $(document).ready(function(){
 });
 </script>
 <script type="text/javascript">
+/*
 $('.form_date').datetimepicker({
 	language:  'es',
 	weekStart: 1,
@@ -478,7 +412,37 @@ $('.form_date').datetimepicker({
 	forceParse: 0,
 	format: 'dd/mm/yyyy'
 });
+*/
 </script>
+
+<script>
+  $(function() {
+	  $.datepicker.regional['es'] = {
+ closeText: 'Cerrar',
+ prevText: '<Ant',
+ nextText: 'Sig>',
+ currentText: 'Hoy',
+ monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+ monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
+ dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+ dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
+ dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
+ weekHeader: 'Sm',
+ dateFormat: 'dd/mm/yy',
+ firstDay: 1,
+ isRTL: false,
+ showMonthAfterYear: false,
+ yearSuffix: ''
+ };
+ $.datepicker.setDefaults($.datepicker.regional['es']);
+ 
+    $( "#fechapago" ).datepicker();
+    $( "#fechapago" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+	$('#fechapago').datepicker('setDate', <?php echo "'".$fecha."'"; ?>);
+	
+
+  });
+  </script>
 <?php } ?>
 </body>
 </html>

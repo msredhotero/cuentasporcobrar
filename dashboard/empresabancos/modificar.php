@@ -36,8 +36,8 @@ $resResultado = $serviciosEmpresaBancos->traerEmpresaBancosPorId($id);
 /////////////////////// Opciones para la creacion del formulario  /////////////////////
 $tabla 			= "dbempresasbancos";
 
-$lblCambio	 	= array("refempresa");
-$lblreemplazo	= array("Empresa");
+$lblCambio	 	= array("refempresa","clave");
+$lblreemplazo	= array("Empresa","Clabe");
 
 
 $resEmpresa 	= $serviciosEmpresas->traerEmpresasPorId($_SESSION['usua_idempresa']);

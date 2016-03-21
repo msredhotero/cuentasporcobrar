@@ -181,7 +181,7 @@ $resBancos		=		$serviciosEmpresaBancos->traerEmpresaBancosPorEmpresa($_SESSION['
                     <td align="center"><?php echo $row['banco']."/".$row['sucursal']; ?></td>
                     <th>CUENTA</th>
                     <td align="center"><?php echo $row['cuenta']; ?></td>
-                    <th>CLAVE</th>
+                    <th>CLABE</th>
                     <td align="center"><?php echo $row['clave']; ?></td>
                 </tr>
             <?php } ?>
