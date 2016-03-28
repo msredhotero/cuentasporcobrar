@@ -7,7 +7,7 @@
 
 date_default_timezone_set('America/Buenos_Aires');
 
-class ServiciosSocios {
+class ServiciosSociosEmpresas {
 
 function GUID()
 {
@@ -20,65 +20,47 @@ function GUID()
 }
 
 
-/* PARA Socios */
+/* PARA SociosEmpresas */
 
-function insertarSocios($reftiposocio,$nombre,$domicilio,$curp,$rfc) { 
-$sql = "insert into dbsocios(idsocio,reftiposocio,nombre,domicilio,curp,rfc) 
-values ('',".$reftiposocio.",'".utf8_decode($nombre)."','".utf8_decode($domicilio)."','".utf8_decode($curp)."','".utf8_decode($rfc)."')"; 
+function insertarSociosEmpresas($refsocio,$refempresa) { 
+$sql = "insert into dbsociosempresas(iddbsocioempresa,refsocio,refempresa) 
+values ('',".$refsocio.",".$refempresa.")"; 
 $res = $this->query($sql,1); 
 return $res; 
 } 
 
 
-function modificarSocios($id,$reftiposocio,$nombre,$domicilio,$curp,$rfc) { 
-$sql = "update dbsocios 
+function modificarSociosEmpresas($id,$refsocio,$refempresa) { 
+$sql = "update dbsociosempresas 
 set 
-reftiposocio = ".$reftiposocio.",nombre = '".utf8_decode($nombre)."',domicilio = '".utf8_decode($domicilio)."',curp = '".utf8_decode($curp)."',rfc = '".utf8_decode($rfc)."' 
-where idsocio =".$id; 
+refsocio = ".$refsocio.",refempresa = ".$refempresa." 
+where iddbsocioempresa =".$id; 
 $res = $this->query($sql,0); 
 return $res; 
 } 
 
 
-function eliminarSocios($id) { 
-$sql = "delete from dbsocios where idsocio =".$id; 
+function eliminarSociosEmpresas($id) { 
+$sql = "delete from dbsociosempresas where iddbsocioempresa =".$id; 
 $res = $this->query($sql,0); 
 return $res; 
 } 
 
 
-function traerSocios() { 
-$sql = "select s.idsocio, s.nombre, s.domicilio, s.curp, s.rfc, ts.tiposocio ,s.reftiposocio
-		from dbsocios s 
-		inner join tbtiposocios ts on ts.idtiposocio = s.reftiposocio
-		where ts.activo = 1
-		order by 3"; 
+function traerSociosEmpresas() { 
+$sql = "select iddbsocioempresa,refsocio,refempresa from dbsociosempresas order by 1"; 
 $res = $this->query($sql,0); 
 return $res; 
 } 
 
 
-function traerSociosPorId($id) { 
-$sql = "select idsocio,reftiposocio,nombre,domicilio,curp,rfc from dbsocios where idsocio =".$id; 
-$res = $this->query($sql,0); 
-return $res; 
-}
-
-function traerSociosPorEmpresa($idempresa) { 
-$sql = "select s.idsocio, s.nombre, s.domicilio, s.curp, s.rfc, ts.tiposocio ,s.reftiposocio
-		from dbsocios s 
-		inner join tbtiposocios ts on ts.idtiposocio = s.reftiposocio
-		inner join dbsociosempresas se on se.refsocio = s.idsocio
-		inner join dbempresas e on se.refempresa = e.idempresa
-		where ts.activo = 1 and e.idempresa = ".$idempresa."
-		order by 3"; 
+function traerSociosEmpresasPorId($id) { 
+$sql = "select iddbsocioempresa,refsocio,refempresa from dbsociosempresas where iddbsocioempresa =".$id; 
 $res = $this->query($sql,0); 
 return $res; 
 } 
- 
 
 /* Fin */
-
 function query($sql,$accion) {
 		
 		

@@ -11,6 +11,7 @@ include ('../includes/funcionesFacturas.php');
 include ('../includes/funcionesPagos.php');
 include ('../includes/funcionesTipoSocios.php');
 include ('../includes/funcionesSocios.php');
+include ('../includes/funcionesSociosEmpresas.php');
 
 $serviciosUsuarios  		= new ServiciosUsuarios();
 $serviciosFunciones 		= new Servicios();
@@ -22,6 +23,8 @@ $serviciosEmpresaBancos		= new ServiciosEmpresaBancos();
 $serviciosFacturas			= new ServiciosFacturas();
 $serviciosPagos				= new ServiciosPagos();
 $serviciosTipoSocios		= new ServiciosTipoSocios();
+$serviciosSocios			= new ServiciosSocios();
+$serviciosSociosEmpresas	= new ServiciosSociosEmpresas();
 
 $accion = $_POST['accion'];
 
@@ -140,6 +143,45 @@ modificarEmpresaBancos($serviciosEmpresaBancos);
 break; 
 case 'eliminarEmpresaBancos': 
 eliminarEmpresaBancos($serviciosEmpresaBancos); 
+break; 
+
+/* Fin */
+
+/* PARA Socios */
+case 'insertarSocios': 
+insertarSocios($serviciosSocios,$serviciosSociosEmpresas); 
+break; 
+case 'modificarSocios': 
+modificarSocios($serviciosSocios); 
+break; 
+case 'eliminarSocios': 
+eliminarSocios($serviciosSocios); 
+break; 
+
+/* Fin */
+
+/* PARA TipoSocios */
+case 'insertarTipoSocios': 
+insertarTipoSocios($serviciosTipoSocios); 
+break; 
+case 'modificarTipoSocios': 
+modificarTipoSocios($serviciosTipoSocios); 
+break; 
+case 'eliminarTipoSocios': 
+eliminarTipoSocios($serviciosTipoSocios); 
+break; 
+
+/* Fin */
+
+/* PARA SociosEmpresas */
+case 'insertarSociosEmpresas': 
+insertarSociosEmpresas($serviciosSociosEmpresas,$serviciosSociosEmpresas); 
+break; 
+case 'modificarSociosEmpresas': 
+modificarSociosEmpresas($serviciosSociosEmpresas); 
+break; 
+case 'eliminarSociosEmpresas': 
+eliminarSociosEmpresas($serviciosSociosEmpresas); 
 break; 
 
 /* Fin */
@@ -630,6 +672,95 @@ echo $res;
 } 
 
 /* Fin */
+
+
+
+/* PARA Socios */
+function insertarSocios($serviciosSocios, $serviciosSociosEmpresas) { 
+	$reftiposocio 	= $_POST['reftiposocio']; 
+	$nombre 		= $_POST['nombre']; 
+	$domicilio 		= $_POST['domicilio']; 
+	$curp 			= $_POST['curp']; 
+	$rfc 			= $_POST['rfc']; 
+	$refempresa 	= $_POST['refempresa']; 
+	
+	$res = $serviciosSocios->insertarSocios($reftiposocio,$nombre,$domicilio,$curp,$rfc); 
+	
+	if ((integer)$res > 0) { 
+		$serviciosSociosEmpresas->insertarSociosEmpresas($res,$refempresa);
+		echo ''; 
+	} else { 
+		echo 'Huvo un error al insertar datos';	
+	} 
+} 
+
+
+function modificarSocios($serviciosSocios) { 
+	$id = $_POST['id']; 
+	$reftiposocio = $_POST['reftiposocio']; 
+	$nombre = $_POST['nombre']; 
+	$domicilio = $_POST['domicilio']; 
+	$curp = $_POST['curp']; 
+	$rfc = $_POST['rfc']; 
+	
+	$res = $serviciosSocios->modificarSocios($id,$reftiposocio,$nombre,$domicilio,$curp,$rfc); 
+	
+	if ($res == true) { 
+		echo ''; 
+	} else { 
+		echo 'Huvo un error al modificar datos'; 
+	} 
+} 
+
+
+function eliminarSocios($serviciosSocios) { 
+$id = $_POST['id']; 
+$res = $serviciosSocios->eliminarSocios($id); 
+echo $res; 
+} 
+
+/* Fin */
+
+
+
+/* PARA TipoSocios */
+function insertarTipoSocios($serviciosTipoSocios) { 
+$tiposocio = $_POST['tiposocio']; 
+if (isset($_POST['activo'])) { 
+$activo	= 1; 
+} else { 
+$activo = 0; 
+} 
+$res = $serviciosTipoSocios->insertarTipoSocios($tiposocio,$activo); 
+if ((integer)$res > 0) { 
+echo ''; 
+} else { 
+echo 'Huvo un error al insertar datos';	
+} 
+} 
+function modificarTipoSocios($serviciosTipoSocios) { 
+$id = $_POST['id']; 
+$tiposocio = $_POST['tiposocio']; 
+if (isset($_POST['activo'])) { 
+$activo	= 1; 
+} else { 
+$activo = 0; 
+} 
+$res = $serviciosTipoSocios->modificarTipoSocios($id,$tiposocio,$activo); 
+if ($res == true) { 
+echo ''; 
+} else { 
+echo 'Huvo un error al modificar datos'; 
+} 
+} 
+function eliminarTipoSocios($serviciosTipoSocios) { 
+$id = $_POST['id']; 
+$res = $serviciosTipoSocios->eliminarTipoSocios($id); 
+echo $res; 
+} 
+
+/* Fin */
+
 
 ////////////////////////// FIN DE TRAER DATOS ////////////////////////////////////////////////////////////
 

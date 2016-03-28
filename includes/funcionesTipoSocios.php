@@ -53,6 +53,14 @@ $res = $this->query($sql,0);
 return $res; 
 } 
 
+function traerTipoSociosActivos() { 
+$sql = "select idtiposocio,tiposocio,activo from tbtiposocios 
+		where activo = 1
+		order by 1"; 
+$res = $this->query($sql,0); 
+return $res; 
+} 
+
 
 function traerTipoSociosPorId($id) { 
 $sql = "select idtiposocio,tiposocio,activo from tbtiposocios where idtiposocio =".$id; 
