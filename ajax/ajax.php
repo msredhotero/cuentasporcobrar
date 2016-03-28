@@ -9,6 +9,8 @@ include ('../includes/funcionesEmpresaClientes.php');
 include ('../includes/funcionesEmpresaBancos.php');
 include ('../includes/funcionesFacturas.php');
 include ('../includes/funcionesPagos.php');
+include ('../includes/funcionesTipoSocios.php');
+include ('../includes/funcionesSocios.php');
 
 $serviciosUsuarios  		= new ServiciosUsuarios();
 $serviciosFunciones 		= new Servicios();
@@ -19,6 +21,7 @@ $serviciosEmpresaClientes 	= new ServiciosEmpresaClientes();
 $serviciosEmpresaBancos		= new ServiciosEmpresaBancos();
 $serviciosFacturas			= new ServiciosFacturas();
 $serviciosPagos				= new ServiciosPagos();
+$serviciosTipoSocios		= new ServiciosTipoSocios();
 
 $accion = $_POST['accion'];
 
