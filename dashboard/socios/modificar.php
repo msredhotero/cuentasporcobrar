@@ -14,52 +14,60 @@ include ('../../includes/funcionesUsuarios.php');
 include ('../../includes/funcionesHTML.php');
 include ('../../includes/funcionesEmpresas.php');
 include ('../../includes/funcionesEmpresaBancos.php');
+include ('../../includes/funcionesTipoSocios.php');
+include ('../../includes/funcionesSocios.php');
 
 $serviciosFunciones = new Servicios();
 $serviciosUsuario 	= new ServiciosUsuarios();
 $serviciosHTML 		= new ServiciosHTML();
 $serviciosEmpresas  = new ServiciosEmpresas();
 $serviciosEmpresaBancos = new ServiciosEmpresaBancos();
-
+$serviciosTipoSocio		= new ServiciosTipoSocios();
+$serviciosSocios		= new ServiciosSocios();
 
 
 $fecha = date('Y-m-d');
 
 //$resProductos = $serviciosProductos->traerProductosLimite(6);
-$resMenu = $serviciosHTML->menu(utf8_encode($_SESSION['nombre_predio']),"Empresa-Bancos",$_SESSION['refroll_predio'],$_SESSION['usua_empresa']);
+$resMenu = $serviciosHTML->menu(utf8_encode($_SESSION['nombre_predio']),"Socios",$_SESSION['refroll_predio'],$_SESSION['usua_empresa']);
 
 
 $id = $_GET['id'];
 
-$resResultado = $serviciosEmpresaBancos->traerEmpresaBancosPorId($id);
+$resResultado = $serviciosSocios->traerSociosPorId($id);
 
 /////////////////////// Opciones para la creacion del formulario  /////////////////////
-$tabla 			= "dbempresasbancos";
+$tabla 			= "dbsocios";
 
-$lblCambio	 	= array("refempresa","clave");
-$lblreemplazo	= array("Empresa","Clabe");
+$lblCambio	 	= array("reftiposocio","curp","rfc","ife");
+$lblreemplazo	= array("Tipo Socio","CURP","RFC","IFE");
 
 
-$resEmpresa 	= $serviciosEmpresas->traerEmpresasPorId($_SESSION['usua_idempresa']);
+$resVariable1 	= $serviciosTipoSocio->traerTipoSociosActivos();
 
-$cadEmpresa = '';
-while ($rowFF = mysql_fetch_array($resEmpresa)) {
-	if ($rowFF[0] == $_SESSION['usua_idempresa']) {
-		$cadEmpresa = $cadEmpresa.'<option value="'.$rowFF[0].'" selected>'.utf8_encode($rowFF[1]).'</option>';
+$cadVariable1 = '';
+while ($rowV1 = mysql_fetch_array($resVariable1)) {
+	if ($rowV1[0] == mysql_result($resResultado,0,'reftiposocio')) {
+		$cadVariable1 = $cadVariable1.'<option value="'.$rowV1[0].'" selected>'.utf8_encode($rowV1[1]).'</option>';	
 	} else {
-		$cadEmpresa = $cadEmpresa.'<option value="'.$rowFF[0].'">'.utf8_encode($rowFF[1]).'</option>';	
+		$cadVariable1 = $cadVariable1.'<option value="'.$rowV1[0].'">'.utf8_encode($rowV1[1]).'</option>';	
 	}
 	
 }
 
-$refdescripcion = array(0=>$cadEmpresa);
-$refCampo 	=  array("refempresa");
+$refdescripcion = array(0=>$cadVariable1);
+$refCampo 	=  array("reftiposocio");
+
 //////////////////////////////////////////////  FIN de los opciones //////////////////////////
 
 
 
+$resNoticiasFotos = $serviciosSocios->TraerFotosNoticias($id);
 
-$formulario 	= $serviciosFunciones->camposTablaModificar($id, "idempresabanco", "modificarEmpresaBancos",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
+$cantidadImagenes = 0;
+$cantidadImagenes = mysql_num_rows($resNoticiasFotos);
+
+$formulario 	= $serviciosFunciones->camposTablaModificar($id, "idsocio", "modificarSocios",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
 
 
 if ($_SESSION['refroll_predio'] != 1) {
@@ -127,11 +135,11 @@ if ($_SESSION['refroll_predio'] != 1) {
 
 <div id="content">
 
-<h3>Empresa-Bancos</h3>
+<h3>Socios</h3>
 
     <div class="boxInfoLargo">
         <div id="headBoxInfo">
-        	<p style="color: #fff; font-size:18px; height:16px;">Modificar Banco</p>
+        	<p style="color: #fff; font-size:18px; height:16px;">Modificar Socios</p>
         	
         </div>
     	<div class="cuerpoBox">
@@ -141,6 +149,89 @@ if ($_SESSION['refroll_predio'] != 1) {
 			<?php echo $formulario; ?>
             </div>
             
+            <div class="row" style="margin-left:25px; margin-right:25px;">
+                <h3>Imagenes Cargadas</h3>
+                    <ul class="list-inline">
+                        <?php while ($rowImg = mysql_fetch_array($resNoticiasFotos)) { ?>
+                        <li>
+                            
+                            <div class="col-md-4" align="center">
+                            <div id="img<?php echo $rowImg[3]; ?>">
+                            	<?php 
+									$mystring = $rowImg['type'];
+									$findme   = 'image';
+									$pos = strpos($mystring, $findme);
+									if ($pos !== false) { 
+								?>
+                                <img src="<?php echo '../../archivos/'.$rowImg[0].'/'.$rowImg[1].'/'.utf8_encode($rowImg[2]) ?>" width="100" height="100">
+                                <?php } else { ?>
+                                <img src="../../imagenes/pdf_ico2.jpg" width="100" height="100"><?php echo $rowImg['imagen']; ?>
+                                <?php } ?>
+                            </div>
+                            <input type="button" name="eliminar" id="<?php echo $rowImg[3]; ?>" class="btn btn-danger eliminar" value="Eliminar">
+                            </div>
+                            
+                        </li>
+                        <?php } ?>
+                    </ul>
+            </div>
+            
+            <div class="row" style="margin-left:25px; margin-right:25px;">
+                	<h4>Agregar Imagenes/Archivos</h4>
+                        <p style=" color: #999;">4 Imagenes/Archivos disponibles (no más de 1 mb por archivo)</p>
+                        <div style="height:auto; 
+                    			width:100%; 
+                                background-color:#FFF;
+                                -webkit-border-radius: 13px; 
+                            	-moz-border-radius: 13px;
+                            	border-radius: 13px;
+                                margin-left:-20px;
+                                padding-left:20px;">
+
+                            
+			<ul class="list-inline">
+						<?php for($i=1;$i<=4-$cantidadImagenes;$i=$i+2) { ?>
+                        <li style="margin-top:14px;">
+                        <div style=" height:110px; width:140px; border:2px dashed #CCC; text-align:center; overflow: auto;">
+                            <div class='custom-input-file'>
+                                <input type="file" name="imagen<?php echo $i; ?>" id="imagen<?php echo $i; ?>">
+                                <img src="../../imagenes/clip20.jpg">
+                                <div class="files">...</div>
+                            </div>
+                            
+                            <img id="vistaPrevia<?php echo $i; ?>" name="vistaPrevia<?php echo $i; ?>" width="50" height="50"/>
+                        </div>
+                        <div style="height:14px;">
+                            
+                        </div>
+                        <?php if ($i<4-$cantidadImagenes) { ?>
+                        <div style=" height:110px; width:140px; border:2px dashed #CCC; text-align:center; overflow: auto;">
+                            <div class='custom-input-file'>
+                                <input type="file" name="imagen<?php echo $i+1; ?>" id="imagen<?php echo $i+1; ?>">
+                                <img src="../../imagenes/clip20.jpg">
+                                <div class="files">...</div>
+                            </div>
+                            <img id="vistaPrevia<?php echo $i+1; ?>" name="vistaPrevia<?php echo $i+1; ?>" width="50" height="50"/>
+                        </div>
+                        <?php } ?>
+                            
+                        </li>
+                        <?php } ?>
+                       
+                        
+                        
+                        
+                        </ul>
+                        
+                        
+                        
+                        
+                        
+                        
+                       
+            </div>
+                
+            <input type="hidden" id="cantidadImagenes" name="cantidadImagenes" value="<?php echo $cantidadImagenes; ?>">
             
             <div class='row' style="margin-left:25px; margin-right:25px;">
                 <div class='alert'>
@@ -177,10 +268,10 @@ if ($_SESSION['refroll_predio'] != 1) {
 
 </div>
 
-<div id="dialog2" title="Eliminar Empresa-Banco">
+<div id="dialog2" title="Eliminar Socios">
     	<p>
         	<span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
-            ¿Esta seguro que desea eliminar el banco?.<span id="proveedorEli"></span>
+            ¿Esta seguro que desea eliminar el Socio?.<span id="proveedorEli"></span>
         </p>
 
         <input type="hidden" value="" id="idEliminar" name="idEliminar">
@@ -222,7 +313,7 @@ $(document).ready(function(){
 				    "Eliminar": function() {
 	
 						$.ajax({
-									data:  {id: $('#idEliminar').val(), accion: 'eliminarEmpresaBancos'},
+									data:  {id: $('#idEliminar').val(), accion: 'eliminarSocios'},
 									url:   '../../ajax/ajax.php',
 									type:  'post',
 									beforeSend: function () {
@@ -288,7 +379,7 @@ $(document).ready(function(){
                                             $(".alert").removeClass("alert-danger");
 											$(".alert").removeClass("alert-info");
                                             $(".alert").addClass("alert-success");
-                                            $(".alert").html('<strong>Ok!</strong> Se modifico exitosamente el <strong>Banco</strong> de la Empresa. ');
+                                            $(".alert").html('<strong>Ok!</strong> Se modifico exitosamente el <strong>Socio</strong> de la Empresa. ');
 											$(".alert").delay(3000).queue(function(){
 												/*aca lo que quiero hacer 
 												  después de los 2 segundos de retraso*/
@@ -315,9 +406,143 @@ $(document).ready(function(){
 			});
 		}
     });
+	
+	
+	$('.eliminar').click(function(event){
+                
+			  usersid =  $(this).attr("id");
+			  imagenId = 'img'+usersid;
+			  
+			  if (!isNaN(usersid)) {
+				$("#idAgente").val(usersid);
+                                //$('#vistaPrevia30').attr('src', e.target.result);
+				$("#auxImg").html($('#'+imagenId).html());
+				$("#dialog3").dialog("open");
+				//url = "../clienteseleccionado/index.php?idcliente=" + usersid;
+				//$(location).attr('href',url);
+			  } else {
+				alert("Error, vuelva a realizar la acción.");	
+			  }
+			  
+			  //post code
+	});
+	
+	$( "#dialog3" ).dialog({
+		 	
+			    autoOpen: false,
+			 	resizable: false,
+				width:600,
+				height:340,
+				modal: true,
+				buttons: {
+				    "Eliminar": function() {
+	
+						$.ajax({
+									data:  {id: $("#idAgente").val(), accion: 'eliminarFoto'},
+									url:   '../../ajax/ajax.php',
+									type:  'post',
+									beforeSend: function () {
+											
+									},
+									success:  function (response) {
+											url = "modificar.php?id=<?php echo $id; ?>";
+											$(location).attr('href',url);
+											
+									}
+							});
+						$( this ).dialog( "close" );
+						$( this ).dialog( "close" );
+							$('html, body').animate({
+	           					scrollTop: '1000px'
+	       					},
+	       					1500);
+				    },
+				    Cancelar: function() {
+						$( this ).dialog( "close" );
+				    }
+				}
+		 
+		 
+	});
+	
+	$('#imagen1').on('change', function(e) {
+  var Lector,
+      oFileInput = this;
+ 
+  if (oFileInput.files.length === 0) {
+    return;
+  };
+ 
+  Lector = new FileReader();
+  Lector.onloadend = function(e) {
+    $('#vistaPrevia1').attr('src', e.target.result);         
+  };
+  Lector.readAsDataURL(oFileInput.files[0]);
+ 
+});
+
+$('#imagen2').on('change', function(e) {
+  var Lector,
+      oFileInput = this;
+ 
+  if (oFileInput.files.length === 0) {
+    return;
+  };
+ 
+  Lector = new FileReader();
+  Lector.onloadend = function(e) {
+    $('#vistaPrevia2').attr('src', e.target.result);         
+  };
+  Lector.readAsDataURL(oFileInput.files[0]);
+ 
+});
+
+$('#imagen3').on('change', function(e) {
+  var Lector,
+      oFileInput = this;
+ 
+  if (oFileInput.files.length === 0) {
+    return;
+  };
+ 
+  Lector = new FileReader();
+  Lector.onloadend = function(e) {
+    $('#vistaPrevia3').attr('src', e.target.result);         
+  };
+  Lector.readAsDataURL(oFileInput.files[0]);
+ 
+});
+
+$('#imagen4').on('change', function(e) {
+  var Lector,
+      oFileInput = this;
+ 
+  if (oFileInput.files.length === 0) {
+    return;
+  };
+ 
+  Lector = new FileReader();
+  Lector.onloadend = function(e) {
+    $('#vistaPrevia4').attr('src', e.target.result);         
+  };
+  Lector.readAsDataURL(oFileInput.files[0]);
+ 
+});
+
 
 });
 </script>
+
+<div id="dialog3" title="Eliminar Imagen">
+    	<p>
+        	<span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+            ¿Esta seguro que desea eliminar la imagen?.
+        </p>
+        <div id="auxImg">
+        
+        </div>
+        <input type="hidden" value="" id="idAgente" name="idAgente">
+</div>
 <?php } ?>
 </body>
 </html>

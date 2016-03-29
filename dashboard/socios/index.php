@@ -35,8 +35,8 @@ $resMenu = $serviciosHTML->menu(utf8_encode($_SESSION['nombre_predio']),"Socios"
 /////////////////////// Opciones para la creacion del formulario  /////////////////////
 $tabla 			= "dbsocios";
 
-$lblCambio	 	= array("reftiposocio","curp","rfc");
-$lblreemplazo	= array("Tipo Socio","CURP","RFC");
+$lblCambio	 	= array("reftiposocio","curp","rfc","ife");
+$lblreemplazo	= array("Tipo Socio","CURP","RFC","IFE");
 
 
 $resVariable1 	= $serviciosTipoSocio->traerTipoSociosActivos();
@@ -55,7 +55,8 @@ $refCampo 	=  array("reftiposocio");
 
 
 /////////////////////// Opciones para la creacion del view  /////////////////////
-$cabeceras 		= "	<th>Nombre</th>
+$cabeceras 		= "	<th>IFE</th>
+				<th>Nombre</th>
 				<th>Domicilio</th>
 				<th>CURP</th>
 				<th>RFC</th>
@@ -68,7 +69,7 @@ $cabeceras 		= "	<th>Nombre</th>
 
 $formulario 	= $serviciosFunciones->camposTabla("insertarSocios",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
 
-$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosSocios->traerSociosPorEmpresa($_SESSION['usua_idempresa']),5);
+$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosSocios->traerSociosPorEmpresa($_SESSION['usua_idempresa']),96);
 
 
 
@@ -151,6 +152,77 @@ if ($_SESSION['refroll_predio'] != 1) {
             <input type="hidden" id="refempresa" name="refempresa" value="<?php echo $_SESSION['usua_idempresa']; ?>" />
             </div>
             
+            <div class="row" style="margin-left:25px; margin-right:25px;">
+                	<h4>Agregar Imagenes/Archivos</h4>
+                        <p style=" color: #999;">4 Imagenes/Archivos disponibles (no más de 1 mb por archivo)</p>
+                        <div style="height:auto; 
+                    			width:100%; 
+                                background-color:#FFF;
+                                -webkit-border-radius: 13px; 
+                            	-moz-border-radius: 13px;
+                            	border-radius: 13px;
+                                margin-left:-20px;
+                                padding-left:20px;">
+
+                            
+			<ul class="list-inline">
+                        <li style="margin-top:14px;">
+                        <div style=" height:110px; width:140px; border:2px dashed #CCC; text-align:center; overflow: auto;">
+                            <div class='custom-input-file'>
+                                <input type="file" name="imagen1" id="imagen1">
+                                <img src="../../imagenes/clip20.jpg">
+                                <div class="files">...</div>
+                            </div>
+                            
+                            <img id="vistaPrevia1" name="vistaPrevia1" width="50" height="50"/>
+                        </div>
+                        <div style="height:14px;">
+                            
+                        </div>
+                        <div style=" height:110px; width:140px; border:2px dashed #CCC; text-align:center; overflow: auto;">
+                            <div class='custom-input-file'>
+                                <input type="file" name="imagen2" id="imagen2">
+                                <img src="../../imagenes/clip20.jpg">
+                                <div class="files">...</div>
+                            </div>
+                            <img id="vistaPrevia2" name="vistaPrevia2" width="50" height="50"/>
+                        </div>
+                        
+                            
+                        </li>
+                        <li style="margin-top:14px;">
+                        <div style=" height:110px; width:140px; border:2px dashed #CCC; text-align:center; overflow: auto;">
+                            <div class='custom-input-file'>
+                                <input type="file" name="imagen3" id="imagen3">
+                                <img src="../../imagenes/clip20.jpg">
+                                <div class="files">...</div>
+                            </div>
+                            <img id="vistaPrevia3" name="vistaPrevia3" width="50" height="50"/>
+                        </div>
+                        <div style="height:14px;">
+                            
+                        </div>
+                        <div style=" height:110px; width:140px; border:2px dashed #CCC; text-align:center; overflow: auto;">
+                            <div class='custom-input-file'>
+                                <input type="file" name="imagen4" id="imagen4">
+                                <img src="../../imagenes/clip20.jpg">
+                                <div class="files">...</div>
+                            </div>
+                            <img id="vistaPrevia4" name="vistaPrevia4" width="50" height="50"/>
+                        </div>
+                        </li>
+                        
+                        
+                        </ul>
+                        
+                        
+                        
+                        
+                        
+                        
+                       
+            </div>
+                
             <div class='row' style="margin-left:25px; margin-right:25px;">
                 <div class='alert'>
                 
@@ -256,6 +328,18 @@ $(document).ready(function(){
 			alert("Error, vuelva a realizar la acción.");	
 		  }
 	});//fin del boton modificar
+	
+	
+	$("#example").on("click",'.varver', function(){
+		  usersid =  $(this).attr("id");
+		  if (!isNaN(usersid)) {
+			
+			url = "ver.php?id=" + usersid;
+			$(location).attr('href',url);
+		  } else {
+			alert("Error, vuelva a realizar la acción.");	
+		  }
+	});//fin del boton ver
 
 	 $( "#dialog2" ).dialog({
 		 	
@@ -360,6 +444,75 @@ $(document).ready(function(){
 			});
 		}
     });
+	
+	
+	$('#imagen1').on('change', function(e) {
+  var Lector,
+      oFileInput = this;
+ 
+  if (oFileInput.files.length === 0) {
+    return;
+  };
+ 
+  Lector = new FileReader();
+  Lector.onloadend = function(e) {
+    $('#vistaPrevia1').attr('src', e.target.result);         
+  };
+  Lector.readAsDataURL(oFileInput.files[0]);
+ 
+});
+
+$('#imagen2').on('change', function(e) {
+  var Lector,
+      oFileInput = this;
+ 
+  if (oFileInput.files.length === 0) {
+    return;
+  };
+ 
+  Lector = new FileReader();
+  Lector.onloadend = function(e) {
+    $('#vistaPrevia2').attr('src', e.target.result);         
+  };
+  Lector.readAsDataURL(oFileInput.files[0]);
+ 
+});
+
+$('#imagen3').on('change', function(e) {
+  var Lector,
+      oFileInput = this;
+ 
+  if (oFileInput.files.length === 0) {
+    return;
+  };
+ 
+  Lector = new FileReader();
+  Lector.onloadend = function(e) {
+    $('#vistaPrevia3').attr('src', e.target.result);         
+  };
+  Lector.readAsDataURL(oFileInput.files[0]);
+ 
+});
+
+$('#imagen4').on('change', function(e) {
+  var Lector,
+      oFileInput = this;
+ 
+  if (oFileInput.files.length === 0) {
+    return;
+  };
+ 
+  Lector = new FileReader();
+  Lector.onloadend = function(e) {
+    $('#vistaPrevia4').attr('src', e.target.result);         
+  };
+  Lector.readAsDataURL(oFileInput.files[0]);
+ 
+});
+
+
+
+
 
 });
 </script>

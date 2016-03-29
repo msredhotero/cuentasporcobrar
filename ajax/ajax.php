@@ -149,14 +149,17 @@ break;
 
 /* PARA Socios */
 case 'insertarSocios': 
-insertarSocios($serviciosSocios,$serviciosSociosEmpresas); 
-break; 
+	insertarSocios($serviciosSocios,$serviciosSociosEmpresas); 
+	break; 
 case 'modificarSocios': 
-modificarSocios($serviciosSocios); 
-break; 
+	modificarSocios($serviciosSocios); 
+	break; 
 case 'eliminarSocios': 
-eliminarSocios($serviciosSocios); 
-break; 
+	eliminarSocios($serviciosSocios); 
+	break; 
+case 'eliminarFoto':
+	eliminarFoto($serviciosSocios);
+	break;
 
 /* Fin */
 
@@ -677,17 +680,26 @@ echo $res;
 
 /* PARA Socios */
 function insertarSocios($serviciosSocios, $serviciosSociosEmpresas) { 
-	$reftiposocio 	= $_POST['reftiposocio']; 
+	$reftiposocio 	= $_POST['reftiposocio'];
+	$ife 			= $_POST['ife']; 
 	$nombre 		= $_POST['nombre']; 
 	$domicilio 		= $_POST['domicilio']; 
 	$curp 			= $_POST['curp']; 
 	$rfc 			= $_POST['rfc']; 
 	$refempresa 	= $_POST['refempresa']; 
 	
-	$res = $serviciosSocios->insertarSocios($reftiposocio,$nombre,$domicilio,$curp,$rfc); 
+	$res = $serviciosSocios->insertarSocios($reftiposocio,$ife,$nombre,$domicilio,$curp,$rfc); 
 	
 	if ((integer)$res > 0) { 
 		$serviciosSociosEmpresas->insertarSociosEmpresas($res,$refempresa);
+		$imagenes = array("imagen1" => 'imagen1',
+						  "imagen2" => 'imagen2',
+						  "imagen3" => 'imagen3',
+						  "imagen4" => 'imagen4');
+	
+		foreach ($imagenes as $valor) {
+			$serviciosSocios->subirArchivo($valor,'galeria',$res);
+		}
 		echo ''; 
 	} else { 
 		echo 'Huvo un error al insertar datos';	
@@ -700,12 +712,26 @@ function modificarSocios($serviciosSocios) {
 	$reftiposocio = $_POST['reftiposocio']; 
 	$nombre = $_POST['nombre']; 
 	$domicilio = $_POST['domicilio']; 
+	$ife = $_POST['ife'];
 	$curp = $_POST['curp']; 
 	$rfc = $_POST['rfc']; 
 	
-	$res = $serviciosSocios->modificarSocios($id,$reftiposocio,$nombre,$domicilio,$curp,$rfc); 
+	$cantImagenes		=	$_POST['cantidadImagenes'];
+	
+	$cantImagenes		= 4 - (integer)$cantImagenes;
+	
+	$res = $serviciosSocios->modificarSocios($id,$reftiposocio,$ife,$nombre,$domicilio,$curp,$rfc); 
 	
 	if ($res == true) { 
+		$imagenes = array("imagen1" => 'imagen1',
+						  "imagen2" => 'imagen2',
+						  "imagen3" => 'imagen3',
+						  "imagen4" => 'imagen4');
+	
+		for ($i=1;$i<=$cantImagenes;$i++) {
+			$valor = "imagen".$i;
+			$serviciosSocios->subirArchivo($valor,'galeria',$id);
+		}
 		echo ''; 
 	} else { 
 		echo 'Huvo un error al modificar datos'; 
@@ -715,9 +741,21 @@ function modificarSocios($serviciosSocios) {
 
 function eliminarSocios($serviciosSocios) { 
 $id = $_POST['id']; 
+
+$resT = $serviciosSocios->TraerFotosNoticias($id);
+	
+	while ($resT = mysql_fetch_array($resT)) {
+		$serviciosSocios->eliminarFoto($resT['idfoto']);	
+	}
+	
 $res = $serviciosSocios->eliminarSocios($id); 
 echo $res; 
 } 
+
+function eliminarFoto($serviciosSocios) {
+	$id			=	$_POST['id'];
+	echo $serviciosSocios->eliminarFoto($id);
+}
 
 /* Fin */
 

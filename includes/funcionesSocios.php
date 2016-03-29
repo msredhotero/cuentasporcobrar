@@ -20,20 +20,138 @@ function GUID()
 }
 
 
+///**********  PARA SUBIR ARCHIVOS  ***********************//////////////////////////
+	function borrarDirecctorio($dir) {
+		array_map('unlink', glob($dir."/*.*"));	
+	
+	}
+	
+	function borrarArchivo($id,$archivo) {
+		$sql	=	"delete from dbfotos where idfoto =".$id;
+		
+		$res =  unlink("./../archivos/".$archivo);
+		if ($res)
+		{
+			$this->query($sql,0);	
+		}
+		return $res;
+	}
+	
+	
+	function existeArchivo($idSocio,$nombre,$type) {
+		$sql		=	"select * from dbfotos where refsocio =".$idSocio." and imagen = '".$nombre."' and type = '".$type."'";
+		$resultado  =   $this->query($sql,0);
+			   
+			   if(mysql_num_rows($resultado)>0){
+	
+				   return mysql_result($resultado,0,0);
+	
+			   }
+	
+			   return 0;	
+	}
+
+
+	function subirArchivo($file,$carpeta,$idSocio) {
+		$dir_destino = '../archivos/'.$carpeta.'/'.$idSocio.'/';
+		$imagen_subida = $dir_destino . utf8_decode(str_replace(' ','',basename($_FILES[$file]['name'])));
+		
+		$noentrar = '../imagenes/index.php';
+		$nuevo_noentrar = '../archivos/'.$carpeta.'/'.$idSocio.'/'.'index.php';
+		
+		if (!file_exists($dir_destino)) {
+			mkdir($dir_destino, 0777);
+		}
+		
+		 
+		if(!is_writable($dir_destino)){
+			
+			echo "no tiene permisos";
+			
+		}	else	{
+			if ($_FILES[$file]['tmp_name'] != '') {
+				if(is_uploaded_file($_FILES[$file]['tmp_name'])){
+					/*echo "Archivo ". $_FILES['foto']['name'] ." subido con éxtio.\n";
+					echo "Mostrar contenido\n";
+					echo $imagen_subida;*/
+					if (move_uploaded_file($_FILES[$file]['tmp_name'], $imagen_subida)) {
+						
+						$archivo = utf8_decode($_FILES[$file]["name"]);
+						$tipoarchivo = $_FILES[$file]["type"];
+						
+						if ($this->existeArchivo($idSocio,$archivo,$tipoarchivo) == 0) {
+							$sql	=	"insert into dbfotos(idfoto,refsocio,imagen,type) values ('',".$idSocio.",'".str_replace(' ','',$archivo)."','".$tipoarchivo."')";
+							$this->query($sql,1);
+						}
+						echo "";
+						
+						copy($noentrar, $nuevo_noentrar);
+		
+					} else {
+						echo "Posible ataque de carga de archivos!\n";
+					}
+				}else{
+					echo "Posible ataque del archivo subido: ";
+					echo "nombre del archivo '". $_FILES[$file]['tmp_name'] . "'.";
+				}
+			}
+		}	
+	}
+
+
+	
+	function TraerFotosNoticias($idSocio) {
+		$sql    =   "select 'galeria',s.idsocio,f.imagen,f.idfoto,f.type
+							from dbsocios s
+							
+							inner
+							join dbfotos f
+							on	s.idsocio = f.refsocio
+
+							where s.idsocio = ".$idSocio;
+		$result =   $this->query($sql, 0);
+		return $result;
+	}
+	
+	
+	function eliminarFoto($id)
+	{
+		
+		$sql		=	"select concat('galeria','/',s.idsocio,'/',f.imagen) as archivo
+							from dbsocios s
+							
+							inner
+							join dbfotos f
+							on	s.idsocio = f.refsocio
+
+							where f.idfoto =".$id;
+		$resImg		=	$this->query($sql,0);
+		
+		$res 		=	$this->borrarArchivo($id,mysql_result($resImg,0,0));
+		
+		if ($res == false) {
+			return 'Error al eliminar datos';
+		} else {
+			return '';
+		}
+	}
+
+/* fin archivos */
+
 /* PARA Socios */
 
-function insertarSocios($reftiposocio,$nombre,$domicilio,$curp,$rfc) { 
-$sql = "insert into dbsocios(idsocio,reftiposocio,nombre,domicilio,curp,rfc) 
-values ('',".$reftiposocio.",'".utf8_decode($nombre)."','".utf8_decode($domicilio)."','".utf8_decode($curp)."','".utf8_decode($rfc)."')"; 
+function insertarSocios($reftiposocio,$ife,$nombre,$domicilio,$curp,$rfc) { 
+$sql = "insert into dbsocios(idsocio,reftiposocio,nombre,ife,domicilio,curp,rfc) 
+values ('',".$reftiposocio.",'".utf8_decode($nombre)."',".$ife.",'".utf8_decode($domicilio)."','".utf8_decode($curp)."','".utf8_decode($rfc)."')"; 
 $res = $this->query($sql,1); 
 return $res; 
 } 
 
 
-function modificarSocios($id,$reftiposocio,$nombre,$domicilio,$curp,$rfc) { 
+function modificarSocios($id,$reftiposocio,$ife,$nombre,$domicilio,$curp,$rfc) { 
 $sql = "update dbsocios 
 set 
-reftiposocio = ".$reftiposocio.",nombre = '".utf8_decode($nombre)."',domicilio = '".utf8_decode($domicilio)."',curp = '".utf8_decode($curp)."',rfc = '".utf8_decode($rfc)."' 
+reftiposocio = ".$reftiposocio.",ife = '".$ife."',nombre = '".utf8_decode($nombre)."',domicilio = '".utf8_decode($domicilio)."',curp = '".utf8_decode($curp)."',rfc = '".utf8_decode($rfc)."' 
 where idsocio =".$id; 
 $res = $this->query($sql,0); 
 return $res; 
@@ -48,7 +166,7 @@ return $res;
 
 
 function traerSocios() { 
-$sql = "select s.idsocio, s.nombre, s.domicilio, s.curp, s.rfc, ts.tiposocio ,s.reftiposocio
+$sql = "select s.idsocio, s.ife, s.nombre, s.domicilio, s.curp, s.rfc, ts.tiposocio ,s.reftiposocio
 		from dbsocios s 
 		inner join tbtiposocios ts on ts.idtiposocio = s.reftiposocio
 		where ts.activo = 1
@@ -59,13 +177,13 @@ return $res;
 
 
 function traerSociosPorId($id) { 
-$sql = "select idsocio,reftiposocio,nombre,domicilio,curp,rfc from dbsocios where idsocio =".$id; 
+$sql = "select idsocio,reftiposocio,ife,nombre,domicilio,curp,rfc from dbsocios where idsocio =".$id; 
 $res = $this->query($sql,0); 
 return $res; 
 }
 
 function traerSociosPorEmpresa($idempresa) { 
-$sql = "select s.idsocio, s.nombre, s.domicilio, s.curp, s.rfc, ts.tiposocio ,s.reftiposocio
+$sql = "select s.idsocio,s.ife, s.nombre, s.domicilio, s.curp, s.rfc, ts.tiposocio ,s.reftiposocio
 		from dbsocios s 
 		inner join tbtiposocios ts on ts.idtiposocio = s.reftiposocio
 		inner join dbsociosempresas se on se.refsocio = s.idsocio
