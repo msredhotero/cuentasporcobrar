@@ -160,6 +160,9 @@ case 'eliminarSocios':
 case 'eliminarFoto':
 	eliminarFoto($serviciosSocios);
 	break;
+case 'enviarEmailSocio':
+	enviarEmailSocio($serviciosFunciones,$serviciosSocios);
+	break;
 
 /* Fin */
 
@@ -688,22 +691,27 @@ function insertarSocios($serviciosSocios, $serviciosSociosEmpresas) {
 	$rfc 			= $_POST['rfc']; 
 	$refempresa 	= $_POST['refempresa']; 
 	
-	$res = $serviciosSocios->insertarSocios($reftiposocio,$ife,$nombre,$domicilio,$curp,$rfc); 
-	
-	if ((integer)$res > 0) { 
-		$serviciosSociosEmpresas->insertarSociosEmpresas($res,$refempresa);
-		$imagenes = array("imagen1" => 'imagen1',
-						  "imagen2" => 'imagen2',
-						  "imagen3" => 'imagen3',
-						  "imagen4" => 'imagen4');
-	
-		foreach ($imagenes as $valor) {
-			$serviciosSocios->subirArchivo($valor,'galeria',$res);
-		}
-		echo ''; 
-	} else { 
-		echo 'Huvo un error al insertar datos';	
-	} 
+	if ($serviciosSocios->existeSocio($ife) == 0) {
+		$res = $serviciosSocios->insertarSocios($reftiposocio,$ife,$nombre,$domicilio,$curp,$rfc); 
+		
+		if ((integer)$res > 0) { 
+			$serviciosSociosEmpresas->insertarSociosEmpresas($res,$refempresa);
+			$imagenes = array("imagen1" => 'imagen1',
+							  "imagen2" => 'imagen2',
+							  "imagen3" => 'imagen3',
+							  "imagen4" => 'imagen4');
+		
+			foreach ($imagenes as $valor) {
+				$serviciosSocios->subirArchivo($valor,'galeria',$res);
+			}
+			echo ''; 
+		} else { 
+			echo 'Huvo un error al insertar datos';	
+		} 
+		
+	} else {
+		echo 'Ya existe ese socio (IFE repetido)';
+	}
 } 
 
 
@@ -757,6 +765,34 @@ function eliminarFoto($serviciosSocios) {
 	echo $serviciosSocios->eliminarFoto($id);
 }
 
+function enviarEmailSocio($serviciosFunciones,$serviciosSocios) {
+	$id				=	$_POST['id'];
+	$destinatorio	=	$_POST['destinatario'];
+	
+	$datos = $serviciosSocios->TraerFotosNoticias($id);
+	$socio = $serviciosSocios->traerSociosPorId($id);
+	
+	$tipoSocio 	 = mysql_result($socio,0,'tiposocio');
+	$ife		 = mysql_result($socio,0,'ife');
+	$nombre 	 = mysql_result($socio,0,'nombre');
+	$curp	 	 = mysql_result($socio,0,'curp');
+	$rfc	 	 = mysql_result($socio,0,'rfc');
+	$domicilio 	 = mysql_result($socio,0,'domicilio');
+	
+	$sTexto		 = '';
+	$sTexto		.= "Tipo Socio: ".$tipoSocio."\n\n";
+	$sTexto		.= "IFE: ".$ife."\n\n";
+	$sTexto		.= "Nombre: ".$nombre."\n\n";
+	$sTexto		.= "CURP: ".$curp."\n\n";
+	$sTexto		.= "RFC: ".$rfc."\n\n";
+	$sTexto		.= "Domicilio: ".$domicilio."\n\n";
+	
+	
+	if ($serviciosFunciones->form_mail($destinatorio, "Datos del Socio","Los datos del socio son:\n\n".$sTexto, "luisham@gmail.com", $datos))
+echo "Su formulario ha sido enviado con exito";
+
+
+}
 /* Fin */
 
 

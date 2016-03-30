@@ -48,7 +48,7 @@ $resVariable1 	= $serviciosTipoSocio->traerTipoSociosActivos();
 $cadVariable1 = '';
 while ($rowV1 = mysql_fetch_array($resVariable1)) {
 	if ($rowV1[0] == mysql_result($resResultado,0,'reftiposocio')) {
-		$cadVariable1 = $cadVariable1.'<option value="'.$rowV1[0].'" selected>'.utf8_encode($rowV1[1]).'</option>';	
+		$cadVariable1 = $cadVariable1.utf8_encode($rowV1[1]);	
 	}
 	
 }
@@ -159,7 +159,23 @@ if ($_SESSION['refroll_predio'] != 1) {
                             
                             <div class="col-md-4" align="center">
                             <div id="img<?php echo $rowImg[3]; ?>">
+                                <?php
+									if ($_SESSION['refroll_predio'] == 2) {
+								
+								?>
                                 <?php 
+									$mystring = $rowImg['type'];
+									$findme   = 'image';
+									$pos = strpos($mystring, $findme);
+									if ($pos !== false) { 
+								?>
+                                <img src="<?php echo '../../archivos/'.$rowImg[0].'/'.$rowImg[1].'/'.utf8_encode($rowImg[2]) ?>" width="100" height="100">
+                                <?php } else { ?>
+                                <img src="../../imagenes/pdf_ico2.jpg" width="100" height="100"><?php echo $rowImg['imagen']; ?>
+                                <?php } ?>
+                                
+                                <?php } else { ?>
+								<?php 
 									$mystring = $rowImg['type'];
 									$findme   = 'image';
 									$pos = strpos($mystring, $findme);
@@ -169,6 +185,7 @@ if ($_SESSION['refroll_predio'] != 1) {
                                 <?php } else { ?>
                                 <a href="<?php echo '../../archivos/'.$rowImg[0].'/'.$rowImg[1].'/'.utf8_encode($rowImg[2]) ?>" target="_blank"><img src="../../imagenes/pdf_ico2.jpg" width="100" height="100"><?php echo $rowImg['imagen']; ?></a>
                                 <?php } ?>
+                                <?php } //fin de permiso para el rol de capturista?>
                             </div>
                             
                             </div>
@@ -199,11 +216,18 @@ if ($_SESSION['refroll_predio'] != 1) {
                     </li>
                     <li>
                         <button type="button" class="btn btn-primary enviaremail" id="<?php echo $id; ?>" style="margin-left:0px;"><span class="glyphicon glyphicon-envelope"></span> Enviar Por Email</button>
+                        
                     </li>
                     <li>
                         <button type="button" class="btn btn-default volver" style="margin-left:0px;">Volver</button>
                     </li>
                 </ul>
+                </div>
+                <div class="form-group col-md-6 col-xs-6">
+					<label for="email" class="control-label" style="text-align:left">Ingrese el Email de destino</label>
+                	<div class="input-group col-md-12">
+                    	<input type="text" value="" class="form-control" id="email" name="email" placeholder="Ingrese el Email..." required>
+                    </div>
                 </div>
             </div>
             </form>
@@ -228,7 +252,25 @@ $(document).ready(function(){
 		$(location).attr('href',url);
 	});//fin del boton modificar
 	
-	
+	$('.enviaremail').click(function(e) {
+        $.ajax({
+				data:  {id: <?php echo $id; ?>, 
+						destinatario: $('#email').val(),
+						accion: 'enviarEmailSocio'},
+				url:   '../../ajax/ajax.php',
+				type:  'post',
+				beforeSend: function () {
+						
+				},
+				success:  function (response) {
+						$(".alert").removeClass("alert-danger");
+						$(".alert").removeClass("alert-info");
+                        $(".alert").addClass("alert-success");
+						$('.alert').html('Los datos se enviaron correctamente');
+						
+				}
+		});
+    });
 
 
 });

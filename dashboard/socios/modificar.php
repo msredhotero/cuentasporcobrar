@@ -70,12 +70,9 @@ $cantidadImagenes = mysql_num_rows($resNoticiasFotos);
 $formulario 	= $serviciosFunciones->camposTablaModificar($id, "idsocio", "modificarSocios",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
 
 
-if ($_SESSION['refroll_predio'] != 1) {
-
-} else {
-
-	
-}
+if ($_SESSION['refroll_predio'] == 2) {
+	header('Location: index.php');
+} 
 
 
 ?>

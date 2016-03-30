@@ -30,7 +30,7 @@ $fecha = date('Y-m-d');
 //$resProductos = $serviciosProductos->traerProductosLimite(6);
 $resMenu = $serviciosHTML->menu(utf8_encode($_SESSION['nombre_predio']),"Socios",$_SESSION['refroll_predio'],utf8_encode($_SESSION['usua_empresa']));
 
-
+$resSoc = $serviciosSocios->traerSocios();
 
 /////////////////////// Opciones para la creacion del formulario  /////////////////////
 $tabla 			= "dbsocios";
@@ -130,6 +130,8 @@ if ($_SESSION['refroll_predio'] != 1) {
         $('#navigation').perfectScrollbar();
       });
     </script>
+    
+    <link rel="stylesheet" href="../../css/chosen.css">
 </head>
 
 <body>
@@ -139,7 +141,110 @@ if ($_SESSION['refroll_predio'] != 1) {
 <div id="content">
 
 <h3>Socios</h3>
+	
+    <div class="panel panel-info">
+        <div id="headBoxInfo">
+        	<p style="color: #fff; font-size:18px; height:16px;">Socios Cargados</p>
+        	
+        </div>
+    	<div class="panel-body">
+        	<form class="form-inline formulario" role="form">
+        	<div class="form-group col-md-6">
+                	<label class="control-label" style="text-align:left" for="celular1">Socios Existentes</label>
+                    <div class="input-group col-md-12">
+                    	<select data-placeholder="selecione el socio..." id="refsociocargado" name="refsociocargado" class="chosen-select" style="width:450px;" tabindex="2">
+                            <option value=""></option>
+                            <?php while ($rowC = mysql_fetch_array($resSoc)) { ?>
+                                <option value="<?php echo $rowC[0]; ?>">IFE: <?php echo $rowC[1]; ?> - Nombre: <?php echo $rowC[2]; ?> - Tipo: <?php echo $rowC['tiposocio']; ?></option>
+                            <?php } ?>
+                            
+                        </select>
+                    </div>
+                </div>
+            
+            <div class='row' style="margin-left:25px; margin-right:25px; ">
+                <div class='alert2'>
+                
+                </div>
+                <div id='load'>
+                
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-12">
+                <ul class="list-inline" style="margin-top:15px;">
+                    <li>
+                        <button type="button" class="btn btn-primary" id="adjuntar" style="margin-left:0px;">Guardar</button>
+                    </li>
+                </ul>
+                </div>
+            </div>
+            </form>
+    	</div>
+    </div>
+    
+    
+    <div class="boxInfoLargo">
+        <div id="headBoxInfo">
+        	<p style="color: #fff; font-size:18px; height:16px;">Consultas <span class="glyphicon glyphicon-minus abrir" style="cursor:pointer; float:right; padding-right:12px;">(Cerrar)</span></p>
+	        
+        </div><!-- fin del headBoxInfo-->
+    	<div class="cuerpoBox filt">
+            <form class="form-inline formulario" role="form">
+            <div class="row">
 
+                
+                <div class="form-group col-md-6">
+                	<label class="control-label" style="text-align:left" for="tipobusqueda">Tipo Busqueda</label>
+                    <div class="input-group col-md-12">
+                    	<select id="tipobusqueda" name="tipobusqueda" class="form-control">
+                            <option value="0">---- Seleccione ----</option>
+                            <option value="1">Nombre Empresa</option>
+                            <option value="2">Nombre Socio</option>
+                        </select>
+                    </div>
+                </div>
+                
+                
+                
+                <div class="form-group col-md-6">
+                    <label class="control-label" style="text-align:left" for="busqueda">Dato</label>
+                    <div class="input-group col-md-12">
+                    	<input id="busqueda" class="form-control" type="text" required placeholder="Ingrese el dato..." name="busqueda">
+                    </div>
+                </div>
+
+                
+				<input type="hidden" id="accion" name="accion" value="filtros"/>
+                
+            </div>
+            
+            <div class='row' style="margin-left:25px; margin-right:25px;">
+                <div class='alert'>
+                
+                </div>
+                <div id='load'>
+                
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-12">
+                <ul class="list-inline" style="margin-top:15px;">
+                    <li>
+                        <button type="button" class="btn btn-success" id="buscar" style="margin-left:0px;"><span class="glyphicon glyphicon-search"></span> Buscar</button>
+                    </li>
+                </ul>
+                </div>
+            </div>
+            </form>
+    </div><!-- fin del cuerpoBox-->
+
+    </div><!-- fin del BoxLargo-->
+    
+    
+    
     <div class="boxInfoLargo">
         <div id="headBoxInfo">
         	<p style="color: #fff; font-size:18px; height:16px;">Carga de Socios</p>
@@ -147,7 +252,10 @@ if ($_SESSION['refroll_predio'] != 1) {
         </div>
     	<div class="cuerpoBox">
         	<form class="form-inline formulario" role="form">
-        	<div class="row">
+        	
+     
+    
+            <div class="row">
 			<?php echo $formulario; ?>
             <input type="hidden" id="refempresa" name="refempresa" value="<?php echo $_SESSION['usua_idempresa']; ?>" />
             </div>
@@ -241,6 +349,7 @@ if ($_SESSION['refroll_predio'] != 1) {
                 </ul>
                 </div>
             </div>
+            <input type="hidden" id="accion" name="accion" value="insertarSocios"/>
             </form>
     	</div>
     </div>
@@ -304,11 +413,49 @@ $(document).ready(function(){
 		  }
 	} );
 	
+	$('.abrir').click(function() {
+		
+		if ($('.abrir').text() == '(Abrir)') {
+			$('.filt').show( "slow" );
+			$('.abrir').text('(Cerrar)');
+			$('.abrir').removeClass('glyphicon glyphicon-plus');
+			$('.abrir').addClass('glyphicon glyphicon-minus');
+		} else {
+			$('.filt').slideToggle( "slow" );
+			$('.abrir').text('(Abrir)');
+			$('.abrir').addClass('glyphicon glyphicon-plus');
+			$('.abrir').removeClass('glyphicon glyphicon-minus');
+
+		}
+	});
+	
+	$('.abrir').click();
+	
+	$('.abrir').click(function() {
+		$('.filt').show();
+	});
+	
+	$('#buscar').click(function(e) {
+        
+		url = "consultas.php?tb=" + $('#tipobusqueda').val() + "&b=" + $('#busqueda').val();
+		$(location).attr('href',url);
+    });
+	
 		$('.varborrar').click(function(event){
 		  usersid =  $(this).attr("id");
 		  if (!isNaN(usersid)) {
-			$("#idEliminar").val(usersid);
-			$("#dialog2").dialog("open");
+			<?php
+				if ($_SESSION['refroll_predio'] == 2) {
+			
+			?>
+				alert("Error, no tiene permisos para realizar la acción.");
+			<?php
+				} else {
+			?>
+				$("#idEliminar").val(usersid);
+				$("#dialog2").dialog("open");
+			<?php } ?>  
+			
 
 			
 			//url = "../clienteseleccionado/index.php?idcliente=" + usersid;
@@ -318,12 +465,20 @@ $(document).ready(function(){
 		  }
 	});//fin del boton eliminar
 	
-	$("#example").on("click",'.varmodificar', function(){
+	$("#example").on("click",'.varmodificarsin', function(){
 		  usersid =  $(this).attr("id");
 		  if (!isNaN(usersid)) {
+			<?php
+				if ($_SESSION['refroll_predio'] == 2) {
 			
-			url = "modificar.php?id=" + usersid;
-			$(location).attr('href',url);
+			?>
+				alert("Error, no tiene permisos para realizar la acción.");
+			<?php
+				} else {
+			?>
+				url = "modificar.php?id=" + usersid;
+				$(location).attr('href',url);
+			<?php } ?>
 		  } else {
 			alert("Error, vuelva a realizar la acción.");	
 		  }
@@ -379,12 +534,123 @@ $(document).ready(function(){
 		 
 	 		}); //fin del dialogo para eliminar
 			
-	<?php 
-		echo $serviciosHTML->validacion($tabla);
-	
-	?>
-	
+	$("#reftiposocio").click(function(event) {
+					$("#reftiposocio").removeClass("alert-danger");
+					if ($(this).val() == "") {
+						$("#reftiposocio").attr("value","");
+						$("#reftiposocio").attr("placeholder","Ingrese el Reftiposocio...");
+					}
+				});
+			
+				$("#reftiposocio").change(function(event) {
+					$("#reftiposocio").removeClass("alert-danger");
+					$("#reftiposocio").attr("placeholder","Ingrese el Reftiposocio");
+				});
+				
+				
+			
+				$("#nombre").click(function(event) {
+					$("#nombre").removeClass("alert-danger");
+					if ($(this).val() == "") {
+						$("#nombre").attr("value","");
+						$("#nombre").attr("placeholder","Ingrese el Nombre...");
+					}
+				});
+			
+				$("#nombre").change(function(event) {
+					$("#nombre").removeClass("alert-danger");
+					$("#nombre").attr("placeholder","Ingrese el Nombre");
+				});
+				
+				
+			
+				$("#curp").click(function(event) {
+					$("#curp").removeClass("alert-danger");
+					if ($(this).val() == "") {
+						$("#curp").attr("value","");
+						$("#curp").attr("placeholder","Ingrese el Curp...");
+					}
+				});
+			
+				$("#curp").change(function(event) {
+					$("#curp").removeClass("alert-danger");
+					$("#curp").attr("placeholder","Ingrese el Curp");
+				});
+				
+				
+			
+				$("#rfc").click(function(event) {
+					$("#rfc").removeClass("alert-danger");
+					if ($(this).val() == "") {
+						$("#rfc").attr("value","");
+						$("#rfc").attr("placeholder","Ingrese el Rfc...");
+					}
+				});
+			
+				$("#rfc").change(function(event) {
+					$("#rfc").removeClass("alert-danger");
+					$("#rfc").attr("placeholder","Ingrese el Rfc");
+				});
+				
+				
+	function validador(){
 
+			$error = "";
+			
+			
+					if ($("#reftiposocio").val() == "") {
+						$error = "Es obligatorio el campo Reftiposocio.";
+						$("#reftiposocio").addClass("alert-danger");
+						$("#reftiposocio").attr("placeholder",$error);
+					}
+				
+				
+			
+					if ($("#nombre").val() == "") {
+						$error = "Es obligatorio el campo Nombre.";
+						$("#nombre").addClass("alert-danger");
+						$("#nombre").attr("placeholder",$error);
+					}
+				
+				
+			
+					if ($("#curp").val() == "") {
+						$error = "Es obligatorio el campo Curp.";
+						$("#curp").addClass("alert-danger");
+						$("#curp").attr("placeholder",$error);
+					}
+				
+				
+			
+					if ($("#rfc").val() == "") {
+						$error = "Es obligatorio el campo Rfc.";
+						$("#rfc").addClass("alert-danger");
+						$("#rfc").attr("placeholder",$error);
+					}
+				
+				
+			return $error;
+	}
+	
+	
+	$('#adjuntar').click(function(){
+		$.ajax({
+				data:  {refclientecargado: $('#refclientecargado').val(), 
+						idEmpresa: <?php echo $_SESSION['usua_idempresa']; ?>,
+						accion: 'insertarClienteEmpresa'},
+				url:   '../../ajax/ajax.php',
+				type:  'post',
+				beforeSend: function () {
+						
+				},
+				success:  function (response) {
+						url = "index.php";
+						$(location).attr('href',url);
+
+				}
+		});
+		
+	});
 	
 	
 	//al enviar el formulario
@@ -393,7 +659,7 @@ $(document).ready(function(){
 		if (validador() == "")
         {
 			//información del formulario
-			var formData = new FormData($(".formulario")[0]);
+			var formData = new FormData($(".formulario")[2]);
 			var message = "";
 			//hacemos la petición ajax  
 			$.ajax({
@@ -516,6 +782,20 @@ $('#imagen4').on('change', function(e) {
 
 });
 </script>
+
+<script src="../../js/chosen.jquery.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var config = {
+      '.chosen-select'           : {},
+      '.chosen-select-deselect'  : {allow_single_deselect:true},
+      '.chosen-select-no-single' : {disable_search_threshold:10},
+      '.chosen-select-no-results': {no_results_text:'Oops, nothing found!'},
+      '.chosen-select-width'     : {width:"95%"}
+    }
+    for (var selector in config) {
+      $(selector).chosen(config[selector]);
+    }
+  </script>
 <?php } ?>
 </body>
 </html>

@@ -435,6 +435,58 @@ if ($_SESSION['idroll_predio'] == 2) {
     	</div>
     </div>
     
+    
+    <div class="boxInfoLargo">
+        <div id="headBoxInfo">
+        	<p style="color: #fff; font-size:18px; height:16px;">Reporte Listado de Socios y Empresas</p>
+        	
+        </div>
+    	<div class="cuerpoBox">
+        	<form class="form-inline formulario" role="form">
+        	<div class="row">
+
+                
+            	<div class="form-group col-md-6">
+                    <label class="control-label" style="text-align:left" for="refcliente">Seleccione el Cliente</label>
+                    <div class="input-group col-md-12">
+                    	<select id="refcliente5" class="form-control" name="refcliente5">
+							<?php echo $cadRef; ?>
+                    	</select>
+                    </div>
+                </div>
+                
+
+                
+                <div class="form-group col-md-6">
+                    <label class="control-label" style="text-align:left" for="refcliente">Acción</label>
+                    <ul class="list-inline">
+                        <li>
+                            <button type="button" class="btn btn-success" id="rpt5" style="margin-left:0px;">Generar</button>
+                        </li>
+                        <li>
+                            <button type="button" class="btn btn-default" id="rpt5Excel" style="margin-left:0px;">Generar Excel</button>
+                        </li>
+                    </ul>
+                </div>
+                
+                
+
+            </div>
+            
+            
+            <div class='row' style="margin-left:25px; margin-right:25px;">
+                <div class='alert6'>
+                
+                </div>
+                <div id='load6'>
+                
+                </div>
+            </div>
+
+            </form>
+    	</div>
+    </div>
+    
 
     
     

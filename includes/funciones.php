@@ -35,7 +35,14 @@ class Servicios {
 				break;
 			case 96:
 				$cantidad = 6;
-				$classMod = 'varmodificar';
+				$classMod = 'varmodificarsin';
+				$classEli = 'varborrar';
+				$classVer = 'varver';
+				$idresultados = "resultadosprincipal";
+				break;
+			case 95:
+				$cantidad = 7;
+				$classMod = 'varmodificarsin';
 				$classEli = 'varborrar';
 				$classVer = 'varver';
 				$idresultados = "resultadosprincipal";
@@ -734,9 +741,9 @@ class Servicios {
 						<div class="form-group col-md-6 col-xs-6">
 							<label for="'.$label.'" class="control-label" style="text-align:left">'.ucwords($label).'</label>
 							<div class="input-group col-md-12">
-								<span class="input-group-addon">$</span>
-								<input type="text" class="form-control" id="'.strtolower($row[0]).'" name="'.strtolower($row[0]).'" value="'.mysql_result($resMod,0,$row[0]).'" readonly>
-								<span class="input-group-addon">.00</span>
+								
+								<p>'.mysql_result($resMod,0,$row[0]).'</p>
+								
 							</div>
 						</div>
 						
@@ -765,12 +772,12 @@ class Servicios {
 							<div class="form-group col-md-6 col-xs-6">
 								<label for="'.$campo.'" class="control-label" style="text-align:left">'.$label.'</label>
 								<div class="input-group col-md-12">
-									<select class="form-control" id="'.strtolower($campo).'" name="'.strtolower($campo).'" readonly>
+									<p>
 										';
 							
 							$form	=	$form.$option;
 							
-							$form	=	$form.'		</select>
+							$form	=	$form.'		</p>
 								</div>
 							</div>
 							
@@ -784,15 +791,17 @@ class Servicios {
 								
 								$activo = '';
 								if (mysql_result($resMod,0,$row[0])==1){
-									$activo = 'checked';
+									$activo = 'Si';
+								} else {
+									$activo = 'No';
 								}
 								
 								$form	=	$form.'
 								
 								<div class="form-group col-md-6 col-xs-6">
 									<label for="'.$campo.'" class="control-label" style="text-align:left">'.$label.'</label>
-									<div class="input-group col-md-12 fontcheck">
-										<input type="checkbox" '.$activo.' class="form-control" id="'.$campo.'" name="'.$campo.'" style="width:50px;" readonly> <p>Si/No</p>
+									<div class="input-group col-md-12">
+										<p>'.$activo.'</p>
 									</div>
 								</div>
 								
@@ -824,7 +833,7 @@ class Servicios {
 									<div class="form-group col-md-6 col-xs-6">
 										<label for="'.$campo.'" class="control-label" style="text-align:left">'.$label.'</label>
 										<div class="input-group col-md-6">
-											<input class="form-control" type="text" name="'.$campo.'" id="'.$campo.'" value="Date" readonly/>
+											<p>'.mysql_result($resMod,0,$row[0]).'</p>
 										</div>
 										
 									</div>
@@ -842,10 +851,7 @@ class Servicios {
 										<div class="form-group col-md-6 col-xs-6">
 											<label for="'.$campo.'" class="control-label" style="text-align:left">'.$label.'</label>
 											<div class="input-group bootstrap-timepicker col-md-6">
-												<input id="timepicker2" value="'.mysql_result($resMod,0,$row[0]).'" name="'.$campo.'" class="form-control">
-												<span class="input-group-addon">
-<span class="glyphicon glyphicon-time"></span>
-</span>
+												<p>'.mysql_result($resMod,0,$row[0]).'</p>
 											</div>
 											
 										</div>
@@ -862,7 +868,7 @@ class Servicios {
 											<div class="form-group col-md-6 col-xs-6">
 												<label for="'.$campo.'" class="control-label" style="text-align:left">'.$label.'</label>
 												<div class="input-group col-md-12">
-													<textarea type="text" rows="10" cols="6" class="form-control" id="'.$campo.'" name="'.$campo.'" readonly>'.htmlspecialchars(mysql_result($resMod,0,$row[0]),ENT_HTML5).'</textarea>
+													<p>'.(htmlspecialchars(mysql_result($resMod,0,$row[0]),ENT_HTML5) == '' ? ".............." : htmlspecialchars(mysql_result($resMod,0,$row[0]),ENT_HTML5)).'</p>
 												</div>
 												
 											</div>
@@ -880,9 +886,7 @@ class Servicios {
 											<div class="form-group col-md-12 col-xs-12">
 												<label for="'.$campo.'" class="control-label" style="text-align:left">'.$label.'</label>
 												<div class="input-group col-md-12 col-xs-12">
-													<textarea name="'.$campo.'" id="'.$campo.'" rows="200" cols="160">
-														Ingrese la noticia.
-													</textarea>
+													<p>'.(htmlspecialchars(mysql_result($resMod,0,$row[0]),ENT_HTML5) == '' ? ".............." : htmlspecialchars(mysql_result($resMod,0,$row[0]),ENT_HTML5)).'</p>
 													
 													
 												</div>
@@ -900,7 +904,7 @@ class Servicios {
 												<div class="form-group col-md-6 col-xs-6">
 													<label for="'.$campo.'" class="control-label" style="text-align:left">'.$label.'</label>
 													<div class="input-group col-md-12">
-														<input type="text" value="'.utf8_encode(mysql_result($resMod,0,$row[0])).'" class="form-control" id="'.$campo.'" name="'.$campo.'" readonly>
+														<p>'.(utf8_encode(mysql_result($resMod,0,$row[0])) == '' ? ".............." : utf8_encode(mysql_result($resMod,0,$row[0]))).'</p>
 													</div>
 												</div>
 												
@@ -1142,7 +1146,82 @@ class Servicios {
 		$this-> query($sql,0);
 	}
 	
+	function mail_attachment($filename, $path, $mailto, $from_mail, $from_name, $replyto, $subject, $message) {
+		$file = $path.$filename;
+		$file_size = filesize($file);
+		$handle = fopen($file, "r");
+		$content = fread($handle, $file_size);
+		fclose($handle);
+		$content = chunk_split(base64_encode($content));
+		$uid = md5(uniqid(time()));
+		$name = basename($file);
+		$header = "From: ".$from_name." <".$from_mail.">\r\n";
+		$header .= "Reply-To: ".$replyto."\r\n";
+		$header .= "MIME-Version: 1.0\r\n";
+		$header .= "Content-Type: multipart/mixed; boundary=\"".$uid."\"\r\n\r\n";
+		$header .= "This is a multi-part message in MIME format.\r\n";
+		$header .= "--".$uid."\r\n";
+		$header .= "Content-type:text/plain; charset=iso-8859-1\r\n";
+		$header .= "Content-Transfer-Encoding: 7bit\r\n\r\n";
+		$header .= $message."\r\n\r\n";
+		$header .= "--".$uid."\r\n";
+		$header .= "Content-Type: application/octet-stream; name=\"".$filename."\"\r\n"; // use different content types here
+		$header .= "Content-Transfer-Encoding: base64\r\n";
+		$header .= "Content-Disposition: attachment; filename=\"".$filename."\"\r\n\r\n";
+		$header .= $content."\r\n\r\n";
+		$header .= "--".$uid."--";
+		if (mail($mailto, $subject, "", $header)) {
+			echo "mail send ... OK"; // or use booleans here
+		} else {
+			echo "mail send ... ERROR!";
+		}
+	}
 	
+	
+	function form_mail($sPara, $sAsunto, $sTexto, $sDe, $datos)
+	{
+		$bHayFicheros = 0;
+		$sCabeceraTexto = "";
+		$sAdjuntos = "";
+		 
+		if ($sDe)$sCabeceras = "From:".$sDe."\n";
+		else $sCabeceras = "";
+		$sCabeceras .= "MIME-version: 1.0\n";
+		
+
+		 
+		//foreach ($_FILES as $vAdjunto)
+		while ($row = mysql_fetch_array($datos))
+		{
+
+			$bHayFicheros = 1;
+			$sCabeceras .= "Content-type: multipart/mixed;";
+			$sCabeceras .= "boundary=\"--_Separador-de-mensajes_--\"\n";
+			 
+			$sCabeceraTexto = "----_Separador-de-mensajes_--\n";
+			$sCabeceraTexto .= "Content-type: text/plain;charset=iso-8859-1\n";
+			$sCabeceraTexto .= "Content-transfer-encoding: 7BIT\n";
+			 
+			$sTexto = $sCabeceraTexto.$sTexto;
+
+
+			$sAdjuntos .= "\n\n----_Separador-de-mensajes_--\n";
+			$sAdjuntos .= "Content-type: ".$row["type"].";name=\"".$row[2]."\"\n";;
+			$sAdjuntos .= "Content-Transfer-Encoding: BASE64\n";
+			$sAdjuntos .= "Content-disposition: attachment;filename=\"".$row[2]."\"\n\n";
+			 //$_SERVER['DOCUMENT_ROOT'].
+			$oFichero = fopen( '../archivos/'.$row[0].'/'.$row[1].'/'.utf8_encode($row[2]) , 'r');
+			$sContenido = fread($oFichero, filesize('../archivos/'.$row[0].'/'.$row[1].'/'.utf8_encode($row[2])));
+			$sAdjuntos .= chunk_split(base64_encode($sContenido));
+			fclose($oFichero);
+
+
+		}
+		 
+		if ($bHayFicheros)
+		$sTexto .= $sAdjuntos."\n\n----_Separador-de-mensajes_----\n";
+		return(mail($sPara, $sAsunto, $sTexto, $sCabeceras));
+	}
 	
 	function query($sql,$accion) {
 		

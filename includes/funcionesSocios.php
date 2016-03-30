@@ -140,9 +140,19 @@ function GUID()
 
 /* PARA Socios */
 
+function existeSocio($ife) {
+	$sql = "select * from dbsocios where ife = '".$ife."'";
+	$res = $this->query($sql,0); 
+	
+	if (mysql_num_rows($res)>0) {
+		return 1;	
+	}
+	return 0;
+}
+
 function insertarSocios($reftiposocio,$ife,$nombre,$domicilio,$curp,$rfc) { 
 $sql = "insert into dbsocios(idsocio,reftiposocio,nombre,ife,domicilio,curp,rfc) 
-values ('',".$reftiposocio.",'".utf8_decode($nombre)."',".$ife.",'".utf8_decode($domicilio)."','".utf8_decode($curp)."','".utf8_decode($rfc)."')"; 
+values ('',".$reftiposocio.",'".utf8_decode($nombre)."','".$ife."','".utf8_decode($domicilio)."','".utf8_decode($curp)."','".utf8_decode($rfc)."')"; 
 $res = $this->query($sql,1); 
 return $res; 
 } 
@@ -177,7 +187,10 @@ return $res;
 
 
 function traerSociosPorId($id) { 
-$sql = "select idsocio,reftiposocio,ife,nombre,domicilio,curp,rfc from dbsocios where idsocio =".$id; 
+$sql = "select s.idsocio, s.reftiposocio, s.ife, s.nombre, s.domicilio, s.curp, s.rfc, ts.tiposocio 
+		from dbsocios s 
+		inner join tbtiposocios ts on ts.idtiposocio = s.reftiposocio
+		where s.idsocio =".$id; 
 $res = $this->query($sql,0); 
 return $res; 
 }
@@ -189,6 +202,31 @@ $sql = "select s.idsocio,s.ife, s.nombre, s.domicilio, s.curp, s.rfc, ts.tiposoc
 		inner join dbsociosempresas se on se.refsocio = s.idsocio
 		inner join dbempresas e on se.refempresa = e.idempresa
 		where ts.activo = 1 and e.idempresa = ".$idempresa."
+		order by 3"; 
+$res = $this->query($sql,0); 
+return $res; 
+} 
+
+
+function traerSociosPorNombreEmpresa($empresa) { 
+$sql = "select s.idsocio,s.ife, s.nombre, s.domicilio, s.curp, s.rfc, ts.tiposocio, e.razonsocial ,s.reftiposocio
+		from dbsocios s 
+		inner join tbtiposocios ts on ts.idtiposocio = s.reftiposocio
+		inner join dbsociosempresas se on se.refsocio = s.idsocio
+		inner join dbempresas e on se.refempresa = e.idempresa
+		where ts.activo = 1 and e.razonsocial like '%".$empresa."%'
+		order by 3"; 
+$res = $this->query($sql,0); 
+return $res; 
+} 
+
+function traerSociosPorNombre($socio) { 
+$sql = "select s.idsocio,s.ife, s.nombre, s.domicilio, s.curp, s.rfc, ts.tiposocio, e.razonsocial ,s.reftiposocio
+		from dbsocios s 
+		inner join tbtiposocios ts on ts.idtiposocio = s.reftiposocio
+		inner join dbsociosempresas se on se.refsocio = s.idsocio
+		inner join dbempresas e on se.refempresa = e.idempresa
+		where ts.activo = 1 and s.nombre like '%".$socio."%'
 		order by 3"; 
 $res = $this->query($sql,0); 
 return $res; 
