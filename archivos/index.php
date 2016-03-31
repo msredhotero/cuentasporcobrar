@@ -8,7 +8,7 @@
 <body>
 
 <?php
-	header('Location: http://www.predio98.com.ar');
+	header('Location: http://clientes.exebin.com.mx/sistema/dashboard/');
 ?>
 </body>
 </html>
