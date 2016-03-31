@@ -170,14 +170,24 @@ if ($_SESSION['refroll_predio'] != 1) {
 </div>
 
 
+<div id="dialog4" title="Eliminar Relación Socios-Empresa">
+    	<p>
+        	<span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+            ¿Esta seguro que desea eliminar la Relación Socios-Empresa?.<span id="proveedorEli"></span>
+        </p>
+
+        <input type="hidden" value="" id="idEliminarRS" name="idEliminarRS">
+</div>
+
 <div id="dialog2" title="Eliminar Socios">
     	<p>
         	<span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
             ¿Esta seguro que desea eliminar el Socio?.<span id="proveedorEli"></span>
         </p>
-
+		<h4><strong>Importante:</strong> Borrara todos los datos del socio y sus archivos</h4>
         <input type="hidden" value="" id="idEliminar" name="idEliminar">
 </div>
+
 <script type="text/javascript">
 $(document).ready(function(){
 
@@ -244,6 +254,31 @@ $(document).ready(function(){
 		  }
 	});//fin del boton eliminar
 	
+	
+	$('.varborrarrelacion').click(function(event){
+	  usersid =  $(this).attr("id");
+	  if (!isNaN(usersid)) {
+		<?php
+			if ($_SESSION['refroll_predio'] == 2) {
+		
+		?>
+			alert("Error, no tiene permisos para realizar la acción.");
+		<?php
+			} else {
+		?>
+			$("#idEliminarRS").val(usersid);
+			$("#dialog4").dialog("open");
+		<?php } ?>  
+		
+
+		
+		//url = "../clienteseleccionado/index.php?idcliente=" + usersid;
+		//$(location).attr('href',url);
+	  } else {
+		alert("Error, vuelva a realizar la acción.");	
+	  }
+	});//fin del boton eliminar
+	
 	$( "#dialog2" ).dialog({
 		 	
 		autoOpen: false,
@@ -266,6 +301,47 @@ $(document).ready(function(){
 									$(location).attr('href',url);
 									
 							}
+					});
+				$( this ).dialog( "close" );
+				$( this ).dialog( "close" );
+					$('html, body').animate({
+						scrollTop: '1000px'
+					},
+					1500);
+			},
+			Cancelar: function() {
+				$( this ).dialog( "close" );
+			}
+		}
+ 
+ 
+	}); //fin del dialogo para eliminar
+	
+	
+	$( "#dialog4" ).dialog({
+	
+		autoOpen: false,
+		resizable: false,
+		width:600,
+		height:240,
+		modal: true,
+		buttons: {
+			"Eliminar": function() {
+
+				$.ajax({
+						data:  {id: $('#idEliminarRS').val(),
+								refempresa: <?php echo $_SESSION['usua_idempresa']; ?>, 
+								accion: 'eliminarSociosEmpresas'},
+						url:   '../../ajax/ajax.php',
+						type:  'post',
+						beforeSend: function () {
+								
+						},
+						success:  function (response) {
+								url = "index.php";
+								$(location).attr('href',url);
+								
+						}
 					});
 				$( this ).dialog( "close" );
 				$( this ).dialog( "close" );

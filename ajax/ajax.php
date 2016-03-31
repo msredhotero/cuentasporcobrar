@@ -152,7 +152,7 @@ case 'insertarSocios':
 	insertarSocios($serviciosSocios,$serviciosSociosEmpresas); 
 	break; 
 case 'modificarSocios': 
-	modificarSocios($serviciosSocios); 
+	modificarSocios($serviciosSocios,$serviciosSociosEmpresas); 
 	break; 
 case 'eliminarSocios': 
 	eliminarSocios($serviciosSocios); 
@@ -187,9 +187,11 @@ case 'modificarSociosEmpresas':
 modificarSociosEmpresas($serviciosSociosEmpresas); 
 break; 
 case 'eliminarSociosEmpresas': 
-eliminarSociosEmpresas($serviciosSociosEmpresas); 
+eliminarSociosEmpresas($serviciosSocios,$serviciosSociosEmpresas); 
 break; 
-
+case 'insertarAdjuntarSocio':
+insertarAdjuntarSocio($serviciosSocios,$serviciosSociosEmpresas);
+break;
 /* Fin */
 }
 
@@ -682,6 +684,29 @@ echo $res;
 
 
 /* PARA Socios */
+
+
+function insertarAdjuntarSocio($serviciosSocios,$serviciosSociosEmpresas) {
+	$refsociocargado= $_POST['refsociocargado'];
+	$reftiposocio 	= $_POST['reftiposocio'];
+	$refempresa 	= $_POST['refempresa']; 
+	
+	$socio = $serviciosSocios->traerSociosPorId($refsociocargado);
+	
+	if ($serviciosSocios->insidenciaSocios(mysql_result($socio,0,'ife'),$reftiposocio) == 0) {
+		$res = $serviciosSociosEmpresas->insertarSociosEmpresas($refsociocargado,$refempresa,$reftiposocio);
+		
+		if ((integer)$res > 0) { 
+			echo ''; 
+		} else { 
+			echo 'Huvo un error al insertar datos';	
+		}
+	} else {
+		echo 'El socio ya tiene puesto como Socio A o Socio B en otra Empresa';	
+	}
+}
+
+
 function insertarSocios($serviciosSocios, $serviciosSociosEmpresas) { 
 	$reftiposocio 	= $_POST['reftiposocio'];
 	$ife 			= $_POST['ife']; 
@@ -692,10 +717,10 @@ function insertarSocios($serviciosSocios, $serviciosSociosEmpresas) {
 	$refempresa 	= $_POST['refempresa']; 
 	
 	if ($serviciosSocios->existeSocio($ife) == 0) {
-		$res = $serviciosSocios->insertarSocios($reftiposocio,$ife,$nombre,$domicilio,$curp,$rfc); 
+		$res = $serviciosSocios->insertarSocios($ife,$nombre,$domicilio,$curp,$rfc); 
 		
 		if ((integer)$res > 0) { 
-			$serviciosSociosEmpresas->insertarSociosEmpresas($res,$refempresa);
+			$serviciosSociosEmpresas->insertarSociosEmpresas($res,$refempresa,$reftiposocio);
 			$imagenes = array("imagen1" => 'imagen1',
 							  "imagen2" => 'imagen2',
 							  "imagen3" => 'imagen3',
@@ -710,27 +735,31 @@ function insertarSocios($serviciosSocios, $serviciosSociosEmpresas) {
 		} 
 		
 	} else {
-		echo 'Ya existe ese socio (IFE repetido)';
+		echo 'Ya existe esta persona';
 	}
 } 
 
 
-function modificarSocios($serviciosSocios) { 
-	$id = $_POST['id']; 
-	$reftiposocio = $_POST['reftiposocio']; 
-	$nombre = $_POST['nombre']; 
-	$domicilio = $_POST['domicilio']; 
-	$ife = $_POST['ife'];
-	$curp = $_POST['curp']; 
-	$rfc = $_POST['rfc']; 
+function modificarSocios($serviciosSocios, $serviciosSociosEmpresas) { 
+	$id 			= $_POST['id'];
+	$idse 			= $_POST['idse']; 
+	$reftiposocio 	= $_POST['reftiposocio']; 
+	$nombre 		= $_POST['nombre']; 
+	$domicilio 		= $_POST['domicilio']; 
+	$ife 			= $_POST['ife'];
+	$curp			= $_POST['curp']; 
+	$rfc 			= $_POST['rfc']; 
+	$refempresa 	= $_POST['refempresa'];
 	
 	$cantImagenes		=	$_POST['cantidadImagenes'];
 	
 	$cantImagenes		= 4 - (integer)$cantImagenes;
 	
-	$res = $serviciosSocios->modificarSocios($id,$reftiposocio,$ife,$nombre,$domicilio,$curp,$rfc); 
+	$res = $serviciosSocios->modificarSocios($id,$ife,$nombre,$domicilio,$curp,$rfc); 
 	
 	if ($res == true) { 
+
+		$serviciosSociosEmpresas->modificarSociosEmpresas($idse,$id,$refempresa,$reftiposocio);
 		$imagenes = array("imagen1" => 'imagen1',
 						  "imagen2" => 'imagen2',
 						  "imagen3" => 'imagen3',
@@ -759,6 +788,18 @@ $resT = $serviciosSocios->TraerFotosNoticias($id);
 $res = $serviciosSocios->eliminarSocios($id); 
 echo $res; 
 } 
+
+function eliminarSociosEmpresas($serviciosSocios, $serviciosSociosEmpresas) {
+	$id 			= $_POST['id']; 
+	$refempresa 	= $_POST['refempresa'];
+	
+	$resSocio = $serviciosSocios->traerSociosPorIdEmpresa($id,$refempresa);
+
+	$res = $serviciosSociosEmpresas->eliminarSociosEmpresas(mysql_result($resSocio,0,'iddbsocioempresa')); 
+	echo $res;
+
+	
+}
 
 function eliminarFoto($serviciosSocios) {
 	$id			=	$_POST['id'];

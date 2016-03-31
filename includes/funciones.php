@@ -37,6 +37,7 @@ class Servicios {
 				$cantidad = 6;
 				$classMod = 'varmodificarsin';
 				$classEli = 'varborrar';
+				$classEliRel = 'varborrarrelacion';
 				$classVer = 'varver';
 				$idresultados = "resultadosprincipal";
 				break;
@@ -45,6 +46,7 @@ class Servicios {
 				$classMod = 'varmodificarsin';
 				$classEli = 'varborrar';
 				$classVer = 'varver';
+				$classEliRel = 'varborrarrelacion';
 				$idresultados = "resultadosprincipal";
 				break;
 			default:
@@ -98,6 +100,10 @@ class Servicios {
 											
 												<li>
 												<a href="javascript:void(0)" class="'.$classEli.'" id="'.$row[0].'">Borrar</a>
+												</li>
+												
+												<li>
+												<a href="javascript:void(0)" class="'.$classEliRel.'" id="'.$row[0].'">Borrar Relación</a>
 												</li>
 												
 												<li>

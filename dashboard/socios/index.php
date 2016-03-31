@@ -149,21 +149,37 @@ if ($_SESSION['refroll_predio'] != 1) {
         </div>
     	<div class="panel-body">
         	<form class="form-inline formulario" role="form">
-        	<div class="form-group col-md-6">
-                	<label class="control-label" style="text-align:left" for="celular1">Socios Existentes</label>
-                    <div class="input-group col-md-12">
-                    	<select data-placeholder="selecione el socio..." id="refsociocargado" name="refsociocargado" class="chosen-select" style="width:450px;" tabindex="2">
-                            <option value=""></option>
-                            <?php while ($rowC = mysql_fetch_array($resSoc)) { ?>
-                                <option value="<?php echo $rowC[0]; ?>">IFE: <?php echo $rowC[1]; ?> - Nombre: <?php echo $rowC[2]; ?> - Tipo: <?php echo $rowC['tiposocio']; ?></option>
-                            <?php } ?>
-                            
-                        </select>
-                    </div>
+        	<div class='row' style="margin-left:25px; margin-right:25px; ">
+            <div class="form-group col-md-6">
+                <label class="control-label" style="text-align:left" for="celular1">Socios Existentes</label>
+                <div class="input-group col-md-12">
+                    <select data-placeholder="selecione el socio..." id="refsociocargado" name="refsociocargado" class="chosen-select" style="width:450px;" tabindex="2">
+                        <option value=""></option>
+                        <?php while ($rowC = mysql_fetch_array($resSoc)) { ?>
+                            <option value="<?php echo $rowC[0]; ?>">IFE: <?php echo $rowC[1]; ?> - Nombre: <?php echo $rowC[2]; ?> - Tipo: <?php echo $rowC['tiposocio']; ?></option>
+                        <?php } ?>
+                        
+                    </select>
                 </div>
+            </div>
+            
+            <div class="form-group col-md-6">
+                <label class="control-label" style="text-align:left" for="reftiposocio">Tipo Socio</label>
+                <div class="input-group col-md-12">
+                <select id="reftiposocioA" class="form-control" name="reftiposocioA">
+                    <option value="1">Socio A</option>
+                    <option value="2">Socio B</option>
+                    <option value="3">Administrador</option>
+                    <option value="4">Apoderado</option>
+                    <option value="5">Comisario</option>
+                </select>
+                </div>
+            </div>
+            </div>
+            
             
             <div class='row' style="margin-left:25px; margin-right:25px; ">
-                <div class='alert2'>
+                <div class='alert alert3'>
                 
                 </div>
                 <div id='load'>
@@ -257,6 +273,18 @@ if ($_SESSION['refroll_predio'] != 1) {
     
             <div class="row">
 			<?php echo $formulario; ?>
+            <div class="form-group col-md-6">
+                <label class="control-label" style="text-align:left" for="reftiposocio">Tipo Socio</label>
+                <div class="input-group col-md-12">
+                <select id="reftiposocio" class="form-control" name="reftiposocio">
+                    <option value="1">Socio A</option>
+                    <option value="2">Socio B</option>
+                    <option value="3">Administrador</option>
+                    <option value="4">Apoderado</option>
+                    <option value="5">Comisario</option>
+                </select>
+                </div>
+            </div>
             <input type="hidden" id="refempresa" name="refempresa" value="<?php echo $_SESSION['usua_idempresa']; ?>" />
             </div>
             
@@ -373,12 +401,21 @@ if ($_SESSION['refroll_predio'] != 1) {
 
 
 </div>
+<div id="dialog4" title="Eliminar Relación Socios-Empresa">
+    	<p>
+        	<span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+            ¿Esta seguro que desea eliminar la Relación Socios-Empresa?.<span id="proveedorEli"></span>
+        </p>
+
+        <input type="hidden" value="" id="idEliminarRS" name="idEliminarRS">
+</div>
+
 <div id="dialog2" title="Eliminar Socios">
     	<p>
         	<span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
             ¿Esta seguro que desea eliminar el Socio?.<span id="proveedorEli"></span>
         </p>
-
+		<h4><strong>Importante:</strong> Borrara todos los datos del socio y sus archivos</h4>
         <input type="hidden" value="" id="idEliminar" name="idEliminar">
 </div>
 <script type="text/javascript" src="../../js/jquery.dataTables.min.js"></script>
@@ -441,28 +478,53 @@ $(document).ready(function(){
 		$(location).attr('href',url);
     });
 	
-		$('.varborrar').click(function(event){
-		  usersid =  $(this).attr("id");
-		  if (!isNaN(usersid)) {
-			<?php
-				if ($_SESSION['refroll_predio'] == 2) {
-			
-			?>
-				alert("Error, no tiene permisos para realizar la acción.");
-			<?php
-				} else {
-			?>
-				$("#idEliminar").val(usersid);
-				$("#dialog2").dialog("open");
-			<?php } ?>  
-			
+	$('.varborrar').click(function(event){
+	  usersid =  $(this).attr("id");
+	  if (!isNaN(usersid)) {
+		<?php
+			if ($_SESSION['refroll_predio'] == 2) {
+		
+		?>
+			alert("Error, no tiene permisos para realizar la acción.");
+		<?php
+			} else {
+		?>
+			$("#idEliminar").val(usersid);
+			$("#dialog2").dialog("open");
+		<?php } ?>  
+		
 
-			
-			//url = "../clienteseleccionado/index.php?idcliente=" + usersid;
-			//$(location).attr('href',url);
-		  } else {
-			alert("Error, vuelva a realizar la acción.");	
-		  }
+		
+		//url = "../clienteseleccionado/index.php?idcliente=" + usersid;
+		//$(location).attr('href',url);
+	  } else {
+		alert("Error, vuelva a realizar la acción.");	
+	  }
+	});//fin del boton eliminar
+	
+	
+	$('.varborrarrelacion').click(function(event){
+	  usersid =  $(this).attr("id");
+	  if (!isNaN(usersid)) {
+		<?php
+			if ($_SESSION['refroll_predio'] == 2) {
+		
+		?>
+			alert("Error, no tiene permisos para realizar la acción.");
+		<?php
+			} else {
+		?>
+			$("#idEliminarRS").val(usersid);
+			$("#dialog4").dialog("open");
+		<?php } ?>  
+		
+
+		
+		//url = "../clienteseleccionado/index.php?idcliente=" + usersid;
+		//$(location).attr('href',url);
+	  } else {
+		alert("Error, vuelva a realizar la acción.");	
+	  }
 	});//fin del boton eliminar
 	
 	$("#example").on("click",'.varmodificarsin', function(){
@@ -533,6 +595,47 @@ $(document).ready(function(){
 		 
 		 
 	 		}); //fin del dialogo para eliminar
+			
+			
+	$( "#dialog4" ).dialog({
+	
+		autoOpen: false,
+		resizable: false,
+		width:600,
+		height:240,
+		modal: true,
+		buttons: {
+			"Eliminar": function() {
+
+				$.ajax({
+						data:  {id: $('#idEliminarRS').val(),
+								refempresa: <?php echo $_SESSION['usua_idempresa']; ?>, 
+								accion: 'eliminarSociosEmpresas'},
+						url:   '../../ajax/ajax.php',
+						type:  'post',
+						beforeSend: function () {
+								
+						},
+						success:  function (response) {
+								url = "index.php";
+								$(location).attr('href',url);
+								
+						}
+					});
+				$( this ).dialog( "close" );
+				$( this ).dialog( "close" );
+					$('html, body').animate({
+						scrollTop: '1000px'
+					},
+					1500);
+			},
+			Cancelar: function() {
+				$( this ).dialog( "close" );
+			}
+		}
+ 
+ 
+	}); //fin del dialogo para eliminar
 			
 	$("#reftiposocio").click(function(event) {
 					$("#reftiposocio").removeClass("alert-danger");
@@ -634,18 +737,35 @@ $(document).ready(function(){
 	
 	
 	$('#adjuntar').click(function(){
+		//alert($('#refsociocargado').val());
+		
 		$.ajax({
-				data:  {refclientecargado: $('#refclientecargado').val(), 
-						idEmpresa: <?php echo $_SESSION['usua_idempresa']; ?>,
-						accion: 'insertarClienteEmpresa'},
+				data:  {refsociocargado: $('#refsociocargado').val(), 
+						refempresa: <?php echo $_SESSION['usua_idempresa']; ?>,
+						reftiposocio: $('#reftiposocioA').val(),
+						accion: 'insertarAdjuntarSocio'},
 				url:   '../../ajax/ajax.php',
 				type:  'post',
 				beforeSend: function () {
 						
 				},
 				success:  function (response) {
+					if (response == '') {
+						$(".alert3").removeClass("alert-danger");
+						$(".alert3").removeClass("alert-info");
+						$(".alert3").addClass("alert-success");
+						$(".alert3").html('<strong>Ok!</strong> Se cargo exitosamente el <strong>Socio</strong> a la Empresa. ');
+
+						$("#load").html('');
+											
 						url = "index.php";
 						$(location).attr('href',url);
+					} else {
+						$(".alert3").removeClass("alert-danger");
+						$(".alert3").addClass("alert-danger");
+						$(".alert3").html('<strong>Error!</strong> '+response);
+						$("#load").html('');
+					}
 
 				}
 		});

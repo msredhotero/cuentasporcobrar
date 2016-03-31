@@ -270,6 +270,33 @@ function rptSaldosClientesEmpresas($idcliente,$fechadesde,$fechahasta) {
 }
 
 
+function traerSocios() { 
+$sql = "select s.idsocio, s.ife, s.nombre, s.domicilio, s.curp, s.rfc, ts.tiposocio, e.razonsocial ,se.reftiposocio
+		from dbsocios s
+		inner join dbsociosempresas se on se.refsocio = s.idsocio 
+		inner join tbtiposocios ts on ts.idtiposocio = se.reftiposocio
+		inner join dbempresas e on se.refempresa = e.idempresa
+		where ts.activo = 1
+		order by e.razonsocial, se.reftiposocio"; 
+$res = $this->query($sql,0); 
+return $res; 
+} 
+
+
+function traerSoloSocios() { 
+$sql = "select s.idsocio, s.ife, s.nombre, s.domicilio, s.curp, s.rfc, ts.tiposocio ,se.reftiposocio
+		from dbsocios s
+		inner join dbsociosempresas se on se.refsocio = s.idsocio 
+		inner join tbtiposocios ts on ts.idtiposocio = se.reftiposocio
+		inner join dbempresas e on se.refempresa = e.idempresa
+		where ts.activo = 1
+		group by s.idsocio, s.ife, s.nombre, s.domicilio, s.curp, s.rfc, ts.tiposocio ,se.reftiposocio
+		order by s.nombre, se.reftiposocio, s.domicilio"; 
+$res = $this->query($sql,0); 
+return $res; 
+} 
+
+
 function query($sql,$accion) {
 		
 		

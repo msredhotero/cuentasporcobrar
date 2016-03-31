@@ -446,25 +446,14 @@ if ($_SESSION['idroll_predio'] == 2) {
         	<div class="row">
 
                 
-            	<div class="form-group col-md-6">
-                    <label class="control-label" style="text-align:left" for="refcliente">Seleccione el Cliente</label>
-                    <div class="input-group col-md-12">
-                    	<select id="refcliente5" class="form-control" name="refcliente5">
-							<?php echo $cadRef; ?>
-                    	</select>
-                    </div>
-                </div>
-                
-
-                
                 <div class="form-group col-md-6">
                     <label class="control-label" style="text-align:left" for="refcliente">Acción</label>
                     <ul class="list-inline">
                         <li>
-                            <button type="button" class="btn btn-success" id="rpt5" style="margin-left:0px;">Generar</button>
+                            <button type="button" class="btn btn-success" id="rpt6" style="margin-left:0px;">Generar</button>
                         </li>
                         <li>
-                            <button type="button" class="btn btn-default" id="rpt5Excel" style="margin-left:0px;">Generar Excel</button>
+                            <button type="button" class="btn btn-default" id="rpt6Excel" style="margin-left:0px;">Generar Excel</button>
                         </li>
                     </ul>
                 </div>
@@ -476,6 +465,49 @@ if ($_SESSION['idroll_predio'] == 2) {
             
             <div class='row' style="margin-left:25px; margin-right:25px;">
                 <div class='alert6'>
+                
+                </div>
+                <div id='load6'>
+                
+                </div>
+            </div>
+
+            </form>
+    	</div>
+    </div>
+    
+    
+    
+    
+    <div class="boxInfoLargo">
+        <div id="headBoxInfo">
+        	<p style="color: #fff; font-size:18px; height:16px;">Reporte Listado de Socios</p>
+        	
+        </div>
+    	<div class="cuerpoBox">
+        	<form class="form-inline formulario" role="form">
+        	<div class="row">
+
+                
+                <div class="form-group col-md-6">
+                    <label class="control-label" style="text-align:left" for="refcliente">Acción</label>
+                    <ul class="list-inline">
+                        <li>
+                            <button type="button" class="btn btn-success" id="rpt7" style="margin-left:0px;">Generar</button>
+                        </li>
+                        <li>
+                            <button type="button" class="btn btn-default" id="rpt7Excel" style="margin-left:0px;">Generar Excel</button>
+                        </li>
+                    </ul>
+                </div>
+                
+                
+
+            </div>
+            
+            
+            <div class='row' style="margin-left:25px; margin-right:25px;">
+                <div class='alert7'>
                 
                 </div>
                 <div id='load6'>
@@ -524,69 +556,7 @@ $(document).ready(function(){
 		traerClientesPorEmpresa($(this).val());	
 	});
 	
-/*
-	function traerFacturas() {
-		
-		$.ajax({
-				data:  {refcliente: $('#refcliente').val(),
-						refempresa: <?php echo $_SESSION['usua_idempresa']; ?>,
-						forma: 'check',
-						accion: 'traerFacturasPorClienteEmpresa'},
-				url:   '../../ajax/ajax.php',
-				type:  'post',
-				beforeSend: function () {
-						
-				},
-				success:  function (response) {
-						$('.lstFacturas').html(response);
-						
-				}
-		});
-	}
-	
-	function traerFacturasPorId(id, operacion) {
-		
-		$.ajax({
-				data:  {idfactura: id.replace('factura',''), 
-						accion: 'traerMontoFacturasPorId'},
-				url:   '../../ajax/ajax.php',
-				type:  'post',
-				beforeSend: function () {
-						
-				},
-				success:  function (response) {
-					
-					datos = response.split("|");
-					
-					if (operacion == 0) {
-						$('#total').val(parseFloat($('#total').val()) + parseFloat(datos[0]));
-						$('#saldo').val(parseFloat($('#saldo').val()) +  parseFloat(datos[1]));
-					} else {
-						$('#total').val(parseFloat($('#total').val() - parseFloat(datos[0])));
-						$('#saldo').val(parseFloat($('#saldo').val() - parseFloat(datos[1])));
-					}
-					
-					
-						
-				}
-		});
-	}
-	
-	$(".lstFacturas").on("click",'.lstcheck', function(){
-		usersid =  $(this).attr("id");
-		if ($(this).is(':checked')) {
-			traerFacturasPorId(usersid,0);
-		} else {
-			traerFacturasPorId(usersid,1);
-		}
-	});  */
-	//fin de los check
-/*
-	$('#refcliente').change( function() {
-		$('#total').val(0);
-		traerFacturas();
-		
-	});*/
+
 	
 	$("#rptgf").click(function(event) {
         window.open("../../reportes/rptFacturacionGeneral.php?id=" + $("#refempresa1").val() + "&fechadesde=" + $("#fechadesde1").val()+ "&fechahasta=" + $("#fechahasta1").val(),'_blank');	
@@ -610,6 +580,17 @@ $(document).ready(function(){
 	
 	$("#rpt5").click(function(event) {
         window.open("../../reportes/rptSaldosClientesEmpresas.php?idClie=" + $("#refcliente5").val() + "&fechadesde=" + $("#fechadesde5").val()+ "&fechahasta=" + $("#fechahasta5").val(),'_blank');	
+						
+    });
+	
+	
+	$("#rpt6").click(function(event) {
+        window.open("../../reportes/rptSociosEmpresas.php",'_blank');	
+						
+    });
+	
+	$("#rpt7").click(function(event) {
+        window.open("../../reportes/rptSocios.php",'_blank');	
 						
     });
 
@@ -638,6 +619,16 @@ $(document).ready(function(){
 	
 	$("#rpt5Excel").click(function(event) {
         window.open("../../reportes/rptSaldosClientesEmpresasExcel.php?idClie=" + $("#refcliente5").val() + "&fechadesde=" + $("#fechadesde5").val()+ "&fechahasta=" + $("#fechahasta5").val(),'_blank');	
+						
+    });
+	
+	$("#rpt6Excel").click(function(event) {
+        window.open("../../reportes/rptSociosEmpresasExcel.php",'_blank');	
+						
+    });
+	
+	$("#rpt7Excel").click(function(event) {
+        window.open("../../reportes/rptSociosExcel.php",'_blank');	
 						
     });
 

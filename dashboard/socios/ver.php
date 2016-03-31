@@ -36,6 +36,8 @@ $id = $_GET['id'];
 
 $resResultado = $serviciosSocios->traerSociosPorId($id);
 
+$resEmpresasSocio = $serviciosSocios->traerSociosPorId($id);
+
 /////////////////////// Opciones para la creacion del formulario  /////////////////////
 $tabla 			= "dbsocios";
 
@@ -145,7 +147,11 @@ if ($_SESSION['refroll_predio'] != 1) {
         	
 			<div class="row" id="muestra">
             <div align="center">
-            	<h3>Empresa: <?php echo $_SESSION['usua_empresa']; ?></h3>
+            	
+                <h3>Empresas relacionadas con el Socio</h3>
+                <?php while ($rE = mysql_fetch_array($resEmpresasSocio)) { ?>
+                	<p><span class="glyphicon glyphicon-ok"></span> <?php echo $rE['razonsocial']; ?> - <?php echo $rE['tiposocio']; ?></p>
+                <?php } ?>
             </div>
             <link rel="stylesheet" href="../../bootstrap/css/bootstrap.min.css" media="all"/>
 			<?php echo $formulario; ?>

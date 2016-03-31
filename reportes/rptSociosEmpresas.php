@@ -29,27 +29,8 @@ require('fpdf.php');
 
 //$header = array("Hora", "Cancha 1", "Cancha 2", "Cancha 3");
 
-$idEmpresa		=	$_GET['idEmp'];
 
-//////////////////              PARA LAS FECHAS        /////////////////////////////////////////////////////////////////
-
-$fechadesde		=	$_GET['fechadesde'];
-$fechahasta		=	$_GET['fechahasta'];
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-$resEmpresa		=	$serviciosEmpresas->traerEmpresasPorId($idEmpresa);
-
-$empresa		=	mysql_result($resEmpresa,0,1);
-
-$datos			=	$serviciosReportes->rptSaldoCliente($idEmpresa,$fechadesde,$fechahasta);
-
-$TotalIngresos = 0;
-$TotalEgresos = 0;
-$Totales = 0;
-$Caja = 0;
-
+$datos			=	$serviciosReportes->traerSocios();
 
 
 class PDF extends FPDF
@@ -62,7 +43,11 @@ class PDF extends FPDF
 // Tabla coloreada
 function ingresosFacturacion($header, $data, &$TotalIngresos)
 {
-
+	$this->SetFont('Arial','',12);
+	$this->Ln();
+	$this->Ln();
+	$this->Cell(60,7,'Socios-Empresas',0,0,'L',false);
+	$this->SetFont('Arial','',11);
     // Colores, ancho de línea y fuente en negrita
     $this->SetFillColor(255,0,0);
     $this->SetTextColor(255);
@@ -72,7 +57,7 @@ function ingresosFacturacion($header, $data, &$TotalIngresos)
 	
 	
     // Cabecera
-    $w = array(65,25,25,25);
+    $w = array(50,22,50,15,15,15,110);
     for($i=0;$i<count($header);$i++)
         $this->Cell($w[$i],6,$header[$i],1,0,'C',true);
     $this->Ln();
@@ -83,43 +68,49 @@ function ingresosFacturacion($header, $data, &$TotalIngresos)
     // Datos
     $fill = false;
 	
-	$total = 0;
 	$totalcant = 0;
-	$sumSaldos = 0;
-	$sumAbonos = 0;
 	
-	
-	$this->SetFont('Arial','',8);
+	$this->SetFont('Arial','',9);
     while ($row = mysql_fetch_array($data))
     {
-		$total = $total + $row[1];
-		$totalcant = $totalcant + 1;
-		$sumSaldos = $sumSaldos + $row[3];
-		$sumAbonos = $sumAbonos + $row[2];
 		
-		$this->Cell($w[0],4,$row[0],'LR',0,'L',$fill);
-		$this->Cell($w[1],4,number_format($row[1],2,',','.'),'LR',0,'R',$fill);
-		$this->Cell($w[2],4,number_format($row[2],2,',','.'),'LR',0,'R',$fill);
-		$this->Cell($w[3],4,number_format($row[3],2,',','.'),'LR',0,'R',$fill);
+		$totalcant = $totalcant + 1;
+		
+		//("Empresa", "Tipo Socio", "Nombre", "IFE","CURP", "RFC", "Domicilio");
+        $this->Cell($w[0],5,$row['razonsocial'],'LR',0,'L',$fill);
+		$this->Cell($w[1],5,$row['tiposocio'],'LR',0,'L',$fill);
+        $this->Cell($w[2],5,$row['nombre'],'LR',0,'L',$fill);
+		$this->Cell($w[3],5,$row['ife'],'LR',0,'C',$fill);
+		$this->Cell($w[4],5,$row['curp'],'LR',0,'C',$fill);
+		$this->Cell($w[5],5,$row['rfc'],'LR',0,'C',$fill);
+		$this->Cell($w[6],5,$row['domicilio'],'LR',0,'L',$fill);
         $this->Ln();
-
+        
+		
+		if ($totalcant == 25) {
+			$this->AddPage();
+			$this->SetFont('Arial','',11);
+			// Colores, ancho de línea y fuente en negrita
+			$this->SetFillColor(255,0,0);
+			$this->SetTextColor(255);
+			$this->SetDrawColor(128,0,0);
+			$this->SetLineWidth(.3);
+			for($i=0;$i<count($header);$i++)
+				$this->Cell($w[$i],6,$header[$i],1,0,'C',true);
+			$this->Ln();
+			$this->SetFillColor(224,235,255);
+			$this->SetTextColor(0);
+			$this->SetFont('');
+			// Datos
+			$fill = false;
+			$this->SetFont('Arial','',9);
+		}
     }
 	
-	$this->Cell($w[0],5,'Totales:','LRT',0,'L',$fill);
-	$this->Cell($w[1],5,number_format($total,2,',','.'),'LRT',0,'R',$fill);
-	$this->Cell($w[2],5,number_format($sumAbonos,2,',','.'),'LRT',0,'R',$fill);
-	$this->Cell($w[3],5,number_format($sumSaldos,2,',','.'),'LRT',0,'R',$fill);
+
 	$fill = !$fill;
-	$this->Ln();
+	$this->Cell(array_sum($w),0,'','T');
 	
-    // Línea de cierre
-    $this->Cell(array_sum($w),0,'','T');
-	$this->SetFont('Arial','',12);
-	$this->Ln();
-	$this->Ln();
-	$this->Cell(60,7,'Total: $'.number_format($sumSaldos, 2, '.', ','),0,0,'L',false);
-	
-	$TotalIngresos = $TotalIngresos + $total;
 }
 
 //Pie de página
@@ -132,7 +123,7 @@ $this->SetFont('Arial','I',8);
 
 $this->Cell(0,10,'Pagina '.$this->PageNo()." - Fecha: ".date('Y-m-d'),0,0,'C');
 }
-
+   
 }
 
 
@@ -140,24 +131,19 @@ $this->Cell(0,10,'Pagina '.$this->PageNo()." - Fecha: ".date('Y-m-d'),0,0,'C');
 
 
 
-$pdf = new PDF();
+$pdf = new PDF("L");
 
 
 // Títulos de las columnas
 
-$headerFacturacion = array("Nombre", "Cargos", "Abonos", "Saldo");
+$headerFacturacion = array("Empresa", "Tipo Socio", "Nombre", "IFE","CURP", "RFC", "Domicilio");
 // Carga de datos
 
 $pdf->AddPage();
 
 $pdf->SetFont('Arial','U',17);
-$pdf->Cell(180,7,'Reporte Saldos de Clientes',0,0,'C',false);
-$pdf->Ln();
-$pdf->SetFont('Arial','U',14);
-$pdf->Cell(180,7,"Empresa: ".strtoupper($empresa),0,0,'C',false);
-$pdf->Ln();
-$pdf->Cell(180,7,'Fecha: desde '.$fechadesde." hasta ".$fechahasta,0,0,'C',false);
-$pdf->Ln();
+$pdf->Cell(260,7,'Reporte Socios-Empresas',0,0,'C',false);
+
 
 $pdf->SetFont('Arial','',10);
 
@@ -166,9 +152,10 @@ $pdf->ingresosFacturacion($headerFacturacion,$datos,$TotalFacturacion);
 $pdf->Ln();
 
 
+
 $pdf->SetFont('Arial','',13);
 
-$nombreTurno = "rptSaldosClientes-".$fecha.".pdf";
+$nombreTurno = "rptSociosEmpresas-".$fecha.".pdf";
 
 $pdf->Output($nombreTurno,'D');
 

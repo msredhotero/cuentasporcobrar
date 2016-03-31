@@ -16,6 +16,7 @@ include ('../../includes/funcionesEmpresas.php');
 include ('../../includes/funcionesEmpresaBancos.php');
 include ('../../includes/funcionesTipoSocios.php');
 include ('../../includes/funcionesSocios.php');
+include ('../../includes/funcionesSociosEmpresas.php');
 
 $serviciosFunciones = new Servicios();
 $serviciosUsuario 	= new ServiciosUsuarios();
@@ -24,6 +25,7 @@ $serviciosEmpresas  = new ServiciosEmpresas();
 $serviciosEmpresaBancos = new ServiciosEmpresaBancos();
 $serviciosTipoSocio		= new ServiciosTipoSocios();
 $serviciosSocios		= new ServiciosSocios();
+$serviciosSociosEmpresas= new ServiciosSociosEmpresas();
 
 
 $fecha = date('Y-m-d');
@@ -35,6 +37,8 @@ $resMenu = $serviciosHTML->menu(utf8_encode($_SESSION['nombre_predio']),"Socios"
 $id = $_GET['id'];
 
 $resResultado = $serviciosSocios->traerSociosPorId($id);
+
+$idSE		  = mysql_result($resResultado,0,'iddbsocioempresa');
 
 /////////////////////// Opciones para la creacion del formulario  /////////////////////
 $tabla 			= "dbsocios";
@@ -144,6 +148,14 @@ if ($_SESSION['refroll_predio'] == 2) {
         	
 			<div class="row">
 			<?php echo $formulario; ?>
+            <div class="form-group col-md-6">
+                <label class="control-label" style="text-align:left" for="reftiposocio">Tipo Socio</label>
+                <div class="input-group col-md-12">
+                <select id="reftiposocio" class="form-control" name="reftiposocio">
+                    <?php echo $cadVariable1; ?>
+                </select>
+                </div>
+            </div>
             </div>
             
             <div class="row" style="margin-left:25px; margin-right:25px;">
@@ -229,6 +241,8 @@ if ($_SESSION['refroll_predio'] == 2) {
             </div>
                 
             <input type="hidden" id="cantidadImagenes" name="cantidadImagenes" value="<?php echo $cantidadImagenes; ?>">
+            <input type="hidden" id="idse" name="idse" value="<?php echo $idSE; ?>">
+            <input type="hidden" id="refempresa" name="refempresa" value="<?php echo $_SESSION['usua_idempresa']; ?>">
             
             <div class='row' style="margin-left:25px; margin-right:25px;">
                 <div class='alert'>
@@ -249,6 +263,9 @@ if ($_SESSION['refroll_predio'] == 2) {
                         <button type="button" class="btn btn-danger varborrar" id="<?php echo $id; ?>" style="margin-left:0px;">Eliminar</button>
                     </li>
                     <li>
+                        <button type="button" class="btn btn-danger varborrarrelacion" id="<?php echo $id; ?>" style="margin-left:0px;">Eliminar Relación</button>
+                    </li>
+                    <li>
                         <button type="button" class="btn btn-default volver" style="margin-left:0px;">Volver</button>
                     </li>
                 </ul>
@@ -265,12 +282,21 @@ if ($_SESSION['refroll_predio'] == 2) {
 
 </div>
 
+<div id="dialog4" title="Eliminar Relación Socios-Empresa">
+    	<p>
+        	<span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+            ¿Esta seguro que desea eliminar la Relación Socios-Empresa?.<span id="proveedorEli"></span>
+        </p>
+
+        <input type="hidden" value="" id="idEliminarRS" name="idEliminarRS">
+</div>
+
 <div id="dialog2" title="Eliminar Socios">
     	<p>
         	<span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
             ¿Esta seguro que desea eliminar el Socio?.<span id="proveedorEli"></span>
         </p>
-
+		<h4><strong>Importante:</strong> Borrara todos los datos del socio y sus archivos</h4>
         <input type="hidden" value="" id="idEliminar" name="idEliminar">
 </div>
 <script type="text/javascript" src="../../js/jquery.dataTables.min.js"></script>
@@ -297,6 +323,31 @@ $(document).ready(function(){
 		  } else {
 			alert("Error, vuelva a realizar la acción.");	
 		  }
+	});//fin del boton eliminar
+	
+	
+	$('.varborrarrelacion').click(function(event){
+	  usersid =  $(this).attr("id");
+	  if (!isNaN(usersid)) {
+		<?php
+			if ($_SESSION['refroll_predio'] == 2) {
+		
+		?>
+			alert("Error, no tiene permisos para realizar la acción.");
+		<?php
+			} else {
+		?>
+			$("#idEliminarRS").val(usersid);
+			$("#dialog4").dialog("open");
+		<?php } ?>  
+		
+
+		
+		//url = "../clienteseleccionado/index.php?idcliente=" + usersid;
+		//$(location).attr('href',url);
+	  } else {
+		alert("Error, vuelva a realizar la acción.");	
+	  }
 	});//fin del boton eliminar
 
 	 $( "#dialog2" ).dialog({
@@ -337,7 +388,45 @@ $(document).ready(function(){
 		 
 	 		}); //fin del dialogo para eliminar
 	
+	$( "#dialog4" ).dialog({
 	
+		autoOpen: false,
+		resizable: false,
+		width:600,
+		height:240,
+		modal: true,
+		buttons: {
+			"Eliminar": function() {
+
+				$.ajax({
+						data:  {id: $('#idEliminarRS').val(),
+								refempresa: <?php echo $_SESSION['usua_idempresa']; ?>, 
+								accion: 'eliminarSociosEmpresas'},
+						url:   '../../ajax/ajax.php',
+						type:  'post',
+						beforeSend: function () {
+								
+						},
+						success:  function (response) {
+								url = "index.php";
+								$(location).attr('href',url);
+								
+						}
+					});
+				$( this ).dialog( "close" );
+				$( this ).dialog( "close" );
+					$('html, body').animate({
+						scrollTop: '1000px'
+					},
+					1500);
+			},
+			Cancelar: function() {
+				$( this ).dialog( "close" );
+			}
+		}
+ 
+ 
+	}); //fin del dialogo para eliminar
 	<?php 
 		echo $serviciosHTML->validacion($tabla);
 	

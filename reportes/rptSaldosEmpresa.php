@@ -168,7 +168,7 @@ $pdf->ingresosFacturacion($headerFacturacion,$datos,$TotalFacturacion);
 $pdf->Ln();
 
 $pdf->SetFont('Arial','',13);
-$pdf->Footer();
+
 $nombreTurno = "rptSaldosClientes-".$fecha.".pdf";
 
 $pdf->Output($nombreTurno,'D');

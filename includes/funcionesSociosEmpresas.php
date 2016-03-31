@@ -22,18 +22,18 @@ function GUID()
 
 /* PARA SociosEmpresas */
 
-function insertarSociosEmpresas($refsocio,$refempresa) { 
-$sql = "insert into dbsociosempresas(iddbsocioempresa,refsocio,refempresa) 
-values ('',".$refsocio.",".$refempresa.")"; 
+function insertarSociosEmpresas($refsocio,$refempresa,$reftiposocio) { 
+$sql = "insert into dbsociosempresas(iddbsocioempresa,refsocio,refempresa,reftiposocio) 
+values ('',".$refsocio.",".$refempresa.",".$reftiposocio.")"; 
 $res = $this->query($sql,1); 
 return $res; 
 } 
 
 
-function modificarSociosEmpresas($id,$refsocio,$refempresa) { 
+function modificarSociosEmpresas($id,$refsocio,$refempresa,$reftiposocio) { 
 $sql = "update dbsociosempresas 
 set 
-refsocio = ".$refsocio.",refempresa = ".$refempresa." 
+refsocio = ".$refsocio.",refempresa = ".$refempresa." ,reftiposocio = ".$reftiposocio." 
 where iddbsocioempresa =".$id; 
 $res = $this->query($sql,0); 
 return $res; 
@@ -48,14 +48,14 @@ return $res;
 
 
 function traerSociosEmpresas() { 
-$sql = "select iddbsocioempresa,refsocio,refempresa from dbsociosempresas order by 1"; 
+$sql = "select iddbsocioempresa,refsocio,refempresa,reftiposocio from dbsociosempresas order by 1"; 
 $res = $this->query($sql,0); 
 return $res; 
 } 
 
 
 function traerSociosEmpresasPorId($id) { 
-$sql = "select iddbsocioempresa,refsocio,refempresa from dbsociosempresas where iddbsocioempresa =".$id; 
+$sql = "select iddbsocioempresa,refsocio,refempresa,reftiposocio from dbsociosempresas where iddbsocioempresa =".$id; 
 $res = $this->query($sql,0); 
 return $res; 
 } 
