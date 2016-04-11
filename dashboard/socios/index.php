@@ -73,7 +73,7 @@ $lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosSocios
 
 
 
-if ($_SESSION['refroll_predio'] != 1) {
+if ($_SESSION['idroll_predio'] != 1) {
 
 } else {
 
@@ -482,7 +482,7 @@ $(document).ready(function(){
 	  usersid =  $(this).attr("id");
 	  if (!isNaN(usersid)) {
 		<?php
-			if ($_SESSION['refroll_predio'] == 2) {
+			if ($_SESSION['idroll_predio'] == 2) {
 		
 		?>
 			alert("Error, no tiene permisos para realizar la acción.");
@@ -507,7 +507,7 @@ $(document).ready(function(){
 	  usersid =  $(this).attr("id");
 	  if (!isNaN(usersid)) {
 		<?php
-			if ($_SESSION['refroll_predio'] == 2) {
+			if ($_SESSION['idroll_predio'] == 2) {
 		
 		?>
 			alert("Error, no tiene permisos para realizar la acción.");
@@ -531,7 +531,7 @@ $(document).ready(function(){
 		  usersid =  $(this).attr("id");
 		  if (!isNaN(usersid)) {
 			<?php
-				if ($_SESSION['refroll_predio'] == 2) {
+				if ($_SESSION['idroll_predio'] == 2) {
 			
 			?>
 				alert("Error, no tiene permisos para realizar la acción.");

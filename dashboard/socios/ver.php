@@ -70,7 +70,7 @@ $cantidadImagenes = mysql_num_rows($resNoticiasFotos);
 $formulario 	= $serviciosFunciones->camposTablaVer($id, "idsocio",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
 
 
-if ($_SESSION['refroll_predio'] != 1) {
+if ($_SESSION['idroll_predio'] != 1) {
 
 } else {
 
@@ -166,7 +166,7 @@ if ($_SESSION['refroll_predio'] != 1) {
                             <div class="col-md-4" align="center">
                             <div id="img<?php echo $rowImg[3]; ?>">
                                 <?php
-									if ($_SESSION['refroll_predio'] == 2) {
+									if ($_SESSION['idroll_predio'] == 2) {
 								
 								?>
                                 <?php 
