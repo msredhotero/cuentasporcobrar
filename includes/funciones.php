@@ -1095,7 +1095,7 @@ class Servicios {
                 	<th>CORREO ELECTRONICO</th>
                     <td colspan="2">'.htmlspecialchars((mysql_result($resEmpresa,0,"email")),ENT_HTML5).'</td>
                     <th>CONTRASEÑA</th>
-                    <td colspan="2">'.htmlspecialchars((mysql_result($resEmpresa,0,"contrasenia")),ENT_HTML5).'</td>
+                    <td colspan="2">'.htmlspecialchars((mysql_result($resEmpresa,0,"contraseniaemail")),ENT_HTML5).'</td>
                 </tr>
                 
                 <tr>
@@ -1149,7 +1149,7 @@ class Servicios {
                     <td>'.strtoupper(htmlspecialchars(mysql_result($resEmpresa,0,"comisario"),ENT_HTML5)).'</td>
                     <th>USUARIO</th>
                     <td colspan="2">'.htmlspecialchars((mysql_result($resEmpresa,0,"usuario")),ENT_HTML5).'</td>
-                    <td>'.htmlspecialchars((mysql_result($resEmpresa,0,"contraseniaemail")),ENT_HTML5).'</td>
+                    <td>'.htmlspecialchars((mysql_result($resEmpresa,0,"contrasenia")),ENT_HTML5).'</td>
             	</tr>
                 
                 <tr>
