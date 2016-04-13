@@ -1084,87 +1084,118 @@ class Servicios {
 					<table class="table table-bordered table-responsive table-striped">
         	<tbody>
             	<tr>
-                	<th>RAZON SOCIAL</th>
-                    <td colspan="5">'.strtoupper(htmlspecialchars(mysql_result($resEmpresa,0,"razonsocial"),ENT_HTML5)).'</td>
+                	<th colspan="3" style="text-align:center; width:50%;">RAZON SOCIAL</th>
+                    <th colspan="3" style="text-align:center;">RFC</th>
+					
                 </tr>
             	<tr>
-                	<th>RFC</th>
-                    <td colspan="5">'.strtoupper(mysql_result($resEmpresa,0,"rfc")).'</td>
+                	<td colspan="3">'.strtoupper(htmlspecialchars(mysql_result($resEmpresa,0,"razonsocial"),ENT_HTML5)).'</td>
+                    <td colspan="3">'.strtoupper(mysql_result($resEmpresa,0,"rfc")).'</td>
                 </tr>
+				
+				<tr>
+            		<th colspan="6" style="text-align:center;">DOMICILIO</th>
+            	</tr>
+				
+				<tr>
+            		<td colspan="6">'.strtoupper(htmlspecialchars(mysql_result($resEmpresa,0,"direccion"),ENT_HTML5)).'</td>
+            	</tr>
             	<tr>
-                	<th>CORREO ELECTRONICO</th>
-                    <td colspan="2">'.htmlspecialchars((mysql_result($resEmpresa,0,"email")),ENT_HTML5).'</td>
-                    <th>CONTRASEÑA</th>
-                    <td colspan="2">'.htmlspecialchars((mysql_result($resEmpresa,0,"contraseniaemail")),ENT_HTML5).'</td>
+                	<th colspan="3" style="text-align:center;">CORREO ELECTRONICO</th>
+                    <th colspan="3" style="text-align:center;">CONTRASEÑA</th>
                 </tr>
+				
+				<tr>
+					<td colspan="3">'.htmlspecialchars((mysql_result($resEmpresa,0,"email")),ENT_HTML5).'</td>
+                    <td colspan="3">'.htmlspecialchars((mysql_result($resEmpresa,0,"contraseniaemail")),ENT_HTML5).'</td>
+				</tr>
                 
                 <tr>
-            		<th>TELEFONO</th>
-            		<td colspan="5">'.strtoupper(mysql_result($resEmpresa,0,"telefono")).'</td>
+            		<th colspan="3" style="text-align:center;">TELEFONO</th>
+					<th colspan="3" style="text-align:center;">CELULAR</th>
+            		
             	</tr>
                 
-                <tr>
-            		<th>DOMICILIO</th>
-            		<td colspan="5">'.strtoupper(htmlspecialchars(mysql_result($resEmpresa,0,"direccion"),ENT_HTML5)).'</td>
-            	</tr>
+				<tr>
+					<td colspan="3">'.strtoupper(mysql_result($resEmpresa,0,"telefono")).'</td>
+					<td colspan="3">'.strtoupper(mysql_result($resEmpresa,0,"celular")).'</td>
+				</tr>
+                
             
            		<tr>
-                	<th>NOTARIA</th>
-                    <td colspan="2">'.strtoupper(htmlspecialchars(mysql_result($resEmpresa,0,"notaria"),ENT_HTML5)).'</td>
-                    <th>NOTARIO</th>
-                    <td colspan="2">'.strtoupper(htmlspecialchars(mysql_result($resEmpresa,0,"notario"),ENT_HTML5)).'</td>
+                	<th colspan="3" style="text-align:center;">NOTARIA</th>
+                    <th colspan="3" style="text-align:center;">NOTARIO</th>
                 </tr>
-                
-                <tr>
-            		<th>GIRO</th>
-            		<td colspan="5">'.strtoupper(htmlspecialchars(mysql_result($resEmpresa,0,"giro"),ENT_HTML5)).'</td>
-            	</tr>
-                <tr>
-            		<th>OBJETO</th>
-            		<td colspan="5">'.strtoupper(htmlspecialchars(mysql_result($resEmpresa,0,"objetoempresa"),ENT_HTML5)).'</td>
-            	</tr>
-
-            	<tr>
-                	<th>SOCIO A</th>
-                    <td>'.strtoupper(htmlspecialchars(mysql_result($resEmpresa,0,"socia_a"),ENT_HTML5)).'</td>
-                    <td colspan="4"></td>
+				
+				<tr>
+					<td colspan="3">'.strtoupper(htmlspecialchars(mysql_result($resEmpresa,0,"notaria"),ENT_HTML5)).'</td>
+                    <td colspan="3">'.strtoupper(htmlspecialchars(mysql_result($resEmpresa,0,"notario"),ENT_HTML5)).'</td>
+				</tr>
+				
+				<tr>
+                	<th colspan="3" style="text-align:center;">SOCIO A</th>
+                    <th colspan="3" style="text-align:center;">SOCIO B</th>
                 </tr>
-                
-                <tr>
-                	<th>SOCIO B</th>
-                    <td>'.strtoupper(htmlspecialchars(mysql_result($resEmpresa,0,"socio_b"),ENT_HTML5)).'</td>
-                    <td colspan="4" align="center">FACTURA</td>
+				
+				<tr>
+					<td colspan="3">'.strtoupper(htmlspecialchars(mysql_result($resEmpresa,0,"socia_a"),ENT_HTML5)).'</td>
+                    <td colspan="3">'.strtoupper(htmlspecialchars(mysql_result($resEmpresa,0,"socio_b"),ENT_HTML5)).'</td>
+				</tr>
+				
+				
+				<tr>
+                	<th colspan="3" style="text-align:center;">COMISARIO</th>
+                    <th colspan="3" style="text-align:center;">APODERADO</th>
                 </tr>
-            
-           		<tr> 
-           			<th>ADMINISTRADOR</th>
-                    <td>'.strtoupper(htmlspecialchars(mysql_result($resEmpresa,0,"administrador"),ENT_HTML5)).'</td>
-                    <th>PLATAFORMA</th>
-                    <td colspan="2">'.strtoupper(htmlspecialchars(mysql_result($resEmpresa,0,"plataforma"),ENT_HTML5)).'</td>
-                    <th>CONTRASEÑA</th>
-            	</tr>
-                
-                <tr> 
-           			<th>COMISARIO</th>
-                    <td>'.strtoupper(htmlspecialchars(mysql_result($resEmpresa,0,"comisario"),ENT_HTML5)).'</td>
-                    <th>USUARIO</th>
-                    <td colspan="2">'.htmlspecialchars((mysql_result($resEmpresa,0,"usuario")),ENT_HTML5).'</td>
-                    <td>'.htmlspecialchars((mysql_result($resEmpresa,0,"contrasenia")),ENT_HTML5).'</td>
-            	</tr>
-                
-                <tr>
-            		<th>APODERADO</th>
-            		<td colspan="5">'.strtoupper(htmlspecialchars(mysql_result($resEmpresa,0,"apoderado"),ENT_HTML5)).'</td>
-            	</tr>
-                
-                <tr>
-            		<th>RPP</th>
-            		<td colspan="5">'.strtoupper(htmlspecialchars(mysql_result($resEmpresa,0,"rpp"),ENT_HTML5)).'</td>
-            	</tr>
-                <tr>
-            		<th>CUENTA</th>
-            		<td colspan="5">'.htmlspecialchars((mysql_result($resEmpresa,0,"cuenta")),ENT_HTML5).'</td>
-            	</tr>';
+				
+				<tr>
+					<td colspan="3">'.strtoupper(htmlspecialchars(mysql_result($resEmpresa,0,"comisario"),ENT_HTML5)).'</td>
+                    <td colspan="3">'.strtoupper(htmlspecialchars(mysql_result($resEmpresa,0,"apoderado"),ENT_HTML5)).'</td>
+				</tr>
+				
+				<tr>
+                	<th colspan="3" style="text-align:center;">ADMINISTRADOR</th>
+                    <th colspan="3" style="text-align:center;">RPP</th>
+                </tr>
+				
+				<tr>
+					<td colspan="3">'.strtoupper(htmlspecialchars(mysql_result($resEmpresa,0,"administrador"),ENT_HTML5)).'</td>
+                    <td colspan="3">'.strtoupper(htmlspecialchars(mysql_result($resEmpresa,0,"rpp"),ENT_HTML5)).'</td>
+				</tr>
+				
+				
+				<tr>
+                	<th colspan="3" style="text-align:center;">PLATAFORMA</th>
+                    <th colspan="3" style="text-align:center;">CUENTA</th>
+                </tr>
+				
+				<tr>
+					<td colspan="3">'.strtoupper(htmlspecialchars(mysql_result($resEmpresa,0,"plataforma"),ENT_HTML5)).'</td>
+                    <td colspan="3">'.htmlspecialchars(mysql_result($resEmpresa,0,"cuenta"),ENT_HTML5).'</td>
+				</tr>
+				
+				
+				<tr>
+                	<th colspan="3" style="text-align:center;">USUARIO</th>
+                    <th colspan="3" style="text-align:center;">CONTRASEÑA</th>
+                </tr>
+				
+				<tr>
+					<td colspan="3">'.htmlspecialchars((mysql_result($resEmpresa,0,"usuario")),ENT_HTML5).'</td>
+                    <td colspan="3">'.htmlspecialchars((mysql_result($resEmpresa,0,"contrasenia")),ENT_HTML5).'</td>
+				</tr>
+				
+				
+				<tr>
+                	<th colspan="3" style="text-align:center;">GIRO</th>
+                    <th colspan="3" style="text-align:center;">OBJETO</th>
+                </tr>
+				
+				<tr>
+					<td colspan="3">'.strtoupper(htmlspecialchars(mysql_result($resEmpresa,0,"giro"),ENT_HTML5)).'</td>
+                    <td colspan="3">'.strtoupper(htmlspecialchars(mysql_result($resEmpresa,0,"objetoempresa"),ENT_HTML5)).'</td>
+				</tr>';
+				/*
             while ($row = mysql_fetch_array($resBancos)) {
             	$formulario	.= '<tr>
                 	<th>BANCO/SUCURSAL</th>
@@ -1174,7 +1205,7 @@ class Servicios {
                     <th>CLABE</th>
                     <td align="center">'.$row["clave"].'</td>
                 </tr>';
-            }
+            }*/
 		$formulario	.= '
             </tbody>
         

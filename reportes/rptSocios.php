@@ -57,7 +57,7 @@ function ingresosFacturacion($header, $data, &$TotalIngresos)
 	
 	
     // Cabecera
-    $w = array(22,50,15,15,15,110);
+    $w = array(22,50,15,15,15,150);
     for($i=0;$i<count($header);$i++)
         $this->Cell($w[$i],6,$header[$i],1,0,'C',true);
     $this->Ln();
@@ -83,7 +83,7 @@ function ingresosFacturacion($header, $data, &$TotalIngresos)
 		$this->Cell($w[2],5,$row['ife'],'LR',0,'C',$fill);
 		$this->Cell($w[3],5,$row['curp'],'LR',0,'C',$fill);
 		$this->Cell($w[4],5,$row['rfc'],'LR',0,'C',$fill);
-		$this->Cell($w[5],5,$row['domicilio'],'LR',0,'L',$fill);
+		$this->Cell($w[5],5,substr($row['domicilio'],0,90),'LR',0,'L',$fill);
         $this->Ln();
         
 		

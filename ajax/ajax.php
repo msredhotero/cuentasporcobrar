@@ -214,7 +214,7 @@ function insertarClientes($serviciosClientes, $serviciosEmpresas) {
 		$serviciosEmpresas->insertarEmpresaClientes($_SESSION['usua_idempresa'],$res);
 		echo ''; 
 	} else { 
-		echo 'Huvo un error al insertar datos';	
+		echo 'Hubo un error al insertar datos';	
 	} 
 } 
 function modificarClientes($serviciosClientes) { 
@@ -229,7 +229,7 @@ $res = $serviciosClientes->modificarClientes($id,$razonsocial,$rfc,$direccion,$e
 if ($res == true) { 
 echo ''; 
 } else { 
-echo 'Huvo un error al modificar datos'; 
+echo 'Hubo un error al modificar datos'; 
 } 
 } 
 function eliminarClientes($serviciosClientes) { 
@@ -259,7 +259,7 @@ function insertarClienteEmpresa($serviciosEmpresaClientes) {
 	if ((integer)$res > 0) {
 		echo ''; 
 	} else { 
-		echo 'Huvo un error al insertar datos';	
+		echo 'Hubo un error al insertar datos';	
 	} 
 }
 
@@ -294,7 +294,7 @@ $res = $serviciosEmpresas->insertarEmpresas($razonsocial,$rfc,$direccion,$email,
 if ((integer)$res > 0) { 
 echo ''; 
 } else { 
-echo 'Huvo un error al insertar datos';	
+echo 'Hubo un error al insertar datos';	
 } 
 } 
 function modificarEmpresas($serviciosEmpresas) { 
@@ -325,7 +325,7 @@ $res = $serviciosEmpresas->modificarEmpresas($id,$razonsocial,$rfc,$direccion,$e
 if ($res == true) { 
 echo ''; 
 } else { 
-echo 'Huvo un error al modificar datos'; 
+echo 'Hubo un error al modificar datos'; 
 } 
 } 
 
@@ -344,7 +344,7 @@ function cambiarEmpresa($serviciosEmpresas) {
 	if ($res == true) {
 		echo '';
 	} else {
-		echo 'Huvo un error al cambiar la empresa';
+		echo 'Hubo un error al cambiar la empresa';
 	}
 }
 /* Fin */
@@ -368,7 +368,7 @@ $res = $serviciosFacturas->insertarFacturas($nrofactura,$fecha,$refcliente,$conc
 if ((integer)$res > 0) {
 echo '';
 } else {
-echo 'Huvo un error al insertar datos ';
+echo 'Hubo un error al insertar datos ';
 }
 }
 function modificarFacturas($serviciosFacturas) {
@@ -389,7 +389,7 @@ $res = $serviciosFacturas->modificarFacturas($id,$nrofactura,$fecha,$refcliente,
 if ($res == true) {
 echo '';
 } else {
-echo 'Huvo un error al modificar datos';
+echo 'Hubo un error al modificar datos';
 }
 }
 function eliminarFacturas($serviciosFacturas) {
@@ -589,7 +589,7 @@ function modificarPagos($serviciosPagos) {
 		echo '';
 		 
 	} else { 
-		echo 'Huvo un error al modificar datos'; 
+		echo 'Hubo un error al modificar datos'; 
 	} 
 } 
 function eliminarPagos($serviciosPagos) { 
@@ -607,7 +607,7 @@ $res = $serviciosPagosFacturas->insertarPagosFacturas($refpago,$reffactura,$refe
 if ((integer)$res > 0) { 
 echo ''; 
 } else { 
-echo 'Huvo un error al insertar datos';	
+echo 'Hubo un error al insertar datos';	
 } 
 } 
 
@@ -620,7 +620,7 @@ $res = $serviciosPagosFacturas->modificarPagosFacturas($id,$refpago,$reffactura,
 if ($res == true) { 
 echo ''; 
 } else { 
-echo 'Huvo un error al modificar datos'; 
+echo 'Hubo un error al modificar datos'; 
 } 
 }
  
@@ -649,7 +649,7 @@ $res = $serviciosEmpresaBancos->insertarEmpresaBancos($refempresa,$banco,$sucurs
 if ((integer)$res > 0) {
 echo '';
 } else {
-echo 'Huvo un error al insertar datos';
+echo 'Hubo un error al insertar datos';
 }
 }
 
@@ -669,7 +669,7 @@ $res = $serviciosEmpresaBancos->modificarEmpresaBancos($id,$refempresa,$banco,$s
 if ($res == true) {
 echo '';
 } else {
-echo 'Huvo un error al modificar datos';
+echo 'Hubo un error al modificar datos';
 }
 } 
 
@@ -699,7 +699,7 @@ function insertarAdjuntarSocio($serviciosSocios,$serviciosSociosEmpresas) {
 		if ((integer)$res > 0) { 
 			echo ''; 
 		} else { 
-			echo 'Huvo un error al insertar datos';	
+			echo 'Hubo un error al insertar datos';	
 		}
 	} else {
 		echo 'El socio ya tiene puesto como Socio A o Socio B en otra Empresa';	
@@ -731,7 +731,7 @@ function insertarSocios($serviciosSocios, $serviciosSociosEmpresas) {
 			}
 			echo ''; 
 		} else { 
-			echo 'Huvo un error al insertar datos';	
+			echo 'Hubo un error al insertar datos';	
 		} 
 		
 	} else {
@@ -771,7 +771,7 @@ function modificarSocios($serviciosSocios, $serviciosSociosEmpresas) {
 		}
 		echo ''; 
 	} else { 
-		echo 'Huvo un error al modificar datos'; 
+		echo 'Hubo un error al modificar datos'; 
 	} 
 } 
 
@@ -850,7 +850,7 @@ $res = $serviciosTipoSocios->insertarTipoSocios($tiposocio,$activo);
 if ((integer)$res > 0) { 
 echo ''; 
 } else { 
-echo 'Huvo un error al insertar datos';	
+echo 'Hubo un error al insertar datos';	
 } 
 } 
 function modificarTipoSocios($serviciosTipoSocios) { 
@@ -865,7 +865,7 @@ $res = $serviciosTipoSocios->modificarTipoSocios($id,$tiposocio,$activo);
 if ($res == true) { 
 echo ''; 
 } else { 
-echo 'Huvo un error al modificar datos'; 
+echo 'Hubo un error al modificar datos'; 
 } 
 } 
 function eliminarTipoSocios($serviciosTipoSocios) { 
@@ -943,7 +943,7 @@ function modificarUsuario($serviciosUsuarios) {
 	if ($res == true) { 
 		echo ''; 
 	} else { 
-		echo 'Huvo un error al modificar datos'; 
+		echo 'Hubo un error al modificar datos'; 
 	} 
 }
 

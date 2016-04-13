@@ -83,7 +83,7 @@ function ingresosFacturacion($header, $data, &$TotalIngresos)
 		$this->Cell($w[3],5,$row['ife'],'LR',0,'C',$fill);
 		$this->Cell($w[4],5,$row['curp'],'LR',0,'C',$fill);
 		$this->Cell($w[5],5,$row['rfc'],'LR',0,'C',$fill);
-		$this->Cell($w[6],5,$row['domicilio'],'LR',0,'L',$fill);
+		$this->Cell($w[6],5,substr($row['domicilio'],0,65),'LR',0,'L',$fill);
         $this->Ln();
         
 		

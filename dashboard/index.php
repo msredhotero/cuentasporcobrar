@@ -66,8 +66,14 @@ $dashBoar		= 		$serviciosFunciones->dashBoard($_SESSION['usua_idempresa'],$resBa
     <script src="../bootstrap/js/bootstrap.min.js"></script>
 
 	<style type="text/css">
+		#vista table {
+			border:3px solid #333;
+		}
+		
 		#vista table tbody tr th {
 			background-color:#FC3;
+			color:#37363A;
+			text-shadow:1px 1px 1px #7D7D00;
 		}
 		
 		#vista table tbody tr th, #vista table tbody td {
